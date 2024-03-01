@@ -5,7 +5,7 @@ using VIAEventsAssociation.Core.Tools.OperationResult.OperationResult;
 namespace UnitTests.OperationResult;
 
 public class ResultHelperUnitTests
-{
+{ 
     [Fact]
     public void CreateSuccess_WithGenericValue_ShouldCreateSuccessResult()
     {
