@@ -9,7 +9,7 @@ public abstract class ValueObject
         return ((ValueObject)other).GetEqualityComponents().SequenceEqual(GetEqualityComponents());
     }
 
-    protected abstract IEnumerable<object> GetEqualityComponents();
+    protected abstract IEnumerable<object?> GetEqualityComponents();
 
     public override int GetHashCode()
     {
