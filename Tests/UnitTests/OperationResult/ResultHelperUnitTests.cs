@@ -25,8 +25,8 @@ public class ResultHelperUnitTests
     [Fact]
     public void CreateErrorResult_WithErrors_ShouldCreateErrorResultWithErrors()
     {
-        var veaError1 = new VeaError(ErrorType.UnknownType, new ErrorMessage("Error 1"));
-        var veaError2 = new VeaError(ErrorType.ValidationFailedType, new ErrorMessage("Error 2"));
+        var veaError1 = new VeaError(ErrorType.Unknown, new ErrorMessage("Error 1"));
+        var veaError2 = new VeaError(ErrorType.ValidationFailed, new ErrorMessage("Error 2"));
         var errors = new HashSet<VeaError>() { veaError1, veaError2 }; 
         var errorResult = ResultHelper.CreateErrorResultWithMultipleErrors(errors);
         Assert.NotNull(errorResult);
@@ -41,7 +41,7 @@ public class ResultHelperUnitTests
     [Fact]
     public void CreateErrorResultWithSingleError_ShouldCreateErrorResultWithSingleError()
     {
-        var veaError = new VeaError(ErrorType.UnknownType, new ErrorMessage("Single Error"));
+        var veaError = new VeaError(ErrorType.Unknown, new ErrorMessage("Single Error"));
         var errorResult = ResultHelper.CreateErrorResultWithSingleError(veaError.Type, veaError.Message);
         Assert.NotNull(errorResult);
         Assert.True(errorResult.Errors.TryGetValue(veaError, out var result));
