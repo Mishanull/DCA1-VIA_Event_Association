@@ -2,9 +2,4 @@
 
 namespace ViaEventAssociation.Core.Domain.EventAgg;
 
-public class VeaEventId : TId
-{
-    protected VeaEventId(string id) : base(id)
-    {
-    }
-}
+public class VeaEventId : TId;

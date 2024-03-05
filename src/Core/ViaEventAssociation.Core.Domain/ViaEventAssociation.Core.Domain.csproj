@@ -13,5 +13,11 @@
     <ItemGroup>
       <ProjectReference Include="..\..\..\Core\Tools\VIAEventsAssociation.Core.Tools.OperationResult\VIAEventsAssociation.Core.Tools.OperationResult.csproj" />
     </ItemGroup>
+    
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+            <_Parameter1>UnitTests</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
 
 </Project>

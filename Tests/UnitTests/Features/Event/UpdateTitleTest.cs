@@ -2,7 +2,7 @@
 using VIAEventsAssociation.Core.Tools.OperationResult.Error;
 using VIAEventsAssociation.Core.Tools.OperationResult.OperationResult;
 
-namespace UnitTests.Features.Event.UC02_UpdateTitle;
+namespace UnitTests.Features.Event;
 
 public class UpdateTitleTest
 {
@@ -10,11 +10,12 @@ public class UpdateTitleTest
     [InlineData("Scary Movie Night!")]
     [InlineData("Graduation Gala")]
     [InlineData("VIA Hackathon")]
-    public void S1_UpdateTitle_WithValidTitle_ShouldUpdateTitle(string? title)
+    public void S1_UpdateTitle_WithValidTitle_ShouldUpdateTitle(string title)
     {
         // Arrange
-        var veaEvent = new VeaEvent(new VeaEventId());
-        var newTitleResult = (Result<Title>)Title.Create(title);
+        var veaEvent = new VeaEventBuilder().Init()
+            .Build();
+        var newTitleResult = Title.Create(title);
         var newTitle = newTitleResult.Value;
         
         // Act
@@ -28,13 +29,13 @@ public class UpdateTitleTest
     [InlineData("Scary Movie Night!")]
     [InlineData("Graduation Gala")]
     [InlineData("VIA Hackathon")]
-    public void S2_UpdateTitleWithReadyStatus_WithValidTitle_ShouldUpdateTitleAndChangeStatusToDraft(string? title)
+    public void S2_UpdateTitleOfReadyEvent_WithValidTitle_ShouldUpdateTitleAndChangeEventStatusToDraft(string title)
     {
         // Arrange
-        var veaEvent = new VeaEvent(new VeaEventId()){
-            VeaEventStatus = VeaEventStatus.Ready
-        };
-        var newTitleResult = (Result<Title>)Title.Create(title);
+        var veaEvent = new VeaEventBuilder().Init()
+            .WithStatus(VeaEventStatus.Ready)
+            .Build();
+        var newTitleResult = Title.Create(title);
         var newTitle = newTitleResult.Value;
         
         // Act
@@ -49,12 +50,12 @@ public class UpdateTitleTest
     public void F1_UpdateTitle_WithEmptyTitle_ShouldThrowError()
     {
         // Arrange
-        var newTitleResult = (ErrorResult)Title.Create("");
+        var newTitleResult = Title.Create("");
         
         // Assert
-        Assert.True(newTitleResult.HasErrors());
-        Assert.Equal(newTitleResult.Value.First().Type, ErrorType.InvalidTitle);
-        Assert.Equal("Title length must be between 3 and 75 characters", newTitleResult.Value.First().Message.Message);
+        Assert.True(newTitleResult.IsErrorResult());
+        Assert.Equal(newTitleResult.Errors.First().Type, ErrorType.InvalidTitle);
+        Assert.Equal("Title length must be between 3 and 75 characters", newTitleResult.Errors.First().Message.Message);
     }
     
     [Theory]
@@ -63,11 +64,11 @@ public class UpdateTitleTest
     public void F2_UpdateTitle_WithTooShortTitle_ShouldThrowError(string? title)
     {
         // Arrange
-        var newTitleResult = (ErrorResult)Title.Create(title);
+        var newTitleResult = Title.Create(title);
         
         // Assert
-        Assert.True(newTitleResult.HasErrors());
-        Assert.Equal(newTitleResult.Value.First().Type, ErrorType.InvalidTitle);
+        Assert.True(newTitleResult.IsErrorResult());
+        Assert.Equal(newTitleResult.Errors.First().Type, ErrorType.InvalidTitle);
     }
     
     [Theory]
@@ -75,11 +76,11 @@ public class UpdateTitleTest
     public void F3_UpdateTitle_WithTooLongTitle_ShouldThrowError(string? title)
     {
         // Arrange
-        var newTitleResult = (ErrorResult)Title.Create(title);
+        var newTitleResult = Title.Create(title);
         
         // Assert
-        Assert.True(newTitleResult.HasErrors());
-        Assert.Equal(newTitleResult.Value.First().Type, ErrorType.InvalidTitle);
+        Assert.True(newTitleResult.IsErrorResult());
+        Assert.Equal(newTitleResult.Errors.First().Type, ErrorType.InvalidTitle);
     }
     public static IEnumerable<object[]> GetTooLongTitles()
     {
@@ -93,44 +94,44 @@ public class UpdateTitleTest
     public void F4_UpdateTitle_WithNullTitle_ShouldThrowError()
     {
         // Arrange
-        var newTitleResult = (ErrorResult)Title.Create(null);
+        var newTitleResult = Title.Create(null);
         
         // Assert
-        Assert.True(newTitleResult.HasErrors());
-        Assert.Equal(newTitleResult.Value.First().Type, ErrorType.InvalidTitle);
+        Assert.True(newTitleResult.IsErrorResult());
+        Assert.Equal(newTitleResult.Errors.First().Type, ErrorType.InvalidTitle);
     }
     
     [Fact]
-    public void F5_UpdateTitle_OfActiveEvent_ShouldThrowError()
+    public void F5_UpdateTitleOfActiveEvent_WithValidTitle_ShouldThrowError()
     {
         // Arrange
-        var veaEvent = new VeaEvent(new VeaEventId()){
-            VeaEventStatus = VeaEventStatus.Active
-        };
-        var newTitleResult = (Result<Title>)Title.Create("Valid title");
+        var veaEvent = new VeaEventBuilder().Init()
+            .WithStatus(VeaEventStatus.Active)
+            .Build();
+        var newTitleResult = Title.Create("Valid title");
         var newTitle = newTitleResult.Value;
         
         // Act
-        var updateResult = (ErrorResult)veaEvent.UpdateTitle(newTitle);
+        var updateResult = veaEvent.UpdateTitle(newTitle);
         
         // Assert
-        Assert.Equal(updateResult.Value.First().Type, ErrorType.ActionNotAllowed);
+        Assert.Equal(updateResult.Errors.First().Type, ErrorType.ActionNotAllowed);
     }
     
     [Fact]
     public void F6_UpdateTitle_OfCanceledEvent_ShouldThrowError()
     {
         // Arrange
-        var veaEvent = new VeaEvent(new VeaEventId()){
-            VeaEventStatus = VeaEventStatus.Cancelled
-        };
-        var newTitleResult = (Result<Title>)Title.Create("Valid title");
+        var veaEvent = new VeaEventBuilder().Init()
+            .WithStatus(VeaEventStatus.Cancelled)
+            .Build();
+        var newTitleResult = Title.Create("Valid title");
         var newTitle = newTitleResult.Value;
         
         // Act
-        var updateResult = (ErrorResult)veaEvent.UpdateTitle(newTitle);
+        var updateResult = veaEvent.UpdateTitle(newTitle);
         
         // Assert
-        Assert.Equal(updateResult.Value.First().Type, ErrorType.ActionNotAllowed);
+        Assert.Equal(updateResult.Errors.First().Type, ErrorType.ActionNotAllowed);
     }
 }

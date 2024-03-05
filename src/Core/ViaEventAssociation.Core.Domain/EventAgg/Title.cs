@@ -6,18 +6,16 @@ namespace ViaEventAssociation.Core.Domain.EventAgg;
 
 public class Title : ValueObject
 {
-    internal string? Value { get; init; }
+    internal string? Value { get; }
     //private constructor
     private Title(string? value)
     {
         Value = value;
     }
     //factory method
-    public static Result Create(string? value)
+    public static Result<Title> Create(string title)
     {
-        var title = new Title(value);
-        var errorResult = Validate(title);
-        return errorResult.HasErrors() ? errorResult : new Result<Title>(title);
+        return Validate(new Title(title));
     }
     
     protected override IEnumerable<object?> GetEqualityComponents()
@@ -25,9 +23,9 @@ public class Title : ValueObject
         yield return Value;
     }
 
-    private static ErrorResult Validate(Title title)
+    private static Result<Title> Validate(Title title)
     {
-        var errorResult = new ErrorResult();
+        var errorResult = new Result<Title>(title);
         if (string.IsNullOrWhiteSpace(title.Value) || title.Value.Length < 3 || title.Value.Length > 75)
         {
             errorResult.CollectError(new VeaError(ErrorType.InvalidTitle, new ErrorMessage("Title length must be between 3 and 75 characters")));

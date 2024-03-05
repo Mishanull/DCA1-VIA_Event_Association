@@ -6,24 +6,16 @@ namespace ViaEventAssociation.Core.Domain.EventAgg;
 
 public class MaxGuests : ValueObject
 {
-    private int Value { get; init; }
+    internal int Value { get; init; }
     //private constructor
     private MaxGuests(int value)
     {
         Value = value;
     }
     //factory methods
-    public static Result Create()
-    {
-        const int defaultMaxGuests = 5;
-        var maxGuests = new MaxGuests(defaultMaxGuests);
-        return new Result<MaxGuests>(maxGuests);
-    }
     public static Result Create(int value)
     {
-        var maxGuests = new MaxGuests(value);
-        var errorResult = Validate(maxGuests);
-        return errorResult.HasErrors() ? errorResult : new Result<MaxGuests>(maxGuests);
+        return Validate(new MaxGuests(value));
     }
     
     protected override IEnumerable<object?> GetEqualityComponents()
@@ -31,9 +23,9 @@ public class MaxGuests : ValueObject
         yield return Value;
     }
     
-    private static ErrorResult Validate(MaxGuests maxGuests)
+    private static Result<MaxGuests> Validate(MaxGuests maxGuests)
     {
-        var errorResult = new ErrorResult();
+        var errorResult = new Result<MaxGuests>(maxGuests);
         switch (maxGuests.Value)
         {
             // maxGuests is at least 5

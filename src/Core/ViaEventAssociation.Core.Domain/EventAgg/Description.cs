@@ -6,18 +6,20 @@ namespace ViaEventAssociation.Core.Domain.EventAgg;
 
 public class Description : ValueObject
 {
-    internal string? Value { get; init; }
-    
-    private Description(string? value)
+    internal string Value { get; init; }
+
+    private Description(string value)
     {
         Value = value;
     }
     
-    public Result Create(string? value)
+    public static Result<Description> Create(string description)
     {
-        var description = new Description(value);
-        var errorResult = Validate(description);
-        return errorResult.HasErrors() ? errorResult : new Result<Description>(description);
+        return Validate(new Description(description));
+    }
+    public static Result<Description> Create()
+    {
+        return new Result<Description>(new Description(""));
     }
     
     protected override IEnumerable<object?> GetEqualityComponents()
@@ -25,9 +27,9 @@ public class Description : ValueObject
         yield return Value;
     }
     
-    private static ErrorResult Validate(Description description)
+    private static Result<Description> Validate(Description description)
     {
-        var errorResult = new ErrorResult();
+        var errorResult = new Result<Description>(description);
         // the description length is between 0 and 250 (inclusive) characters
         if (description.Value.Length > 250)
         {
