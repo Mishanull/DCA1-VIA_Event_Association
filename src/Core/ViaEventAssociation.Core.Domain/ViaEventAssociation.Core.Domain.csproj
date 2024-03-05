@@ -6,4 +6,12 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Folder Include="Common\GuestAgg\Request\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\Core\Tools\VIAEventsAssociation.Core.Tools.OperationResult\VIAEventsAssociation.Core.Tools.OperationResult.csproj" />
+    </ItemGroup>
+
 </Project>
