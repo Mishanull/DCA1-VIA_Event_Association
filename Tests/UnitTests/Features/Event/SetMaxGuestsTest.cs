@@ -72,7 +72,7 @@ public class SetMaxGuestsTest(ITestOutputHelper testOutputHelper)
         Assert.True(result.IsErrorResult());
         Assert.Equal(initialMaxGuests, veaEvent.MaxGuests.Value);
         Assert.Equal(ErrorType.InvalidMaxGuests, result.Errors.First().Type);
-        Assert.Equal("Maximum number of guests of an active event cannot be reduced", result.Errors.First().Message.Message);
+        Assert.Equal("Maximum number of guests of an active event cannot be reduced.", result.Errors.First().Message.Message);
 
     }
 
@@ -84,13 +84,13 @@ public class SetMaxGuestsTest(ITestOutputHelper testOutputHelper)
             .Init()
             .WithStatus(VeaEventStatus.Cancelled)
             .Build();
-        var maxGuests = ((Result<MaxGuests>)MaxGuests.Create(maxGuestsNumber)).Value;
+        var maxGuests = MaxGuests.Create(maxGuestsNumber).Value;
         
         var result = veaEvent.SetMaxGuests(maxGuests);
         
         Assert.True(result.IsErrorResult());
         Assert.Equal(ErrorType.InvalidMaxGuests, result.Errors.First().Type);
-        Assert.Equal("Cancelled event cannot be modified", result.Errors.First().Message.Message);
+        Assert.Equal("Cancelled event cannot be modified.", result.Errors.First().Message.Message);
     }
     
     [Fact]

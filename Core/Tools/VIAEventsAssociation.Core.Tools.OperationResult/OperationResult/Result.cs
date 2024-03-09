@@ -5,9 +5,19 @@ namespace VIAEventsAssociation.Core.Tools.OperationResult.OperationResult;
 public class Result
 {
     public HashSet<VeaError> Errors { get; private set; } = [];
-    
-    public void CollectError(VeaError error) => Errors.Add(error); 
-    
+
+    public Result()
+    {
+    }
+
+    public Result(HashSet<VeaError> errors)
+    {
+        Errors = errors;
+    }
+
+    public void CollectError(VeaError error) => Errors.Add(error);
+    public void CollectErrors(HashSet<VeaError> errors) => Errors.UnionWith(errors);
+
     public bool IsErrorResult()
     {
         return Errors.Count > 0;

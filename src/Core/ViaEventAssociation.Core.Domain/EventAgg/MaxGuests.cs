@@ -13,7 +13,7 @@ public class MaxGuests : ValueObject
         Value = value;
     }
     //factory methods
-    public static Result Create(int value)
+    public static Result<MaxGuests> Create(int value)
     {
         return Validate(new MaxGuests(value));
     }

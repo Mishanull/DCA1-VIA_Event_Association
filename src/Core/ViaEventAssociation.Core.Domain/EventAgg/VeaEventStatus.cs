@@ -12,4 +12,9 @@ public class VeaEventStatus : Enumeration
     private VeaEventStatus(int id, string value) : base(id, value)
     {
     }
+
+    public VeaEventStatus()
+    {
+        
+    }
 }
