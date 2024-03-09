@@ -1,12 +1,14 @@
 ﻿using ViaEventAssociation.Core.Domain.Common.Base;
 using ViaEventAssociation.Core.Domain.Common.ValueObjects;
 using ViaEventAssociation.Core.Domain.Contracts;
+using ViaEventAssociation.Core.Domain.CreatorAgg;
+using ViaEventAssociation.Core.Domain.GuestAgg.Guest;
 using VIAEventsAssociation.Core.Tools.OperationResult.Error;
 using VIAEventsAssociation.Core.Tools.OperationResult.OperationResult;
 
 namespace ViaEventAssociation.Core.Domain.EventAgg;
 
-public class VeaEvent (VeaEventId id) : AggregateRoot(id)
+public class VeaEvent(VeaEventId id) : AggregateRoot(id)
 {
     // Default values
     private const string DefaultTitle = "Working Title";
@@ -14,21 +16,27 @@ public class VeaEvent (VeaEventId id) : AggregateRoot(id)
     private static readonly VeaEventStatus DefaultEventStatus = VeaEventStatus.Draft;
     private const int DefaultMaxGuests = 5;
     private static readonly VeaEventType DefaultEventType = VeaEventType.Private;
-    
+
+    internal VeaEventId Id { get; } = id;
     // Services
     internal ICurrentTime currentTimeProvider;
-    
+
     // Properties
     internal Title Title { get; set; } = ((Result<Title>)Title.Create(DefaultTitle)).Value;
-    internal Description Description { get; set; } = ((Result<Description>)Description.Create(DefaultDescription)).Value;
+
+    internal Description Description { get; set; } =
+        ((Result<Description>)Description.Create(DefaultDescription)).Value;
+
     internal VeaEventType VeaEventType { get; set; } = DefaultEventType;
     internal MaxGuests MaxGuests { get; set; } = ((Result<MaxGuests>)MaxGuests.Create(DefaultMaxGuests)).Value;
     internal VeaEventStatus VeaEventStatus { get; set; } = DefaultEventStatus;
+
     internal FromTo FromTo { get; set; }
-    // internal CreatorId CreatorId { get; }
+
+    internal CreatorId CreatorId { get; }
     // internal LocationId LocationId { get; }
-    // internal List<GuestId> Participants { get; }
-    
+    internal List<GuestId> Participants { get; } = [];
+
     // Constructors
     private VeaEvent(VeaEventId id, ICurrentTime currentTimeProvider) : this(id)
     {
@@ -48,19 +56,26 @@ public class VeaEvent (VeaEventId id) : AggregateRoot(id)
         {
             VeaEventStatus = VeaEventStatus.Draft;
         }
-        
         var errorResult = new Result();
+        
         // cause error if status is "Active" or "Cancelled"
         if (Equals(VeaEventStatus, VeaEventStatus.Active))
         {
-            errorResult.CollectError(new VeaError(ErrorType.ActionNotAllowed, new ErrorMessage("Title of active event cannot be changed")));
+            errorResult.CollectError(new VeaError(ErrorType.ActionNotAllowed,
+                new ErrorMessage("Title of active event cannot be changed")));
         }
+
         if (Equals(VeaEventStatus, VeaEventStatus.Cancelled))
         {
-            errorResult.CollectError(new VeaError(ErrorType.ActionNotAllowed, new ErrorMessage("Title of cancelled event cannot be changed")));
+            errorResult.CollectError(new VeaError(ErrorType.ActionNotAllowed,
+                new ErrorMessage("Title of cancelled event cannot be changed")));
         }
-        
-        if (errorResult.IsErrorResult()) { return errorResult; }
+
+        if (errorResult.IsErrorResult())
+        {
+            return errorResult;
+        }
+
         Title = title;
         return new Result();
     }
@@ -77,15 +92,22 @@ public class VeaEvent (VeaEventId id) : AggregateRoot(id)
         // cause error if status is "Cancelled"
         if (Equals(VeaEventStatus, VeaEventStatus.Cancelled))
         {
-            errorResult.CollectError(new VeaError(ErrorType.ActionNotAllowed, new ErrorMessage("Description of cancelled event cannot be changed")));
+            errorResult.CollectError(new VeaError(ErrorType.ActionNotAllowed,
+                new ErrorMessage("Description of cancelled event cannot be changed")));
         }
+
         // cause error if status is "Active"
         if (Equals(VeaEventStatus, VeaEventStatus.Active))
         {
-            errorResult.CollectError(new VeaError(ErrorType.ActionNotAllowed, new ErrorMessage("Description of active event cannot be changed")));
+            errorResult.CollectError(new VeaError(ErrorType.ActionNotAllowed,
+                new ErrorMessage("Description of active event cannot be changed")));
         }
-        
-        if (errorResult.IsErrorResult()) { return errorResult; }
+
+        if (errorResult.IsErrorResult())
+        {
+            return errorResult;
+        }
+
         Description = description;
         return new Result();
     }
@@ -97,41 +119,44 @@ public class VeaEvent (VeaEventId id) : AggregateRoot(id)
         {
             VeaEventStatus = VeaEventStatus.Draft;
         }
-        
+
         var errorResult = new Result();
-        // cannot update fromTo of active event
-        if (Equals(VeaEventStatus, VeaEventStatus.Active))
-        {
-            errorResult.CollectError(new VeaError(ErrorType.ActionNotAllowed, new ErrorMessage("FromTo of active event cannot be changed")));
-        }
-        // cannot update fromTo of cancelled event
-        if (Equals(VeaEventStatus, VeaEventStatus.Cancelled))
-        {
-            errorResult.CollectError(new VeaError(ErrorType.ActionNotAllowed, new ErrorMessage("FromTo of cancelled event cannot be changed")));
-        }
         // event cannot be shorter than 1 hour and longer than 10 hours
         if (fromTo.End - fromTo.Start < TimeSpan.FromHours(1) || fromTo.End - fromTo.Start > TimeSpan.FromHours(10))
         {
-            errorResult.CollectError(new VeaError(ErrorType.InvalidFromTo, new ErrorMessage("Event cannot be shorter than 1 hour and longer than 10 hours")));
+            errorResult.CollectError(new VeaError(ErrorType.InvalidFromTo,
+                new ErrorMessage("Event cannot be shorter than 1 hour and longer than 10 hours")));
         }
+
         // event cannot start in the past
         // if (fromTo.Start < DateTime.Now)
         if (fromTo.Start < currentTimeProvider.GetCurrentTime())
         {
-            errorResult.CollectError(new VeaError(ErrorType.InvalidFromTo, new ErrorMessage("Event cannot start in the past")));
+            errorResult.CollectError(new VeaError(ErrorType.InvalidFromTo,
+                new ErrorMessage("Event cannot start in the past")));
         }
+
         // event cannot start after midnight or it cannot start before 8am
-        if (TimeOnly.FromDateTime(fromTo.Start) >= new TimeOnly(0, 0, 0) && TimeOnly.FromDateTime(fromTo.Start) < new TimeOnly(8, 0, 0))
+        if (TimeOnly.FromDateTime(fromTo.Start) >= new TimeOnly(0, 0, 0) &&
+            TimeOnly.FromDateTime(fromTo.Start) < new TimeOnly(8, 0, 0))
         {
-            errorResult.CollectError(new VeaError(ErrorType.InvalidFromTo, new ErrorMessage("Event cannot start after midnight or it cannot start before 8am")));
+            errorResult.CollectError(new VeaError(ErrorType.InvalidFromTo,
+                new ErrorMessage("Event cannot start after midnight or it cannot start before 8am")));
         }
+
         // event cannot end after 1am the next day
-        if (DateOnly.FromDateTime(fromTo.End) > DateOnly.FromDateTime(fromTo.Start) && TimeOnly.FromDateTime(fromTo.End) > new TimeOnly(1, 0, 0))
+        if (DateOnly.FromDateTime(fromTo.End) > DateOnly.FromDateTime(fromTo.Start) &&
+            TimeOnly.FromDateTime(fromTo.End) > new TimeOnly(1, 0, 0))
         {
-            errorResult.CollectError(new VeaError(ErrorType.InvalidFromTo, new ErrorMessage("Event cannot end after 1am")));
+            errorResult.CollectError(new VeaError(ErrorType.InvalidFromTo,
+                new ErrorMessage("Event cannot end after 1am")));
         }
-        
-        if (errorResult.IsErrorResult()) { return errorResult; }
+
+        if (errorResult.IsErrorResult())
+        {
+            return errorResult;
+        }
+
         FromTo = fromTo;
         return new Result();
     }
@@ -141,9 +166,11 @@ public class VeaEvent (VeaEventId id) : AggregateRoot(id)
         var result = new Result();
         if (Equals(VeaEventStatus, VeaEventStatus.Cancelled))
         {
-            result.CollectError(new VeaError(ErrorType.InvalidStatus, new ErrorMessage("Cancelled event cannot be set to 'public'")));
+            result.CollectError(new VeaError(ErrorType.InvalidStatus,
+                new ErrorMessage("Cancelled event cannot be set to 'public'")));
             return result;
         }
+
         VeaEventType = VeaEventType.Public;
         return result;
     }
@@ -151,32 +178,35 @@ public class VeaEvent (VeaEventId id) : AggregateRoot(id)
     public Result MakePrivate()
     {
         var result = new Result();
-        // Active or Cancelled event can't be set to private
-         if (Equals(VeaEventStatus.Active, VeaEventStatus) || Equals(VeaEventStatus.Cancelled, VeaEventStatus))
-         {
-             result.CollectError(new VeaError(ErrorType.InvalidStatus, new ErrorMessage($"{VeaEventStatus.DisplayName} event cannot be set to 'private'")));
-             return result;
-         }
-        
+
+        if (Equals(VeaEventStatus.Active, VeaEventStatus) || Equals(VeaEventStatus.Cancelled, VeaEventStatus))
+        {
+            result.CollectError(new VeaError(ErrorType.InvalidStatus,
+                new ErrorMessage($"{VeaEventStatus.DisplayName} event cannot be set to 'private'")));
+            return result;
+        }
+
         if (Equals(VeaEventType.Private, VeaEventType))
         {
             return result;
         }
-       
+
         VeaEventType = VeaEventType.Private;
         VeaEventStatus = VeaEventStatus.Draft;
         return result;
     }
     
     public Result SetMaxGuests(MaxGuests maxGuests)
+
     {
         var result = new Result();
         if (Equals(VeaEventStatus.Cancelled, VeaEventStatus))
-        { 
-            result.CollectError(new VeaError(ErrorType.InvalidMaxGuests, new ErrorMessage("Cancelled event cannot be modified"))); 
+        {
+            result.CollectError(new VeaError(ErrorType.InvalidMaxGuests,
+                new ErrorMessage("Cancelled event cannot be modified.")));
             return result;
         }
-        
+
         if (Equals(VeaEventStatus.Draft, VeaEventStatus) || Equals(VeaEventStatus.Ready, VeaEventStatus))
         {
             MaxGuests = maxGuests;
@@ -186,7 +216,8 @@ public class VeaEvent (VeaEventId id) : AggregateRoot(id)
         {
             if (maxGuests.Value < MaxGuests.Value)
             {
-                result.CollectError(new VeaError(ErrorType.InvalidMaxGuests, new ErrorMessage("Maximum number of guests of an active event cannot be reduced")));
+                result.CollectError(new VeaError(ErrorType.InvalidMaxGuests,
+                    new ErrorMessage("Maximum number of guests of an active event cannot be reduced.")));
                 return result;
             }
 
@@ -274,5 +305,32 @@ public class VeaEvent (VeaEventId id) : AggregateRoot(id)
 
         VeaEventStatus = VeaEventStatus.Active;
         return result;
+
+        return result;
+    }
+
+    public void AddParticipant(GuestId guestId)
+    {
+        Participants.Add(guestId);
+    }
+
+    public void RemoveParticipant(GuestId guestId)
+    {
+        Participants.Remove(guestId);
+    }
+
+    public int ParticipantCount()
+    {
+        return Participants.Count();
+    }
+
+    public bool IsFull()
+    {
+        return Participants.Count == MaxGuests.Value;
+    }
+
+    public bool IsParticipant(GuestId guestId)
+    {
+        return Participants.Contains(guestId);
     }
 }

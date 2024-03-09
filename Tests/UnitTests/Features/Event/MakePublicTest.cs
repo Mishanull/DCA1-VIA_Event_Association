@@ -17,7 +17,6 @@ public class MakePublicTest(ITestOutputHelper testOutput)
     [MemberData(nameof(ValidStatuses))]
     public void S1_MakePublic_WithValidStatus_ShouldMakeEventPublic(VeaEventStatus status)
     {
-        testOutput.WriteLine($"Testing with: {status}");
         var veaEvent = new VeaEventBuilder().Init().WithStatus(status).Build();
         
         veaEvent.MakePublic();

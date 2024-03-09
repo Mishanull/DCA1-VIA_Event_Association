@@ -11,7 +11,6 @@ public class VeaEventBuilder
     
     public VeaEventBuilder Init()
     {
-        // VeaEvent = new VeaEvent(new VeaEventId());
         VeaEvent = VeaEvent.Create(new FakeCurrentTime()).Value;
         return this;
     }
