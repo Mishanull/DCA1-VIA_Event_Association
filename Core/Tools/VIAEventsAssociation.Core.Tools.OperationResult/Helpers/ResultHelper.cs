@@ -8,14 +8,26 @@ public static class ResultHelper
     public static Result<T> CreateSuccess<T>(T value) => new(value);
 
     public static Result CreateSuccess() => new();
-    public static ErrorResult CreateEmptyErrorResult() => new();
 
-    public static ErrorResult CreateErrorResult(HashSet<VeaError> errors) => new(errors);
 
-    public static ErrorResult CreateErrorResultWithSingleError(ErrorType errorType, ErrorMessage errorMessage)
+    public static Result CreateErrorResultWithSingleError(ErrorType errorType, ErrorMessage errorMessage)
     {
-        var errorResult = new ErrorResult();
+        var errorResult = new Result();
         errorResult.CollectError(new VeaError(errorType, errorMessage));
+        return errorResult;
+    }
+
+    public static Result CreateErrorResultWithSingleError(VeaError error)
+    {
+        var errorResult = new Result();
+        errorResult.CollectError(error);
+        return errorResult;
+    }
+
+    public static Result CreateErrorResultWithMultipleErrors(IEnumerable<VeaError> errors)
+    {
+        var errorResult = new Result();
+        errorResult.SetErrors(errors);
         return errorResult;
     }
 }

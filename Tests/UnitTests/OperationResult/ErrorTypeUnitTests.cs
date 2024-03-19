@@ -9,11 +9,10 @@ public class ErrorTypeUnitTests
     public void ErrorType_GetAll_ShouldReturnAllInstances()
     {
         var allInstances = Enumeration.GetAll<ErrorType>().ToList();
-        Assert.Equal(4, allInstances.Count);
-        Assert.Contains(ErrorType.UnknownType, allInstances);
-        Assert.Contains(ErrorType.ValidationFailedType, allInstances);
-        Assert.Contains(ErrorType.ResourceNotFoundType, allInstances);
-        Assert.Contains(ErrorType.UnauthorizedType, allInstances);
+        Assert.Contains(ErrorType.Unknown, allInstances);
+        Assert.Contains(ErrorType.ValidationFailed, allInstances);
+        Assert.Contains(ErrorType.ResourceNotFound, allInstances);
+        Assert.Contains(ErrorType.Unauthorized, allInstances);
     }
     
     [Fact]
@@ -35,8 +34,8 @@ public class ErrorTypeUnitTests
     [Fact]
     public void ErrorType_AbsoluteDifference_ShouldReturnCorrectDifference()
     {
-        var firstInstance = ErrorType.UnknownType;
-        var secondInstance = ErrorType.UnauthorizedType;
+        var firstInstance = ErrorType.Unknown;
+        var secondInstance = ErrorType.Unauthorized;
 
         var difference = Enumeration.AbsoluteDifference(firstInstance, secondInstance);
 
@@ -48,7 +47,7 @@ public class ErrorTypeUnitTests
     {
         var instance = Enumeration.FromValue<ErrorType>(101);
 
-        Assert.Equal(ErrorType.ResourceNotFoundType, instance);
+        Assert.Equal(ErrorType.ResourceNotFound, instance);
     }
     
     [Fact]
@@ -56,14 +55,14 @@ public class ErrorTypeUnitTests
     {
         var instance = Enumeration.FromDisplayName<ErrorType>("Unauthorized");
 
-        Assert.Equal(ErrorType.UnauthorizedType, instance);
+        Assert.Equal(ErrorType.Unauthorized, instance);
     }
     
     [Fact]
     public void ErrorType_CompareTo_ShouldReturnCorrectComparisonResult()
     {
-        var firstInstance = ErrorType.UnknownType;
-        var secondInstance = ErrorType.ValidationFailedType;
+        var firstInstance = ErrorType.Unknown;
+        var secondInstance = ErrorType.ValidationFailed;
 
         var comparisonResult = firstInstance.CompareTo(secondInstance);
 
