@@ -7,7 +7,7 @@ namespace UnitTests;
 
 public class VeaEventBuilder
 {
-    public static VeaEvent? VeaEvent;
+    private static VeaEvent? VeaEvent;
     
     public VeaEventBuilder Init()
     {

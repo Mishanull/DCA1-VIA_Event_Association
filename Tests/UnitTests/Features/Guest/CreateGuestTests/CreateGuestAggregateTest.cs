@@ -3,8 +3,8 @@ using ViaEventAssociation.Core.Domain.Common.ValueObjects;
 using ViaEventAssociation.Core.Domain.Contracts;
 using ViaEventAssociation.Core.Domain.GuestAgg.Guest;
 
-namespace UnitTests.Features.Guest;
-public class CreateGuestTest
+namespace UnitTests.Features.Guest.CreateGuestTests;
+public class CreateGuestAggregateTest
 {
 
     [Fact]
@@ -17,17 +17,17 @@ public class CreateGuestTest
         var pictureUrlValue = "http://example.com/image.jpg";
         var mockEmailCheck = new Mock<IEmailCheck>();
         mockEmailCheck.Setup(service => service.DoesEmailExist(emailValue)).Returns(false);
-        var email = Email.Create(emailValue, mockEmailCheck.Object).Value;
-        var firstName = FirstName.Create(firstNameValue).Value; 
-        var lastName = LastName.Create(lastNameValue).Value; 
-        var pictureUrl = PictureUrl.Create(pictureUrlValue).Value; 
+        var email = Email.Create(emailValue, mockEmailCheck.Object).Value!;
+        var firstName = FirstName.Create(firstNameValue).Value!; 
+        var lastName = LastName.Create(lastNameValue).Value!; 
+        var pictureUrl = PictureUrl.Create(pictureUrlValue).Value!; 
 
         // Act
         var result = VeaGuest.Create(email, firstName, lastName, pictureUrl);
 
         // Assert
         Assert.False(result.IsErrorResult());
-        Assert.Equal(emailValue.ToLower(), result.Value.Email?.Value); 
+        Assert.Equal(emailValue.ToLower(), result.Value!.Email?.Value); 
         Assert.Equal(firstNameValue, result.Value.FirstName?.Value); 
         Assert.Equal(lastNameValue, result.Value.LastName?.Value); 
         Assert.Equal(pictureUrlValue, result.Value.PictureUrl?.Value); 

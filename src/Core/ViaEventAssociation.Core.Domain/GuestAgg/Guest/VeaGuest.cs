@@ -12,20 +12,16 @@ public  class GuestId : TId
     {
         
     }
-    
-    internal GuestId(string id) : base(id)
-    {
-    }
 }
 
 public class VeaGuest : AggregateRoot
 {
-    internal GuestId Id { get; }
+    internal GuestId Id { get; private init; }
     internal Email? Email { get; private init; } 
     internal FirstName? FirstName{ get; private init; } 
-    internal LastName? LastName { get; private init; } 
-    internal PictureUrl? PictureUrl { get; private init; }
-    internal ICollection<RequestEntity.Request> JoinRequests { get; private init; } = [];
+    internal LastName? LastName { get; private init; }
+    internal PictureUrl? PictureUrl { get; private init; } = new ();
+    private ICollection<RequestEntity.Request> JoinRequests { get; init; } = [];
 
     internal VeaGuest(GuestId id) : base(id)
     {

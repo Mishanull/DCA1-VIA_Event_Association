@@ -6,15 +6,14 @@ using ViaEventAssociation.Core.Domain.CreatorAgg;
 using ViaEventAssociation.Core.Domain.CreatorAgg.InviteEntity;
 using ViaEventAssociation.Core.Domain.EventAgg;
 using ViaEventAssociation.Core.Domain.GuestAgg.Guest;
-using ViaEventAssociation.Core.Domain.GuestAgg.RequestEntity;
 using ViaEventAssociation.Core.Domain.Services;
 using VIAEventsAssociation.Core.Tools.Enumeration;
 using VIAEventsAssociation.Core.Tools.OperationResult.Error;
 using VIAEventsAssociation.Core.Tools.OperationResult.OperationResult;
 
-namespace UnitTests.Features.Guest;
+namespace UnitTests.Features.Guest.GuestIsInvitedTests;
 
-public class GuestIsInvitedToEventTest
+public class GuestIsInvitedToEventDomainServiceTest
 {
     private readonly Mock<IGuestRepository> _guestRepoMock;
     private readonly Mock<IVeaEventRepository> _eventRepoMock;
@@ -24,7 +23,7 @@ public class GuestIsInvitedToEventTest
     private readonly Email _defaultEmail;
     private readonly GuestIsInvitedToEvent _service;
 
-    public GuestIsInvitedToEventTest()
+    public GuestIsInvitedToEventDomainServiceTest()
     {
         _guestRepoMock = new Mock<IGuestRepository>();
         _eventRepoMock = new Mock<IVeaEventRepository>();
@@ -49,7 +48,7 @@ public class GuestIsInvitedToEventTest
     }
 
     [Fact]
-    public void S1_InviteGuestToReadyOrActiveEvent_Success()
+    public async Task S1_InviteGuestToReadyOrActiveEvent_Success()
     {
         // Arrange
         var guest = new VeaGuest(new GuestId());
@@ -63,7 +62,7 @@ public class GuestIsInvitedToEventTest
         RepoMockSetup(guest, veaEvent, invite, creator);
 
         // Act
-        var result = _service.Handle(invite);
+        var result = await _service.Handle(invite);
 
         // Assert
         Assert.False(result.IsErrorResult());
@@ -72,7 +71,7 @@ public class GuestIsInvitedToEventTest
     [Theory]
     [InlineData(1)] // Draft
     [InlineData(4)] // Cancelled
-    public void F1_InviteGuestToInactiveEvent_Failure(int status)
+    public async Task F1_InviteGuestToInactiveEvent_Failure(int status)
     {
         // Arrange
         var guest = new VeaGuest(new GuestId());
@@ -85,7 +84,7 @@ public class GuestIsInvitedToEventTest
         RepoMockSetup(guest, veaEvent, invite, creator);
 
         // Act
-        var result = _service.Handle(invite);
+        var result = await _service.Handle(invite);
 
         // Assert
         Assert.True(result.IsErrorResult());
@@ -93,7 +92,7 @@ public class GuestIsInvitedToEventTest
     }
 
     [Fact]
-    public void F2_InviteGuestToFullEvent_Failure()
+    public async Task F2_InviteGuestToFullEvent_Failure()
     {
         // Arrange
         var guest = new VeaGuest(new GuestId());
@@ -108,7 +107,7 @@ public class GuestIsInvitedToEventTest
         RepoMockSetup(guest, veaEvent, invite, creator);
 
         // Act
-        var result = _service.Handle(invite);
+        var result = await _service.Handle(invite);
 
         // Assert
         Assert.True(result.IsErrorResult());

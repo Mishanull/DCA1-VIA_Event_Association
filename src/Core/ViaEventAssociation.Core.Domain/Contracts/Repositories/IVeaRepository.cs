@@ -11,5 +11,5 @@ public interface IVeaRepository<T, TypeId> where TypeId : TId
     public Result Remove(TypeId id);
     public Task<Result> RemoveAsync(TypeId id);
     public Result<T> Update(T entity);
-    public Result<T> UpdateAsync(T entity);
+    public Task<Result<T>> UpdateAsync(T entity);
 }

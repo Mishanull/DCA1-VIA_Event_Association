@@ -1,20 +1,20 @@
 using Moq;
 using ViaEventAssociation.Core.Domain.Common.ValueObjects;
 using ViaEventAssociation.Core.Domain.Contracts;
+using ViaEventAssociation.Core.Domain.Services;
 using ViaEventAssociation.Core.Domain.Contracts.Repositories;
 using ViaEventAssociation.Core.Domain.CreatorAgg;
 using ViaEventAssociation.Core.Domain.CreatorAgg.InviteEntity;
 using ViaEventAssociation.Core.Domain.EventAgg;
 using ViaEventAssociation.Core.Domain.GuestAgg.Guest;
-using ViaEventAssociation.Core.Domain.Services;
 using VIAEventsAssociation.Core.Tools.Enumeration;
 using VIAEventsAssociation.Core.Tools.OperationResult.Error;
 using VIAEventsAssociation.Core.Tools.OperationResult.Helpers;
 using VIAEventsAssociation.Core.Tools.OperationResult.OperationResult;
 
-namespace UnitTests.Features.Guest;
+namespace UnitTests.Features.Guest.GuestDeclinesInviteTests;
 
-public class GuestAcceptsInviteTest
+public class GuestDeclinesInviteDomainServiceTest
 {
     private readonly Mock<IGuestRepository> _guestRepoMock;
     private readonly Mock<IVeaEventRepository> _eventRepoMock;
@@ -22,16 +22,17 @@ public class GuestAcceptsInviteTest
     private readonly Mock<IInviteRepository> _inviteRepoMock;
     private readonly Mock<IEmailCheck> _mockEmailCheck;
     private readonly Email _defaultEmail;
-    private readonly GuestAcceptsInvite uut;
-    public GuestAcceptsInviteTest()
+    private readonly GuestDeclinesInvite _service;
+
+    public GuestDeclinesInviteDomainServiceTest()
     {
         _guestRepoMock = new Mock<IGuestRepository>();
         _eventRepoMock = new Mock<IVeaEventRepository>();
         _inviteRepoMock = new Mock<IInviteRepository>();
         _creatorRepoMock = new Mock<ICreatorRepository>();
         _mockEmailCheck = new Mock<IEmailCheck>();
-        _defaultEmail = Email.Create("creator@example.com", _mockEmailCheck.Object).Value;
-        uut = new GuestAcceptsInvite(
+        _defaultEmail = Email.Create("creator@example.com", _mockEmailCheck.Object).Value!;
+        _service = new GuestDeclinesInvite(
             _guestRepoMock.Object,
             _creatorRepoMock.Object,
             _eventRepoMock.Object,
@@ -43,34 +44,34 @@ public class GuestAcceptsInviteTest
         _eventRepoMock.Setup(repo => repo.Find(veaEvent.Id)).Returns(new Result<VeaEvent>(veaEvent));
         _inviteRepoMock.Setup(repo => repo.Find(invite.Id)).Returns(new Result<Invite>(invite));
         _creatorRepoMock.Setup(repo => repo.Find(creator.Id)).Returns(new Result<Creator>(creator));
-        _mockEmailCheck.Setup(service => service.DoesEmailExist(_defaultEmail.Value)).Returns(true);
+        _mockEmailCheck.Setup(emailService => emailService.DoesEmailExist(_defaultEmail.Value)).Returns(true);
+
     }
 
     [Fact]
-    public void S1_AcceptsPendingInvite_ShouldAddParticipant()
+    public async Task S1_DeclinesPendingInvite_ShouldAddParticipant()
     {
         // Arrange
         var guest = new VeaGuest(new GuestId());
         var veaEvent = new VeaEvent(new VeaEventId()) { VeaEventStatus = VeaEventStatus.Active };
-        var creator = Creator.Create(_defaultEmail).Value;
-        var invite = Invite.Create(guest.Id, creator.Id, veaEvent.Id).Value;
-
-        RepoMockSetup(guest, veaEvent, invite, creator);
-
+       var creator = Creator.Create( _defaultEmail).Value;
+        var invite = Invite.Create(guest.Id, creator!.Id, veaEvent.Id).Value;
+        RepoMockSetup(guest, veaEvent, invite!, creator);
+        
         // Act
-        var result = uut.Handle(invite.Id);
+        var result = await _service.Handle(invite!.Id);
 
         // Assert
         Assert.False(result.IsErrorResult());
-        Assert.Equal(InviteStatus.Accepted, invite.InviteStatus);
+        Assert.Equal(InviteStatus.Declined, invite.InviteStatus);
     }
 
     [Fact]
-    public void F1_NoInvitationForGuest_ShouldReturnError()
+    public async Task F1_NoInvitationForGuest_ShouldReturnError()
     {
         // Arrange
         var veaEvent = new VeaEvent(new VeaEventId()) { VeaEventStatus = VeaEventStatus.Active };
-        var creator = Creator.Create(_defaultEmail).Value;
+        var creator = Creator.Create( _defaultEmail).Value;
         var guest = new VeaGuest(new GuestId());
         var invite = Invite.Create(guest.Id, creator.Id, veaEvent.Id).Value;
         var inviteId = invite.Id;
@@ -79,8 +80,9 @@ public class GuestAcceptsInviteTest
         RepoMockSetup(guest, veaEvent, invite, creator);
         _inviteRepoMock.Setup(r => r.Find(inviteId)).Returns(findInviteResult);
 
+
         // Act
-        var result = uut.Handle(inviteId);
+        var result = await _service.Handle(inviteId);
 
         // Assert
         Assert.True(result.IsErrorResult());
@@ -88,19 +90,19 @@ public class GuestAcceptsInviteTest
     }
 
     [Fact]
-    public void F2_InvitationAcceptedForFullEvent_ShouldReturnError()
+    public async Task F2_InvitationDeclinedForFullEvent_ShouldReturnError()
     {
         // Arrange
         var veaEvent = new VeaEvent(new VeaEventId()) { VeaEventStatus = VeaEventStatus.Active };
-        var creator = Creator.Create(_defaultEmail).Value;
+        var creator = Creator.Create( _defaultEmail).Value;
         var guest = new VeaGuest(new GuestId());
-        var invite = Invite.Create(guest.Id, creator.Id, veaEvent.Id).Value;
-        var inviteId = invite.Id;
+        var invite = Invite.Create(guest.Id, creator!.Id, veaEvent.Id).Value;
+        var inviteId = invite!.Id;
         RepoMockSetup(guest, veaEvent, invite, creator);
-        veaEvent.MaxGuests = MaxGuests.Create(0).Value; // Assuming this sets the event as full
+        veaEvent.MaxGuests = MaxGuests.Create(0).Value!; 
 
         // Act
-        var result = uut.Handle(inviteId);
+        var result = await _service.Handle(inviteId);
 
         // Assert
         Assert.True(result.IsErrorResult());
@@ -110,40 +112,40 @@ public class GuestAcceptsInviteTest
     [Theory]
     [InlineData(1)]
     [InlineData(4)]
-    public void F3_InvitationAcceptedForCancelledEvent_ShouldReturnError(int statusCode)
+    public async Task F3_InvitationDeclinedForCancelledOrDraftEvent_ShouldReturnError(int statusCode)
     {
         // Arrange
-        var veaEvent = new VeaEvent(new VeaEventId()) { VeaEventStatus = Enumeration.FromValue<VeaEventStatus>(statusCode) };
-        var creator = Creator.Create(_defaultEmail).Value;
+        var veaEvent = new VeaEvent(new VeaEventId()) { VeaEventStatus = Enumeration.FromValue<VeaEventStatus>(statusCode)! };
+        var creator = Creator.Create( _defaultEmail).Value;
         var guest = new VeaGuest(new GuestId());
-        var invite = Invite.Create(guest.Id, creator.Id, veaEvent.Id).Value;
-        var inviteId = invite.Id;
+        var invite = Invite.Create(guest.Id, creator!.Id, veaEvent.Id).Value;
+        var inviteId = invite!.Id;
         RepoMockSetup(guest, veaEvent, invite, creator);
 
         // Act
-        var result = uut.Handle(inviteId);
+        var result = await _service.Handle(inviteId);
 
         // Assert
         Assert.True(result.IsErrorResult());
-        Assert.Contains(result.Errors, e => e.Message.Message.Contains("An invite can only be accepted for an active event."));
+        Assert.Contains(result.Errors, e => e.Message.Message.Contains("An invite cannot be be declined for a cancelled or draft event."));
     }
 
     [Fact]
-    public void F4_InviteToReadyEvent_ShouldReturnError()
+    public async Task F4_InviteToReadyEvent_ShouldReturnError()
     {
         // Arrange
         var veaEvent = new VeaEvent(new VeaEventId()) { VeaEventStatus = VeaEventStatus.Ready };
-        var creator = Creator.Create(_defaultEmail).Value;
+        var creator = Creator.Create( _defaultEmail).Value;
         var guest = new VeaGuest(new GuestId());
-        var invite = Invite.Create(guest.Id, creator.Id, veaEvent.Id).Value;
-        var inviteId = invite.Id;
+        var invite = Invite.Create(guest.Id, creator!.Id, veaEvent.Id).Value;
+        var inviteId = invite!.Id;
         RepoMockSetup(guest, veaEvent, invite, creator);
 
         // Act
-        var result = uut.Handle(inviteId);
+        var result = await _service.Handle(inviteId);
 
         // Assert
         Assert.True(result.IsErrorResult());
-        Assert.Contains(result.Errors, e => e.Message.Message.Contains("This event cannot be joined yet."));
+        Assert.Contains(result.Errors, e => e.Message.Message.Contains("This event cannot be declined yet."));
     }
 }
