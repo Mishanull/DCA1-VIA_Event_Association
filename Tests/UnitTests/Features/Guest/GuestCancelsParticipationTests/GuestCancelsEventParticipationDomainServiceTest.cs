@@ -1,6 +1,5 @@
 using Moq;
 using ViaEventAssociation.Core.Domain.Common.ValueObjects;
-using ViaEventAssociation.Core.Domain.Contracts;
 using ViaEventAssociation.Core.Domain.Contracts.Repositories;
 using ViaEventAssociation.Core.Domain.EventAgg;
 using ViaEventAssociation.Core.Domain.GuestAgg.Guest;
@@ -10,16 +9,16 @@ using ViaEventAssociation.Core.Domain.Services;
 using VIAEventsAssociation.Core.Tools.OperationResult.Error;
 using VIAEventsAssociation.Core.Tools.OperationResult.OperationResult;
 
-namespace UnitTests.Features.Guest;
+namespace UnitTests.Features.Guest.GuestCancelsParticipationTests;
 
-public class GuestCancelsEventParticipationTest
+public class GuestCancelsEventParticipationDomainServiceTest
 {
     private readonly Mock<IGuestRepository> _guestRepoMock;
     private readonly Mock<IRequestRepository> _requestRepoMock;
     private readonly Mock<IVeaEventRepository> _eventRepoMock;
-    private static readonly FromTo ValidFromTo = FromTo.Create(DateTime.Now.AddDays(6), DateTime.Now.AddDays(8)).Value;
+    private static readonly FromTo ValidFromTo = FromTo.Create(DateTime.Now.AddDays(6), DateTime.Now.AddDays(8)).Value!;
     private readonly GuestCancelsEventParticipation service;
-    public GuestCancelsEventParticipationTest()
+    public GuestCancelsEventParticipationDomainServiceTest()
     {
         _guestRepoMock = new Mock<IGuestRepository>();
         _requestRepoMock = new Mock<IRequestRepository>();
@@ -31,8 +30,8 @@ public class GuestCancelsEventParticipationTest
     }
 
     [Fact]
-    public void S1_GuestCancelParticipation_SuccessfulCancellation_ShouldRemoveParticipation()
-    
+    public async Task S1_GuestCancelParticipation_SuccessfulCancellation_ShouldRemoveParticipation()
+
     {
         //Arrange
         var guestId = new GuestId();
@@ -43,13 +42,13 @@ public class GuestCancelsEventParticipationTest
             VeaEventStatus = VeaEventStatus.Active,
             FromTo = ValidFromTo,
         };
-        var request = Request.Create("reason", eventId, guestId).Value;
+        var request = Request.Create("I am interested in this.", eventId, guestId).Value;
         veaEvent.AddParticipant(guestId);
         RepoMockSetup(guestId, guest, eventId, veaEvent, request);
         _requestRepoMock.Setup(repo => repo.Find(request.Id)).Returns(new Result<Request>(request));
 
         // Act
-        var result = service.Handle(request.Id);
+        var result = await service.Handle(request.Id);
 
         // Assert
         Assert.False(result.IsErrorResult());
@@ -57,7 +56,7 @@ public class GuestCancelsEventParticipationTest
     }
 
     [Fact]
-    public void S2_GuestCancelParticipation_GuestNotParticipating_ShouldChangeNothing()
+    public async Task S2_GuestCancelParticipation_GuestNotParticipating_ShouldChangeNothing()
     {
         //Arrange
         var guestId = new GuestId();
@@ -68,20 +67,20 @@ public class GuestCancelsEventParticipationTest
             VeaEventStatus = VeaEventStatus.Active,
             FromTo = ValidFromTo,
         };
-        var request = Request.Create("reason", eventId, guestId).Value;
+        var request = Request.Create("I am interested in this.", eventId, guestId).Value;
 
         RepoMockSetup(guestId, guest, eventId, veaEvent, request);
 
 
         // Act
-        var result = service.Handle(request.Id);
+        var result = await service.Handle(request.Id);
 
         // Assert
         Assert.False(result.IsErrorResult());
     }
 
     [Fact]
-    public void F1_GuestCancelParticipation_EventHasEnded_ShouldReturnError()
+    public async Task F1_GuestCancelParticipation_EventHasEnded_ShouldReturnError()
     {
         // Arrange 
         var guestId = new GuestId();
@@ -94,11 +93,11 @@ public class GuestCancelsEventParticipationTest
         };
         veaEvent.AddParticipant(guestId);
 
-        var request = Request.Create("reason", eventId, guestId).Value;
+        var request = Request.Create("I am interested in this.", eventId, guestId).Value;
         RepoMockSetup(guestId, guest, eventId, veaEvent, request);
 
         // Act
-        var result = service.Handle(request.Id);
+        var result = await service.Handle(request.Id);
 
         // Assert
         Assert.True(result.IsErrorResult());

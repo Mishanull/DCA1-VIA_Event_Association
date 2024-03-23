@@ -35,7 +35,7 @@ public class VeaEvent(VeaEventId id) : AggregateRoot(id)
     internal FromTo FromTo { get; set; }
 
     internal CreatorId CreatorId { get; }
-    // internal LocationId LocationId { get; }
+    
     internal List<GuestId> Participants { get; } = [];
 
     // Constructors

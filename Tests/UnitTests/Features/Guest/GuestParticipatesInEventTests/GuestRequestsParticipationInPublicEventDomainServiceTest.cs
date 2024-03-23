@@ -8,24 +8,23 @@ namespace UnitTests.Features.Guest;
 
 using Moq;
 using Xunit;
-using ViaEventAssociation.Core.Domain.Contracts;
 using ViaEventAssociation.Core.Domain.EventAgg;
 using ViaEventAssociation.Core.Domain.GuestAgg.Guest;
 using ViaEventAssociation.Core.Domain.GuestAgg.Request;
 using ViaEventAssociation.Core.Domain.Services;
 using VIAEventsAssociation.Core.Tools.OperationResult.OperationResult;
 
-public class GuestRequestsParticipationInPublicEventTest
+public class GuestRequestsParticipationInPublicEventDomainServiceTest
 {
     private readonly Mock<IGuestRepository> _guestRepoMock;
     private readonly Mock<IRequestRepository> _requestRepoMock;
     private readonly Mock<IVeaEventRepository> _eventRepoMock;
-    private static readonly string Reason = "reason";
-    private static readonly FromTo ValidFromTo = FromTo.Create(DateTime.Now.AddDays(6), DateTime.Now.AddDays(8)).Value;
+    private static readonly string Reason = "I am interested in this.";
+    private static readonly FromTo ValidFromTo = FromTo.Create(DateTime.Now.AddDays(6), DateTime.Now.AddDays(8)).Value!;
     private readonly GuestRequestParticipationPublicEvent _service;
 
 
-    public GuestRequestsParticipationInPublicEventTest()
+    public GuestRequestsParticipationInPublicEventDomainServiceTest()
     {
         _guestRepoMock = new Mock<IGuestRepository>();
         _requestRepoMock = new Mock<IRequestRepository>();
@@ -37,7 +36,7 @@ public class GuestRequestsParticipationInPublicEventTest
     }
     
     [Fact]
-    public void S1_RequestParticipation_ActivePublicEvent_Success()
+    public async Task S1_RequestParticipation_ActivePublicEvent_Success()
     {
         // Arrange
         var status = VeaEventStatus.Active;
@@ -50,11 +49,11 @@ public class GuestRequestsParticipationInPublicEventTest
             FromTo = ValidFromTo,
             VeaEventType = VeaEventType.Public
         };
-        var request = Request.Create(Reason, eventId, guestId).Value;
+        var request = Request.Create(Reason, eventId, guestId).Value!;
         RepoMockSetup(guestId, guest, eventId, veaEvent, request);
 
         // Act
-        var result = _service.Handle(request);
+        var result = await _service.Handle(request);
 
         // Assert
         Assert.False(result.IsErrorResult());
@@ -66,7 +65,7 @@ public class GuestRequestsParticipationInPublicEventTest
     [InlineData(1)]
     [InlineData(2)]
     [InlineData(4)]
-    public void F1_GuestRequestParticipation_EventNotActive_ShouldReturnError(int statusCode)
+    public async Task F1_GuestRequestParticipation_EventNotActive_ShouldReturnError(int statusCode)
     {
         // Arrange
         var status = Enumeration.FromValue<VeaEventStatus>(statusCode);
@@ -78,11 +77,11 @@ public class GuestRequestsParticipationInPublicEventTest
             VeaEventStatus = status,
             FromTo = ValidFromTo
         };
-        var request = Request.Create("", eventId, guestId).Value;
+        var request = Request.Create(Reason, eventId, guestId).Value;
         RepoMockSetup(guestId, guest, eventId, veaEvent, request);
 
         // Act
-        var result = _service.Handle(request);
+        var result = await _service.Handle(request);
 
         // Assert
         Assert.True(result.IsErrorResult());
@@ -97,7 +96,7 @@ public class GuestRequestsParticipationInPublicEventTest
 
 
     [Fact]
-    public void F2_RequestParticipation_FullEvent_ShouldReturnError()
+    public async Task F2_RequestParticipation_FullEvent_ShouldReturnError()
     {
         // Arrange
         var guestId = new GuestId();
@@ -109,11 +108,11 @@ public class GuestRequestsParticipationInPublicEventTest
             MaxGuests = MaxGuests.Create(0).Value,
             FromTo = ValidFromTo
         };
-        var request = Request.Create("", eventId, guestId).Value;
+        var request = Request.Create(Reason, eventId, guestId).Value;
         RepoMockSetup(guestId, guest, eventId, veaEvent, request);
 
         // Act
-        var result = _service.Handle(request);
+        var result = await _service.Handle(request);
 
         // Assert
         Assert.True(result.IsErrorResult());
@@ -122,7 +121,7 @@ public class GuestRequestsParticipationInPublicEventTest
     }
 
     [Fact]
-    public void F3_RequestParticipation_PastEvent_ShouldReturnError()
+    public async Task F3_RequestParticipation_PastEvent_ShouldReturnError()
     {
         // Arrange
         var guestId = new GuestId();
@@ -130,14 +129,14 @@ public class GuestRequestsParticipationInPublicEventTest
         var guest = new VeaGuest(guestId);
         var veaEvent = new VeaEvent(eventId)
         {
-            FromTo = FromTo.Create(new DateTime(2004, 12, 23), new DateTime(2004, 12, 25)).Value,
+            FromTo = FromTo.Create(new DateTime(2004, 12, 23), new DateTime(2004, 12, 25)).Value!,
             VeaEventStatus = VeaEventStatus.Active
         };
-        var request = Request.Create("", eventId, guestId).Value;
+        var request = Request.Create(Reason, eventId, guestId).Value!;
         RepoMockSetup(guestId, guest, eventId, veaEvent, request);
 
         // Act
-        var result = _service.Handle(request);
+        var result = await _service.Handle(request);
 
         // Assert
         Assert.True(result.IsErrorResult());
@@ -146,12 +145,12 @@ public class GuestRequestsParticipationInPublicEventTest
     }
 
     [Fact]
-    public void F4_RequestParticipation_PrivateEvent_ShouldReturnError()
+    public async Task F4_RequestParticipation_PrivateEvent_ShouldReturnError()
     {
         // Arrange
         var guestId = new GuestId();
         var eventId = new VeaEventId();
-        var request = Request.Create("", eventId, guestId).Value;
+        var request = Request.Create(Reason, eventId, guestId).Value!;
         var guest = new VeaGuest(guestId);
         var veaEvent = new VeaEvent(eventId);
         veaEvent.VeaEventStatus = VeaEventStatus.Active;
@@ -160,7 +159,7 @@ public class GuestRequestsParticipationInPublicEventTest
         RepoMockSetup(guestId, guest, eventId, veaEvent, request);
 
         // Act
-        var result = _service.Handle(request);
+        var result = await _service.Handle(request);
 
         // Assert
         Assert.True(result.IsErrorResult());
@@ -169,7 +168,7 @@ public class GuestRequestsParticipationInPublicEventTest
     }
 
     [Fact]
-    public void F5_RequestParticipation_AlreadyParticipant_ShouldReturnError()
+    public async Task F5_RequestParticipation_AlreadyParticipant_ShouldReturnError()
     {
         // Arrange
         var guestId = new GuestId();
@@ -185,7 +184,7 @@ public class GuestRequestsParticipationInPublicEventTest
         RepoMockSetup(guestId, guest, eventId, veaEvent, request);
 
         // Act
-        var result = _service.Handle(request);
+        var result = await _service.Handle(request);
 
         // Assert
         Assert.True(result.IsErrorResult());

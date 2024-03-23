@@ -14,24 +14,26 @@ public class GuestIsInvitedToEvent(
     IVeaEventRepository eventRepo,
     IInviteRepository inviteRepo)
 {
-    public Result Handle(Invite invite)
+    public async Task<Result> Handle(Invite invite) 
     {
         var result = new Result();
         if (ValidateGuestCreatorAndEventExistence(invite, result, out var findCreatorResult, out var findEventResult, out var immediateResult)) return immediateResult;
         if (ValidateEvent(findEventResult, result)) return result;
-        UpdateAggregates(invite, findCreatorResult, result);
+        await UpdateAggregates(invite, findCreatorResult, result);
         return result;
     }
 
-    private void UpdateAggregates(Invite invite, Result<Creator> findCreatorResult, Result result)
+    private async Task UpdateAggregates(Invite invite, Result<Creator> findCreatorResult, Result result)
     {
-        var creator = findCreatorResult.Value;
+        var creator = findCreatorResult.Value!;
         creator.AddInvite(invite);
+        await inviteRepo.AddAsync(invite); 
+        await creatorRepo.UpdateAsync(creator);
     }
 
     private static bool ValidateEvent(Result<VeaEvent> findEventResult, Result result)
     {
-        var veaEvent = findEventResult.Value;
+        var veaEvent = findEventResult.Value!;
         if (veaEvent.VeaEventStatus.Equals(VeaEventStatus.Cancelled) ||
             veaEvent.VeaEventStatus.Equals(VeaEventStatus.Draft))
         {
@@ -51,7 +53,6 @@ public class GuestIsInvitedToEvent(
             }
         }
 
-        
         return false;
     }
 

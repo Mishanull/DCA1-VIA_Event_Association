@@ -14,7 +14,7 @@ public class GuestAcceptsInvite(
     IVeaEventRepository eventRepo,
     IInviteRepository inviteRepo)
 {
-    public Result Handle(InviteId inviteId)
+    public async Task<Result> Handle(InviteId inviteId)
     {
         if (ValidateInviteId(inviteId, out var findInviteResult)) return findInviteResult;
 
@@ -24,20 +24,22 @@ public class GuestAcceptsInvite(
         
         if (ValidateVeaEvent(findEventResult, result, out var veaEvent, out var handle1)) return handle1;
 
-        UpdateAggregates(findGuestResult, veaEvent, invite, result);
+        await UpdateAggregates(findGuestResult, veaEvent, invite);
         return result;
     }
 
-    private void UpdateAggregates(Result<VeaGuest> findGuestResult, VeaEvent veaEvent, Invite invite, Result result)
+    private async Task UpdateAggregates(Result<VeaGuest> findGuestResult, VeaEvent veaEvent, Invite invite)
     {
-        var guest = findGuestResult.Value;
+        var guest = findGuestResult.Value!;
         veaEvent.AddParticipant(guest.Id);
         invite.Accept();
+        await eventRepo.UpdateAsync(veaEvent);
+        await inviteRepo.UpdateAsync(invite);
     }
 
     private static bool ValidateVeaEvent(Result<VeaEvent> findEventResult, Result result, out VeaEvent veaEvent, out Result handle)
     {
-        veaEvent = findEventResult.Value;
+        veaEvent = findEventResult.Value!;
         if (veaEvent.VeaEventStatus.Equals(VeaEventStatus.Cancelled) || veaEvent.VeaEventStatus.Equals(VeaEventStatus.Draft))
         {
             result.CollectError(ErrorHelper.CreateVeaError("An invite can only be accepted for an active event.",
@@ -92,7 +94,7 @@ public class GuestAcceptsInvite(
         out Result<VeaGuest> findGuestResult, out Result<VeaEvent> findEventResult)
     {
         result = new Result();
-        invite = findInviteResult.Value;
+        invite = findInviteResult.Value!;
         findGuestResult = guestRepo.Find(invite.GuestId);
         var findCreatorResult = creatorRepo.Find(invite.CreatorId);
         findEventResult = eventRepo.Find(invite.EventId);

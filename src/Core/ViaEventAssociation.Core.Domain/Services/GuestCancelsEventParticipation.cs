@@ -14,23 +14,23 @@ public class GuestCancelsEventParticipation(
     IVeaEventRepository eventRepo,
     IRequestRepository requestRepo)
 {
-    public Result Handle(RequestId requestId)
+    public async Task<Result> Handle(RequestId requestId)
     {
         if (ValidateRequestId(requestId, out var findRequestResult)) return findRequestResult;
 
         if (ValidateGuestAndResultExist(findRequestResult, out var result, out var request, out var findGuestResult, out var findEventResult)) return result;
 
-        VeaGuest guest = findGuestResult.Value;
-        VeaEvent veaEvent = findEventResult.Value;
+        VeaGuest guest = findGuestResult.Value!;
+        VeaEvent veaEvent = findEventResult.Value!;
 
         if (ValidateEventHasNotEnded(veaEvent, result, out var result1)) return result1;
 
-        CancelRequestAndUpdateAggregates(veaEvent, guest, result, request);
+        await CancelRequestAndUpdateAggregates(veaEvent, guest, request);
 
         return result;
     }
 
-    private void CancelRequestAndUpdateAggregates(VeaEvent veaEvent, VeaGuest guest, Result result, Request request)
+    private async Task CancelRequestAndUpdateAggregates(VeaEvent veaEvent, VeaGuest guest, Request request)
     {
         if (veaEvent.IsParticipant(guest.Id))
         {
@@ -38,6 +38,8 @@ public class GuestCancelsEventParticipation(
         }
 
         request.CancelRequest();
+        await eventRepo.UpdateAsync(veaEvent);
+        await requestRepo.UpdateAsync(request);
     }
 
     private static bool ValidateEventHasNotEnded(VeaEvent veaEvent, Result result, out Result result1)
@@ -60,7 +62,7 @@ public class GuestCancelsEventParticipation(
         out Result<VeaGuest> findGuestResult, out Result<VeaEvent> findEventResult)
     {
         result = new Result();
-        request = findRequestResult.Value;
+        request = findRequestResult.Value!;
         findGuestResult = guestRepo.Find(request.GuestId);
         findEventResult = eventRepo.Find(request.EventId);
         result.CollectErrors(findGuestResult.Errors);

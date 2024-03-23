@@ -7,12 +7,16 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\Core\Tools\VIAEventsAssociation.Core.Tools.OperationResult\VIAEventsAssociation.Core.Tools.OperationResult.csproj" />
+        <ProjectReference Include="..\..\..\Core\Tools\VIAEventsAssociation.Core.Tools.OperationResult\VIAEventsAssociation.Core.Tools.OperationResult.csproj"/>
+        <ProjectReference Include="..\ViaEventAssociation.Core.Domain\ViaEventAssociation.Core.Domain.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="CommandDispatching\Commands\" />
-      <Folder Include="CommandDispatching\Dispatcher\" />
+        <Folder Include="CommandDispatching\Dispatcher\"/>
     </ItemGroup>
-
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+            <_Parameter1>UnitTests</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
 </Project>

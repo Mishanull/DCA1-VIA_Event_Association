@@ -30,7 +30,7 @@ public class SetMaxGuestsTest(ITestOutputHelper testOutputHelper)
             .Init()
             .WithStatus(status)
             .Build();
-        var validMaxGuests = ((Result<MaxGuests>)MaxGuests.Create(numberOfGuests)).Value;
+        var validMaxGuests = MaxGuests.Create(numberOfGuests).Value;
         
         veaEvent.SetMaxGuests(validMaxGuests);
         
@@ -48,7 +48,7 @@ public class SetMaxGuestsTest(ITestOutputHelper testOutputHelper)
             .Init()
             .WithStatus(VeaEventStatus.Active)
             .Build();
-        var validMaxGuests = ((Result<MaxGuests>)MaxGuests.Create(numberOfGuests)).Value;
+        var validMaxGuests = MaxGuests.Create(numberOfGuests).Value;
 
         veaEvent.SetMaxGuests(validMaxGuests);
         

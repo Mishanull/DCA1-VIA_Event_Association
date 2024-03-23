@@ -7,6 +7,7 @@ namespace UnitTests.Features.Event;
 public class ReadyTest(ITestOutputHelper testOutputHelper)
 {
     private static readonly DateTime FakeDateTime = new (2023, 08, 24, 12, 00, 00);
+    
     [Fact]
     public void S1_Ready_WithValidEventData_ShouldReadyEvent()
     {
