@@ -1,4 +1,4 @@
-using ViaEventAssociation.Core.Domain.Contracts;
+using ViaEventAssociation.Core.Domain.Contracts.Repositories;
 using ViaEventAssociation.Core.Domain.CreatorAgg;
 using ViaEventAssociation.Core.Domain.CreatorAgg.InviteEntity;
 using ViaEventAssociation.Core.Domain.EventAgg;
@@ -27,8 +27,6 @@ public class GuestIsInvitedToEvent(
     {
         var creator = findCreatorResult.Value;
         creator.AddInvite(invite);
-        result.CollectErrors(inviteRepo.Save(invite).Errors);
-        result.CollectErrors(creatorRepo.Save(creator).Errors);
     }
 
     private static bool ValidateEvent(Result<VeaEvent> findEventResult, Result result)

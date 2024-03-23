@@ -1,7 +1,6 @@
 using ViaEventAssociation.Core.Domain.EventAgg;
-using VIAEventsAssociation.Core.Tools.OperationResult.OperationResult;
 
-namespace ViaEventAssociation.Core.Domain.Contracts;
+namespace ViaEventAssociation.Core.Domain.Contracts.Repositories;
 
 public interface IVeaEventRepository : IVeaRepository<VeaEvent, VeaEventId>
 {

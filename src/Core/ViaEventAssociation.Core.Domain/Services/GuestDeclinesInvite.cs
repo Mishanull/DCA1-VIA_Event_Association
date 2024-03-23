@@ -1,4 +1,4 @@
-using ViaEventAssociation.Core.Domain.Contracts;
+using ViaEventAssociation.Core.Domain.Contracts.Repositories;
 using ViaEventAssociation.Core.Domain.CreatorAgg.InviteEntity;
 using ViaEventAssociation.Core.Domain.EventAgg;
 using ViaEventAssociation.Core.Domain.GuestAgg.Guest;
@@ -32,7 +32,6 @@ public class GuestDeclinesInvite(
     {
         invite.Decline();
         veaEvent.RemoveParticipant(findGuestResult.Value.Id);
-        result.CollectErrors(inviteRepo.Save(invite).Errors);
     }
 
     private static bool ValidateVeaEvent(Result<VeaEvent> findEventResult, Result result, out VeaEvent veaEvent,

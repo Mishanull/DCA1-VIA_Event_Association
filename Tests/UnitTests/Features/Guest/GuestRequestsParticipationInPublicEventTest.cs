@@ -1,4 +1,5 @@
 using ViaEventAssociation.Core.Domain.Common.ValueObjects;
+using ViaEventAssociation.Core.Domain.Contracts.Repositories;
 using ViaEventAssociation.Core.Domain.GuestAgg.RequestEntity;
 using VIAEventsAssociation.Core.Tools.Enumeration;
 using VIAEventsAssociation.Core.Tools.OperationResult.Error;
@@ -91,10 +92,7 @@ public class GuestRequestsParticipationInPublicEventTest
     private void RepoMockSetup(GuestId guestId, VeaGuest guest, VeaEventId eventId, VeaEvent veaEvent, Request request)
     {
         _guestRepoMock.Setup(repo => repo.Find(guestId)).Returns(new Result<VeaGuest>(guest));
-        _guestRepoMock.Setup(repo => repo.Save(guest)).Returns(new Result<VeaGuest>(guest));
         _eventRepoMock.Setup(repo => repo.Find(eventId)).Returns(new Result<VeaEvent>(veaEvent));
-        _eventRepoMock.Setup(repo => repo.Save(veaEvent)).Returns(new Result<VeaEvent>(veaEvent));
-        _requestRepoMock.Setup(repo => repo.Save(request)).Returns(new Result<Request>(request));
     }
 
 

@@ -1,4 +1,4 @@
-using ViaEventAssociation.Core.Domain.Contracts;
+using ViaEventAssociation.Core.Domain.Contracts.Repositories;
 using ViaEventAssociation.Core.Domain.EventAgg;
 using ViaEventAssociation.Core.Domain.GuestAgg.Guest;
 using ViaEventAssociation.Core.Domain.GuestAgg.Request;
@@ -35,11 +35,9 @@ public class GuestCancelsEventParticipation(
         if (veaEvent.IsParticipant(guest.Id))
         {
             veaEvent.RemoveParticipant(guest.Id);
-            result.CollectErrors(eventRepo.Save(veaEvent).Errors);
         }
 
         request.CancelRequest();
-        result.CollectErrors(requestRepo.Save(request).Errors);
     }
 
     private static bool ValidateEventHasNotEnded(VeaEvent veaEvent, Result result, out Result result1)

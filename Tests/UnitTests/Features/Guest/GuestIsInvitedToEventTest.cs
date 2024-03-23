@@ -1,6 +1,7 @@
 using Moq;
 using ViaEventAssociation.Core.Domain.Common.ValueObjects;
 using ViaEventAssociation.Core.Domain.Contracts;
+using ViaEventAssociation.Core.Domain.Contracts.Repositories;
 using ViaEventAssociation.Core.Domain.CreatorAgg;
 using ViaEventAssociation.Core.Domain.CreatorAgg.InviteEntity;
 using ViaEventAssociation.Core.Domain.EventAgg;
@@ -41,13 +42,9 @@ public class GuestIsInvitedToEventTest
     private void RepoMockSetup(VeaGuest guest, VeaEvent veaEvent, Invite invite, Creator creator)
     {
         _guestRepoMock.Setup(repo => repo.Find(guest.Id)).Returns(new Result<VeaGuest>(guest));
-        _guestRepoMock.Setup(repo => repo.Save(guest)).Returns(new Result<VeaGuest>(guest));
         _eventRepoMock.Setup(repo => repo.Find(veaEvent.Id)).Returns(new Result<VeaEvent>(veaEvent));
-        _eventRepoMock.Setup(repo => repo.Save(veaEvent)).Returns(new Result<VeaEvent>(veaEvent));
         _inviteRepoMock.Setup(repo => repo.Find(invite.Id)).Returns(new Result<Invite>(invite));
-        _inviteRepoMock.Setup(repo => repo.Save(invite)).Returns(new Result<Invite>(invite));
         _creatorRepoMock.Setup(repo => repo.Find(creator.Id)).Returns(new Result<Creator>(creator));
-        _creatorRepoMock.Setup(repo => repo.Save(creator)).Returns(new Result<Creator>(creator));
         _mockEmailCheck.Setup(emailService => emailService.DoesEmailExist(_defaultEmail.Value)).Returns(true);
     }
 
@@ -70,7 +67,6 @@ public class GuestIsInvitedToEventTest
 
         // Assert
         Assert.False(result.IsErrorResult());
-        _inviteRepoMock.Verify(repo => repo.Save(invite), Times.Once);
     }
 
     [Theory]

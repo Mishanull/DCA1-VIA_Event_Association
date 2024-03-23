@@ -1,4 +1,4 @@
-# Completed Features Status
+# Completed Features Status - Core Domain, Domain Services and Repository Contracts
 
 -[x] ValueObject base
 -[x] Entity base

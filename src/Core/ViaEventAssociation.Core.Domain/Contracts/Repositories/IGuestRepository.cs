@@ -1,7 +1,6 @@
 using ViaEventAssociation.Core.Domain.GuestAgg.Guest;
-using ViaEventAssociation.Core.Domain.Services;
 
-namespace ViaEventAssociation.Core.Domain.Contracts;
+namespace ViaEventAssociation.Core.Domain.Contracts.Repositories;
 
 public interface IGuestRepository : IVeaRepository<VeaGuest, GuestId>
 {

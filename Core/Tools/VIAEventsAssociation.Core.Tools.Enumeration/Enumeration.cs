@@ -75,28 +75,22 @@ public abstract class Enumeration : IComparable
         return absoluteDifference;
     }
 
-    public static T FromValue<T>(int value) where T : Enumeration, new()
+    public static T? FromValue<T>(int value) where T : Enumeration, new()
     {
         var matchingItem = Parse<T, int>(value, "value", item => item.Value == value);
         return matchingItem;
     }
 
-    public static T FromDisplayName<T>(string displayName) where T : Enumeration, new()
+    public static T? FromDisplayName<T>(string displayName) where T : Enumeration, new()
     {
         var matchingItem = Parse<T, string>(displayName, "display name", item => item.DisplayName == displayName);
         return matchingItem;
     }
 
-    private static T Parse<T, K>(K value, string description, Func<T, bool> predicate) where T : Enumeration, new()
+    private static T? Parse<T, K>(K value, string description, Func<T, bool> predicate) where T : Enumeration, new()
     {
         var matchingItem = GetAll<T>().FirstOrDefault(predicate);
-
-        if (matchingItem == null)
-        {
-            var message = string.Format("'{0}' is not a valid {1} in {2}", value, description, typeof(T));
-            throw new ApplicationException(message);
-        }
-
+        
         return matchingItem;
     }
 

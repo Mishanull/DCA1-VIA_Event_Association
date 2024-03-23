@@ -1,6 +1,7 @@
 using Moq;
 using ViaEventAssociation.Core.Domain.Common.ValueObjects;
 using ViaEventAssociation.Core.Domain.Contracts;
+using ViaEventAssociation.Core.Domain.Contracts.Repositories;
 using ViaEventAssociation.Core.Domain.EventAgg;
 using ViaEventAssociation.Core.Domain.GuestAgg.Guest;
 using ViaEventAssociation.Core.Domain.GuestAgg.Request;
@@ -108,8 +109,6 @@ public class GuestCancelsEventParticipationTest
     {
         _guestRepoMock.Setup(repo => repo.Find(guestId)).Returns(new Result<VeaGuest>(guest));
         _eventRepoMock.Setup(repo => repo.Find(eventId)).Returns(new Result<VeaEvent>(veaEvent));
-        _eventRepoMock.Setup(repo => repo.Save(veaEvent)).Returns(new Result<VeaEvent>(veaEvent));
-        _requestRepoMock.Setup(repo => repo.Save(request)).Returns(new Result<Request>(request));
         _requestRepoMock.Setup(repo => repo.Find(request.Id)).Returns(new Result<Request>(request));
     }
 }

@@ -1,7 +1,6 @@
-using ViaEventAssociation.Core.Domain.Contracts;
+using ViaEventAssociation.Core.Domain.Contracts.Repositories;
 using ViaEventAssociation.Core.Domain.EventAgg;
 using ViaEventAssociation.Core.Domain.GuestAgg.Guest;
-using ViaEventAssociation.Core.Domain.GuestAgg.Request;
 using ViaEventAssociation.Core.Domain.GuestAgg.RequestEntity;
 using VIAEventsAssociation.Core.Tools.OperationResult.Error;
 using VIAEventsAssociation.Core.Tools.OperationResult.Helpers;
@@ -30,10 +29,6 @@ public class GuestRequestParticipationPublicEvent(
         veaEvent.AddParticipant(guest.Id);
         request.ApproveRequest();
         guest.AddRequest(request);
-
-        result.CollectErrors(requestRepo.Save(request).Errors);
-        result.CollectErrors(eventRepo.Save(veaEvent).Errors);
-        result.CollectErrors(guestRepo.Save(guest).Errors);
     }
 
     private static bool HandleErrorResult(Request request, Result result, out Result result1)

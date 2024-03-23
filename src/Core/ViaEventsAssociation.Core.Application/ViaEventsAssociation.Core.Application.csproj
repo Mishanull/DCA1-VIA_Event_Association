@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\Core\Tools\VIAEventsAssociation.Core.Tools.OperationResult\VIAEventsAssociation.Core.Tools.OperationResult.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="CommandDispatching\Commands\" />
+      <Folder Include="CommandDispatching\Dispatcher\" />
+    </ItemGroup>
+
+</Project>
