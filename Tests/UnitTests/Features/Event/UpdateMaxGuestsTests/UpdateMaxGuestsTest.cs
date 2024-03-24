@@ -3,10 +3,10 @@ using VIAEventsAssociation.Core.Tools.OperationResult.Error;
 using VIAEventsAssociation.Core.Tools.OperationResult.OperationResult;
 using Xunit.Abstractions;
 
-namespace UnitTests.Features.Event;
+namespace UnitTests.Features.Event.UpdateMaxGuestsTests;
 
 
-public class SetMaxGuestsTest(ITestOutputHelper testOutputHelper)
+public class UpdateMaxGuestsTest(ITestOutputHelper testOutputHelper)
 {
     private readonly ITestOutputHelper _testOutputHelper = testOutputHelper;
 

@@ -2,7 +2,7 @@
 
 namespace UnitTests.Features.Event;
 
-public class CreateEventTest
+public class CreateEventAggregateTest
 {
 
     [Fact]
