@@ -9,7 +9,7 @@ using VIAEventsAssociation.Core.Tools.OperationResult.OperationResult;
 
 namespace ViaEventAssociation.Core.Domain.EventAgg;
 
-public class VeaEvent(VeaEventId id) : AggregateRoot(id)
+public class VeaEvent(TId id) : AggregateRoot(id)
 {
     // Default values
     private const string DefaultTitle = "Working Title";
@@ -17,40 +17,37 @@ public class VeaEvent(VeaEventId id) : AggregateRoot(id)
     private static readonly VeaEventStatus DefaultEventStatus = VeaEventStatus.Draft;
     private const int DefaultMaxGuests = 5;
     private static readonly VeaEventType DefaultEventType = VeaEventType.Private;
-
-    internal VeaEventId Id { get; } = id;
+    
     // Services
-    internal ICurrentTime currentTimeProvider;
+    internal readonly ICurrentTime CurrentTimeProvider;
 
     // Properties
-    internal Title Title { get; set; } = ((Result<Title>)Title.Create(DefaultTitle)).Value;
-
-    internal Description Description { get; set; } =
-        ((Result<Description>)Description.Create(DefaultDescription)).Value;
-
+    internal VeaEventId Id => (VeaEventId)base.Id;
+    internal Title Title { get; set; } = ((Result<Title>)Title.Create(DefaultTitle)).Value!;
+    internal Description Description { get; set; } = Description.Create(DefaultDescription).Value!;
     internal VeaEventType VeaEventType { get; set; } = DefaultEventType;
-    internal MaxGuests MaxGuests { get; set; } = ((Result<MaxGuests>)MaxGuests.Create(DefaultMaxGuests)).Value;
+    internal MaxGuests MaxGuests { get; set; } = MaxGuests.Create(DefaultMaxGuests).Value!;
     internal VeaEventStatus VeaEventStatus { get; set; } = DefaultEventStatus;
-
-    internal FromTo FromTo { get; set; }
-
+    internal FromTo? FromTo { get; set; }
     internal CreatorId CreatorId { get; }
     
     internal List<GuestId> Participants { get; } = [];
 
     // Constructors
-    private VeaEvent(VeaEventId id, ICurrentTime currentTimeProvider) : this(id)
+    private VeaEvent(VeaEventId id ,CreatorId creatorId, ICurrentTime currentTimeProvider) : this(id)
     {
-        this.currentTimeProvider = currentTimeProvider;
+        CreatorId = creatorId;
+        CurrentTimeProvider = currentTimeProvider;
     }
 
-    public static Result<VeaEvent> Create(ICurrentTime currentTime)
+    public static Result<VeaEvent> Create(CreatorId creatorId ,ICurrentTime currentTime)
     {
-        var veaEvent = new VeaEvent(new VeaEventId(), currentTime);
+        var veaEvent = new VeaEvent(new VeaEventId(), creatorId, currentTime);
         return new Result<VeaEvent>(veaEvent);
     }
 
-    internal Result UpdateTitle(Title title)
+    // Methods
+    public Result UpdateTitle(Title title)
     {
         // change status to "Draft" if status is "Ready"
         if (Equals(VeaEventStatus, VeaEventStatus.Ready))
@@ -142,7 +139,7 @@ public class VeaEvent(VeaEventId id) : AggregateRoot(id)
 
         // event cannot start in the past
         // if (fromTo.Start < DateTime.Now)
-        if (fromTo.Start < currentTimeProvider.GetCurrentTime())
+        if (fromTo.Start < CurrentTimeProvider.GetCurrentTime())
         {
             errorResult.CollectError(new VeaError(ErrorType.InvalidFromTo,
                 new ErrorMessage("Event cannot start in the past")));
@@ -209,7 +206,6 @@ public class VeaEvent(VeaEventId id) : AggregateRoot(id)
     }
 
     public Result SetMaxGuests(MaxGuests maxGuests)
-
     {
         var result = new Result();
         if (Equals(VeaEventStatus.Cancelled, VeaEventStatus))
@@ -249,11 +245,11 @@ public class VeaEvent(VeaEventId id) : AggregateRoot(id)
             return result;
         }
 
-        if (FromTo is null)
+        if (FromTo == null || FromTo.Start == null || FromTo.End == null)
         {
             result.CollectError(new VeaError(ErrorType.InvalidFromTo, new ErrorMessage("Time not set")));
         }
-        else if (FromTo.Start < currentTimeProvider.GetCurrentTime())
+        else if (FromTo.Start < CurrentTimeProvider.GetCurrentTime())
         {
             result.CollectError(new VeaError(ErrorType.InvalidFromTo, new ErrorMessage("Event starting in the past cannot be readied.")));
             return result;

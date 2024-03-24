@@ -1,10 +1,11 @@
-﻿using ViaEventAssociation.Core.Domain.EventAgg;
+﻿using UnitTests.Utils;
+using ViaEventAssociation.Core.Domain.EventAgg;
 using VIAEventsAssociation.Core.Tools.OperationResult.Error;
 using Xunit.Abstractions;
 
-namespace UnitTests.Features.Event;
+namespace UnitTests.Features.Event.MakeEventPrivateTests;
 
-public class MakePrivateTest(ITestOutputHelper testOutput)
+public class MakeEventPrivateTest(ITestOutputHelper testOutput)
 {
     
     public static TheoryData<VeaEventStatus> ValidStatuses => new TheoryData<VeaEventStatus>

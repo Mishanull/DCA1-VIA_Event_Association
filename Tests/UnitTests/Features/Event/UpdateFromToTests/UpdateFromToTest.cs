@@ -1,8 +1,9 @@
-﻿using ViaEventAssociation.Core.Domain.Common.ValueObjects;
+﻿using UnitTests.Utils;
+using ViaEventAssociation.Core.Domain.Common.ValueObjects;
 using ViaEventAssociation.Core.Domain.EventAgg;
 using VIAEventsAssociation.Core.Tools.OperationResult.Error;
 
-namespace UnitTests.Features.Event;
+namespace UnitTests.Features.Event.UpdateFromToTests;
 
 public class UpdateFromToTest
 {

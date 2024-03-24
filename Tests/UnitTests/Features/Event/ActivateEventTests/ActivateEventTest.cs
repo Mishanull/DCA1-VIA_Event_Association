@@ -1,11 +1,14 @@
-﻿using ViaEventAssociation.Core.Domain.EventAgg;
+﻿using UnitTests.Utils;
+using ViaEventAssociation.Core.Domain.EventAgg;
 using VIAEventsAssociation.Core.Tools.OperationResult.Error;
 using Xunit.Abstractions;
 
-namespace UnitTests.Features.Event;
+namespace UnitTests.Features.Event.ActivateEventTests;
 
-public class ActivateTest(ITestOutputHelper testOutputHelper)
+public class ActivateEventTest(ITestOutputHelper testOutputHelper)
 {
+    private static readonly DateTime FakeDateTime = new (2023, 08, 24, 12, 00, 00);
+
     [Fact]
     public void S1_Activate_WithValidStatusAndEventData_ShouldActivateEvent()
     {
@@ -15,6 +18,7 @@ public class ActivateTest(ITestOutputHelper testOutputHelper)
         var validTo = new DateTime(2024, 3, 15, 17, 30, 0);
         var veaEvent = new VeaEventBuilder()
             .Init()
+            .WithTime(FakeDateTime)
             .WithTitle(validTitle)
             .WithDescription(validDescription)
             .WithFromTo(validFrom, validTo)

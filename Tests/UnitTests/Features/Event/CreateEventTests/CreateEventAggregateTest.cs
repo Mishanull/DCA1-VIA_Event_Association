@@ -1,8 +1,8 @@
 ﻿using ViaEventAssociation.Core.Domain.EventAgg;
 
-namespace UnitTests.Features.Event;
+namespace UnitTests.Features.Event.CreateEventTests;
 
-public class CreateEventTest
+public class CreateEventAggregateTest
 {
 
     [Fact]
