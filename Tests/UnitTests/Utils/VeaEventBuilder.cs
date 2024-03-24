@@ -1,65 +1,65 @@
 ﻿using UnitTests.FakeServices;
-using ViaEventAssociation.Core.Domain.EventAgg;
 using ViaEventAssociation.Core.Domain.Common.ValueObjects;
-using VIAEventsAssociation.Core.Tools.OperationResult.OperationResult;
+using ViaEventAssociation.Core.Domain.CreatorAgg;
+using ViaEventAssociation.Core.Domain.EventAgg;
 
-namespace UnitTests;
+namespace UnitTests.Utils;
 
 public class VeaEventBuilder
 {
-    private static VeaEvent? VeaEvent;
+    private static VeaEvent? _veaEvent;
     
     public VeaEventBuilder Init()
     {
-        VeaEvent = VeaEvent.Create(new FakeCurrentTime()).Value;
+        _veaEvent = VeaEvent.Create(new CreatorId() ,new FakeCurrentTime()).Value;
         return this;
     }
     
     public VeaEventBuilder WithTime(DateTime fakeTime)
     {
-        ((FakeCurrentTime)VeaEvent.currentTimeProvider).FakeTime = fakeTime;
+        ((FakeCurrentTime)_veaEvent.CurrentTimeProvider).FakeTime = fakeTime;
         return this;
     }
     
     public VeaEventBuilder WithTitle(string title)
     {
-        VeaEvent.Title = Title.Create(title).Value;
+        _veaEvent.Title = Title.Create(title).Value;
         return this;
     }
     
     public VeaEventBuilder WithDescription(string description)
     {
-        VeaEvent.Description = Description.Create(description).Value;
+        _veaEvent.Description = Description.Create(description).Value;
         return this;
     }
     
     public VeaEventBuilder WithEventType(VeaEventType veaEventType)
     {
-        VeaEvent.VeaEventType = veaEventType;
+        _veaEvent.VeaEventType = veaEventType;
         return this;
     }
     
     public VeaEventBuilder WithMaxGuests(int maxGuests)
     {
-        VeaEvent.MaxGuests = ((Result<MaxGuests>)MaxGuests.Create(maxGuests)).Value;
+        _veaEvent.MaxGuests = MaxGuests.Create(maxGuests).Value;
         return this;
     }
     
     public VeaEventBuilder WithStatus(VeaEventStatus veaEventStatus)
     {
-        VeaEvent.VeaEventStatus = veaEventStatus;
+        _veaEvent.VeaEventStatus = veaEventStatus;
         return this;
     }
     
     public VeaEventBuilder WithFromTo(DateTime from, DateTime to)
     {
-        VeaEvent.FromTo = ((Result<FromTo>)FromTo.Create(from, to)).Value;
+        _veaEvent.FromTo = FromTo.Create(from, to).Value;
         return this;
     }
     
     public VeaEvent Build()
     {
-        return VeaEvent;
+        return _veaEvent;
     }
     
 }

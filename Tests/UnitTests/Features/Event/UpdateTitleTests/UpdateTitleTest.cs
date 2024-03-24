@@ -1,8 +1,8 @@
-﻿using ViaEventAssociation.Core.Domain.EventAgg;
+﻿using UnitTests.Utils;
+using ViaEventAssociation.Core.Domain.EventAgg;
 using VIAEventsAssociation.Core.Tools.OperationResult.Error;
-using VIAEventsAssociation.Core.Tools.OperationResult.OperationResult;
 
-namespace UnitTests.Features.Event;
+namespace UnitTests.Features.Event.UpdateTitleTests;
 
 public class UpdateTitleTest
 {

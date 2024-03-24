@@ -1,3 +1,4 @@
+using UnitTests.Utils;
 using ViaEventAssociation.Core.Domain.Contracts.Repositories;
 using ViaEventAssociation.Core.Domain.EventAgg;
 using VIAEventsAssociation.Core.Tools.OperationResult.OperationResult;

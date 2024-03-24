@@ -1,7 +1,8 @@
-﻿using ViaEventAssociation.Core.Domain.EventAgg;
+﻿using UnitTests.Utils;
+using ViaEventAssociation.Core.Domain.EventAgg;
 using VIAEventsAssociation.Core.Tools.OperationResult.Error;
 
-namespace UnitTests.Features.Event;
+namespace UnitTests.Features.Event.UpdateDescriptionTests;
 
 public class UpdateDescriptionTest
 {
@@ -9,13 +10,12 @@ public class UpdateDescriptionTest
     public void S1_UpdateDescriptionOfDraftEvent_WithValidDescription_ShouldUpdateDescription()
     {
         // Arrange
-        var veaEvent = new VeaEventBuilder().Init()
-            .Build();
-        var newDescription = Description.Create("Valid Description").Value;
+        var veaEvent = new VeaEventBuilder().Init().Build();
+        var newDescriptionResul = Description.Create("Valid Description");
         // Act
-        veaEvent.UpdateDescription(newDescription);
+        veaEvent.UpdateDescription(newDescriptionResul.Value!);
         // Assert
-        Assert.Equal(veaEvent.Description, newDescription);
+        Assert.Equal(veaEvent.Description, newDescriptionResul.Value!);
     }
     
     [Fact]
@@ -26,7 +26,7 @@ public class UpdateDescriptionTest
             .WithDescription("Old valid description")
             .Build();
         // Act
-        veaEvent.UpdateDescription(Description.Create().Value);
+        veaEvent.UpdateDescription(Description.Create().Value!);
         // Assert
         Assert.Equal(veaEvent.Description, Description.Create("").Value);
     }
@@ -38,11 +38,11 @@ public class UpdateDescriptionTest
         var veaEvent = new VeaEventBuilder().Init()
             .WithStatus(VeaEventStatus.Ready)
             .Build();
-        var newDescription = Description.Create("New valid description").Value;
+        var newDescriptionResult = Description.Create("New valid description");
         // Act
-        veaEvent.UpdateDescription(newDescription);
+        veaEvent.UpdateDescription(newDescriptionResult.Value!);
         // Assert
-        Assert.Equal(veaEvent.Description, newDescription);
+        Assert.Equal(veaEvent.Description, newDescriptionResult.Value);
         Assert.Equal(VeaEventStatus.Draft, veaEvent.VeaEventStatus);
     }
     
@@ -65,9 +65,9 @@ public class UpdateDescriptionTest
         var veaEvent = new VeaEventBuilder().Init()
             .WithStatus(VeaEventStatus.Cancelled)
             .Build();
-        var newDescription = Description.Create("New valid description").Value;
+        var newDescriptionResult = Description.Create("New valid description");
         // Act
-        var result = veaEvent.UpdateDescription(newDescription);
+        var result = veaEvent.UpdateDescription(newDescriptionResult.Value!);
         // Assert
         Assert.True(result.IsErrorResult());
         Assert.Equal(result.Errors.First().Type, ErrorType.ActionNotAllowed);
@@ -80,9 +80,9 @@ public class UpdateDescriptionTest
         var veaEvent = new VeaEventBuilder().Init()
             .WithStatus(VeaEventStatus.Active)
             .Build();
-        var newDescription = Description.Create("New valid description").Value;
+        var newDescriptionResult = Description.Create("New valid description");
         // Act
-        var result = veaEvent.UpdateDescription(newDescription);
+        var result = veaEvent.UpdateDescription(newDescriptionResult.Value!);
         // Assert
         Assert.True(result.IsErrorResult());
         Assert.Equal(result.Errors.First().Type, ErrorType.ActionNotAllowed);
