@@ -10,4 +10,8 @@ public class VeaEventType : Enumeration
     private VeaEventType(int id, string value) : base(id, value)
     {
     }
+
+    public VeaEventType()
+    {
+    }
 }

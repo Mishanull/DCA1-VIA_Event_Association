@@ -17,23 +17,18 @@ public class VeaEvent(VeaEventId id) : AggregateRoot(id)
     private static readonly VeaEventStatus DefaultEventStatus = VeaEventStatus.Draft;
     private const int DefaultMaxGuests = 5;
     private static readonly VeaEventType DefaultEventType = VeaEventType.Private;
-
-    internal VeaEventId Id { get; } = id;
+    
     // Services
     internal ICurrentTime currentTimeProvider;
 
     // Properties
+    internal VeaEventId Id { get; } = id;
     internal Title Title { get; set; } = ((Result<Title>)Title.Create(DefaultTitle)).Value;
-
-    internal Description Description { get; set; } =
-        ((Result<Description>)Description.Create(DefaultDescription)).Value;
-
+    internal Description Description { get; set; } = ((Result<Description>)Description.Create(DefaultDescription)).Value;
     internal VeaEventType VeaEventType { get; set; } = DefaultEventType;
     internal MaxGuests MaxGuests { get; set; } = ((Result<MaxGuests>)MaxGuests.Create(DefaultMaxGuests)).Value;
     internal VeaEventStatus VeaEventStatus { get; set; } = DefaultEventStatus;
-
     internal FromTo FromTo { get; set; }
-
     internal CreatorId CreatorId { get; }
     // internal LocationId LocationId { get; }
     internal List<GuestId> Participants { get; } = [];
@@ -50,7 +45,8 @@ public class VeaEvent(VeaEventId id) : AggregateRoot(id)
         return new Result<VeaEvent>(veaEvent);
     }
 
-    internal Result UpdateTitle(Title title)
+    // Methods
+    public Result UpdateTitle(Title title)
     {
         // change status to "Draft" if status is "Ready"
         if (Equals(VeaEventStatus, VeaEventStatus.Ready))
@@ -209,7 +205,6 @@ public class VeaEvent(VeaEventId id) : AggregateRoot(id)
     }
 
     public Result SetMaxGuests(MaxGuests maxGuests)
-
     {
         var result = new Result();
         if (Equals(VeaEventStatus.Cancelled, VeaEventStatus))
