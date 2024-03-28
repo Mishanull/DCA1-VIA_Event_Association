@@ -1,7 +1,6 @@
-using ViaEventAssociation.Core.Domain.Contracts;
+using ViaEventAssociation.Core.Domain.Contracts.Repositories;
 using ViaEventAssociation.Core.Domain.EventAgg;
 using ViaEventAssociation.Core.Domain.GuestAgg.Guest;
-using ViaEventAssociation.Core.Domain.GuestAgg.Request;
 using ViaEventAssociation.Core.Domain.GuestAgg.RequestEntity;
 using VIAEventsAssociation.Core.Tools.OperationResult.Error;
 using VIAEventsAssociation.Core.Tools.OperationResult.Helpers;
@@ -14,26 +13,24 @@ public class GuestRequestParticipationPublicEvent(
     IVeaEventRepository eventRepo,
     IRequestRepository requestRepo)
 {
-    public Result Handle(Request request)
+    public async Task<Result> Handle(Request request)
     {
         if (Result(request, out var result, out var findGuestResult, out var findEventResult)) return result;
         var veaEvent = ValidateEvent(findEventResult, result);
         var guest = ValidateGuestParticipation(findGuestResult, veaEvent, result);
         if (HandleErrorResult(request, result, out var result1)) return result1;
-
-        UpdateAggregates(request, veaEvent, guest, result);
+        await UpdateAggregates(request, veaEvent, guest, result);
         return result;
     }
 
-    private void UpdateAggregates(Request request, VeaEvent veaEvent, VeaGuest guest, Result result)
+    private async Task UpdateAggregates(Request request, VeaEvent veaEvent, VeaGuest guest, Result result)
     {
         veaEvent.AddParticipant(guest.Id);
         request.ApproveRequest();
         guest.AddRequest(request);
-
-        result.CollectErrors(requestRepo.Save(request).Errors);
-        result.CollectErrors(eventRepo.Save(veaEvent).Errors);
-        result.CollectErrors(guestRepo.Save(guest).Errors);
+        await eventRepo.UpdateAsync(veaEvent);
+        await requestRepo.UpdateAsync(request);
+        await guestRepo.UpdateAsync(guest);
     }
 
     private static bool HandleErrorResult(Request request, Result result, out Result result1)
@@ -54,7 +51,7 @@ public class GuestRequestParticipationPublicEvent(
     private static VeaGuest ValidateGuestParticipation(Result<VeaGuest> findGuestResult, VeaEvent veaEvent,
         Result result)
     {
-        VeaGuest guest = findGuestResult.Value;
+        VeaGuest guest = findGuestResult.Value!;
         if (veaEvent.IsParticipant(guest.Id))
         {
             result.CollectError(ErrorHelper.CreateVeaError(
@@ -66,7 +63,7 @@ public class GuestRequestParticipationPublicEvent(
 
     private static VeaEvent ValidateEvent(Result<VeaEvent> findEventResult, Result result)
     {
-        VeaEvent veaEvent = findEventResult.Value;
+        VeaEvent veaEvent = findEventResult.Value!;
         if (veaEvent.IsFull())
         {
             result.CollectError(ErrorHelper.CreateVeaError("Event is full.", ErrorType.EventIsFull));

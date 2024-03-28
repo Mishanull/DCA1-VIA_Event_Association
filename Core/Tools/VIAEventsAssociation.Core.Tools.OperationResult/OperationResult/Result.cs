@@ -17,6 +17,13 @@ public class Result
 
     public void CollectError(VeaError error) => Errors.Add(error);
     public void CollectErrors(HashSet<VeaError> errors) => Errors.UnionWith(errors);
+    public void CollectFromMultiple(params Result[] results)
+    {
+        foreach (Result result in results)
+        {
+            Errors.UnionWith(result.Errors);
+        }
+    } 
 
     public bool IsErrorResult()
     {
@@ -29,7 +36,7 @@ public class Result
     }
 }
 
-public class Result<T>(T value) : Result
+public class Result<T>(T? value) : Result
 {
-    public T Value { get; } = value;
+    public T? Value { get; } = value;
 }

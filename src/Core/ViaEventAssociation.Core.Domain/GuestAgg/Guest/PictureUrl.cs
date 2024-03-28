@@ -11,6 +11,11 @@ public class PictureUrl : ValueObject
     
     internal string Value { get; }
 
+    public PictureUrl()
+    {
+        Value = "";
+    }
+
     private PictureUrl(string value)
     {
         Value = value;

@@ -1,7 +1,8 @@
-using ViaEventAssociation.Core.Domain.Contracts;
+using ViaEventAssociation.Core.Domain.Contracts.Repositories;
 using ViaEventAssociation.Core.Domain.CreatorAgg.InviteEntity;
 using ViaEventAssociation.Core.Domain.EventAgg;
 using ViaEventAssociation.Core.Domain.GuestAgg.Guest;
+using VIAEventsAssociation.Core.Tools.Enumeration;
 using VIAEventsAssociation.Core.Tools.OperationResult.Error;
 using VIAEventsAssociation.Core.Tools.OperationResult.Helpers;
 using VIAEventsAssociation.Core.Tools.OperationResult.OperationResult;
@@ -14,31 +15,32 @@ public class GuestDeclinesInvite(
     IVeaEventRepository eventRepo,
     IInviteRepository inviteRepo)
 {
-    public Result Handle(InviteId inviteId)
+    public async Task<Result> Handle(InviteId inviteId)
     {
         if (ValidateInviteId(inviteId, out var findInviteResult)) return findInviteResult;
 
         if (ValidateCreatorGuestAndEventExistence(findInviteResult, out var result, out var invite,
                 out var findGuestResult, out var findEventResult)) return result;
-        
+
         if (ValidateVeaEvent(findEventResult, result, out var veaEvent, out var result1)) return result1;
 
-        DeclineInviteAndUpdateAggregates(invite, veaEvent, findGuestResult, result);
+        await DeclineInviteAndUpdateAggregates(invite, veaEvent, findGuestResult, result);
         return result;
     }
 
-    private void DeclineInviteAndUpdateAggregates(Invite invite, VeaEvent veaEvent, Result<VeaGuest> findGuestResult,
+    private async Task DeclineInviteAndUpdateAggregates(Invite invite, VeaEvent veaEvent, Result<VeaGuest> findGuestResult,
         Result result)
     {
         invite.Decline();
-        veaEvent.RemoveParticipant(findGuestResult.Value.Id);
-        result.CollectErrors(inviteRepo.Save(invite).Errors);
+        veaEvent.RemoveParticipant(findGuestResult.Value!.Id);
+        await inviteRepo.UpdateAsync(invite);
+        await eventRepo.UpdateAsync(veaEvent);
     }
 
     private static bool ValidateVeaEvent(Result<VeaEvent> findEventResult, Result result, out VeaEvent veaEvent,
         out Result result1)
     {
-        veaEvent = findEventResult.Value;
+        veaEvent = findEventResult.Value!;
         result1 = result;
         if (veaEvent.VeaEventStatus.Equals(VeaEventStatus.Cancelled) ||
             veaEvent.VeaEventStatus.Equals(VeaEventStatus.Draft))
@@ -80,15 +82,15 @@ public class GuestDeclinesInvite(
         out Result<VeaGuest> findGuestResult, out Result<VeaEvent> findEventResult)
     {
         result = new Result();
-        invite = findInviteResult.Value;
+        invite = findInviteResult.Value!;
         findGuestResult = guestRepo.Find(invite.GuestId);
         var findCreatorResult = creatorRepo.Find(invite.CreatorId);
         findEventResult = eventRepo.Find(invite.EventId);
-
         result.CollectErrors(findGuestResult.Errors);
         result.CollectErrors(findCreatorResult.Errors);
         result.CollectErrors(findEventResult.Errors);
         result.CollectErrors(findInviteResult.Errors);
+
         if (result.IsErrorResult())
         {
             return true;
