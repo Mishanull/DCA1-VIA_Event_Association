@@ -7,6 +7,7 @@ using ViaEventAssociation.Core.Domain.CreatorAgg.InviteEntity;
 using ViaEventAssociation.Core.Domain.EventAgg;
 using ViaEventAssociation.Core.Domain.GuestAgg.Guest;
 using ViaEventAssociation.Core.Domain.Services;
+using ViaEventAssociation.Core.Domain.Services.Guest;
 using VIAEventsAssociation.Core.Tools.Enumeration;
 using VIAEventsAssociation.Core.Tools.OperationResult.Error;
 using VIAEventsAssociation.Core.Tools.OperationResult.OperationResult;
@@ -30,7 +31,7 @@ public class GuestIsInvitedToEventDomainServiceTest
         _inviteRepoMock = new Mock<IInviteRepository>();
         _creatorRepoMock = new Mock<ICreatorRepository>();
         _mockEmailCheck = new Mock<IEmailCheck>();
-        _defaultEmail = Email.Create("creator@example.com", _mockEmailCheck.Object).Value;
+        _defaultEmail = Email.Create("creator@example.com", _mockEmailCheck.Object).Value!;
         _service = new GuestIsInvitedToEvent(
             _guestRepoMock.Object,
             _creatorRepoMock.Object,
@@ -56,8 +57,8 @@ public class GuestIsInvitedToEventDomainServiceTest
         {
             VeaEventStatus = VeaEventStatus.Ready
         };
-        var creator = Creator.Create(_defaultEmail).Value;
-        var invite = Invite.Create(guest.Id, creator.Id, veaEvent.Id).Value;
+        var creator = Creator.Create(_defaultEmail).Value!;
+        var invite = Invite.Create(guest.Id, creator.Id, veaEvent.Id).Value!;
 
         RepoMockSetup(guest, veaEvent, invite, creator);
 

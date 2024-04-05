@@ -5,9 +5,9 @@ using ViaEventAssociation.Core.Domain.EventAgg;
 using ViaEventAssociation.Core.Domain.GuestAgg.Guest;
 using ViaEventAssociation.Core.Domain.GuestAgg.Request;
 using ViaEventAssociation.Core.Domain.GuestAgg.RequestEntity;
-using ViaEventsAssociation.Core.Application.CommandDispatching.Commands.Guest;
-using ViaEventsAssociation.Core.Application.CommandDispatching.Common.Base;
-using ViaEventsAssociation.Core.Application.CommandDispatching.Handlers.Guest;
+using ViaEventsAssociation.Core.Application.CommandHandler.Commands.Guest;
+using ViaEventsAssociation.Core.Application.CommandHandler.Common.Base;
+using ViaEventsAssociation.Core.Application.CommandHandler.Handlers.GuestHandlers;
 using VIAEventsAssociation.Core.Tools.OperationResult.Error;
 using VIAEventsAssociation.Core.Tools.OperationResult.Helpers;
 using VIAEventsAssociation.Core.Tools.OperationResult.OperationResult;
@@ -60,12 +60,12 @@ public class GuestParticipatesInEventHandlerTest
         var error = ErrorHelper.CreateVeaError("Not found.", ErrorType.ResourceNotFound);
         errorResult.CollectError(error);
         repoMock.Setup(r => r.Find(It.IsAny<GuestId>())).Returns(errorResult);
-        _handler = new GuestParticipatesInPublicEventHandler(new FakeUow(), repoMock.Object, new FakeEventRepository(),new FakeRequestRepository() );
+        _handler = new GuestParticipatesInPublicEventHandler(repoMock.Object, new FakeEventRepository(),new FakeRequestRepository() );
         return error;
     }
 
     private void SetupSuccess()
     {
-        _handler = new GuestParticipatesInPublicEventHandler(new FakeUow(), new FakeGuestRepository(), new FakeEventRepository(), new FakeRequestRepository());
+        _handler = new GuestParticipatesInPublicEventHandler(new FakeGuestRepository(), new FakeEventRepository(), new FakeRequestRepository());
     }
 }

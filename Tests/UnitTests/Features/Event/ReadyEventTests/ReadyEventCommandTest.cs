@@ -1,4 +1,4 @@
-﻿using ViaEventsAssociation.Core.Application.CommandDispatching.Commands.Event;
+﻿using ViaEventsAssociation.Core.Application.CommandHandler.Commands.Event;
 
 namespace UnitTests.Features.Event.ReadyEventTests;
 

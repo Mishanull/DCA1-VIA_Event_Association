@@ -1,4 +1,4 @@
-﻿using ViaEventsAssociation.Core.Application.CommandDispatching.Commands.Event;
+﻿using ViaEventsAssociation.Core.Application.CommandHandler.Commands.Event;
 using VIAEventsAssociation.Core.Tools.OperationResult.Error;
 
 namespace UnitTests.Features.Event.UpdateTitleTests;

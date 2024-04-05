@@ -3,6 +3,7 @@ using ViaEventAssociation.Core.Domain.Common.ValueObjects;
 using ViaEventAssociation.Core.Domain.Contracts;
 using ViaEventAssociation.Core.Domain.CreatorAgg;
 using ViaEventAssociation.Core.Domain.GuestAgg.Guest;
+using ViaEventAssociation.Core.Domain.LocationAgg;
 using VIAEventsAssociation.Core.Tools.OperationResult.Error;
 using VIAEventsAssociation.Core.Tools.OperationResult.Helpers;
 using VIAEventsAssociation.Core.Tools.OperationResult.OperationResult;
@@ -32,6 +33,8 @@ public class VeaEvent(TId id) : AggregateRoot(id)
     internal CreatorId CreatorId { get; }
     
     internal List<GuestId> Participants { get; } = [];
+    
+    internal LocationId? LocationId { get; private set; }
 
     // Constructors
     private VeaEvent(VeaEventId id ,CreatorId creatorId, ICurrentTime currentTimeProvider) : this(id)
@@ -340,5 +343,10 @@ public class VeaEvent(TId id) : AggregateRoot(id)
     public bool IsParticipant(GuestId guestId)
     {
         return Participants.Contains(guestId);
+    }
+
+    public void SetLocationId(LocationId locationId)
+    {
+        LocationId = locationId;
     }
 }

@@ -3,9 +3,9 @@ using UnitTests.FakeServices.Repositories;
 using UnitTests.Utils;
 using ViaEventAssociation.Core.Domain.Contracts.Repositories;
 using ViaEventAssociation.Core.Domain.EventAgg;
-using ViaEventsAssociation.Core.Application.CommandDispatching.Commands.Event;
-using ViaEventsAssociation.Core.Application.CommandDispatching.Common.Base;
-using ViaEventsAssociation.Core.Application.CommandDispatching.Handlers.Event;
+using ViaEventsAssociation.Core.Application.CommandHandler.Commands.Event;
+using ViaEventsAssociation.Core.Application.CommandHandler.Common.Base;
+using ViaEventsAssociation.Core.Application.CommandHandler.Handlers.Event;
 
 namespace UnitTests.Features.Event.MakeEventPublicTests;
 

@@ -4,9 +4,9 @@ using ViaEventAssociation.Core.Domain.Contracts.Repositories;
 using ViaEventAssociation.Core.Domain.CreatorAgg.InviteEntity;
 using ViaEventAssociation.Core.Domain.GuestAgg.Request;
 using ViaEventAssociation.Core.Domain.GuestAgg.RequestEntity;
-using ViaEventsAssociation.Core.Application.CommandDispatching.Commands.Guest;
-using ViaEventsAssociation.Core.Application.CommandDispatching.Common.Base;
-using ViaEventsAssociation.Core.Application.CommandDispatching.Handlers.Guest;
+using ViaEventsAssociation.Core.Application.CommandHandler.Commands.Guest;
+using ViaEventsAssociation.Core.Application.CommandHandler.Common.Base;
+using ViaEventsAssociation.Core.Application.CommandHandler.Handlers.GuestHandlers;
 using VIAEventsAssociation.Core.Tools.OperationResult.Error;
 using VIAEventsAssociation.Core.Tools.OperationResult.Helpers;
 using VIAEventsAssociation.Core.Tools.OperationResult.OperationResult;
@@ -53,12 +53,12 @@ public class GuestCancelsParticipationHandlerTest
         var error = ErrorHelper.CreateVeaError("Not found.", ErrorType.ResourceNotFound);
         errorResult.CollectError(error);
         repoMock.Setup(r => r.Find(It.IsAny<RequestId>())).Returns(errorResult);
-        _handler = new GuestCancelsEventParticipationHandler(new FakeUow(), new FakeGuestRepository(), new FakeEventRepository(), repoMock.Object);
+        _handler = new GuestCancelsEventParticipationHandler(new FakeGuestRepository(), new FakeEventRepository(), repoMock.Object);
         return error;
     }
 
     private void SetupSuccess()
     {
-        _handler = new GuestCancelsEventParticipationHandler(new FakeUow(), new FakeGuestRepository(), new FakeEventRepository(), new FakeRequestRepository());
+        _handler = new GuestCancelsEventParticipationHandler(new FakeGuestRepository(), new FakeEventRepository(), new FakeRequestRepository());
     }
 }
