@@ -7,6 +7,7 @@ using ViaEventAssociation.Core.Domain.CreatorAgg;
 using ViaEventAssociation.Core.Domain.CreatorAgg.InviteEntity;
 using ViaEventAssociation.Core.Domain.EventAgg;
 using ViaEventAssociation.Core.Domain.GuestAgg.Guest;
+using ViaEventAssociation.Core.Domain.Services.Guest;
 using VIAEventsAssociation.Core.Tools.Enumeration;
 using VIAEventsAssociation.Core.Tools.OperationResult.Error;
 using VIAEventsAssociation.Core.Tools.OperationResult.Helpers;

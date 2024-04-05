@@ -1,6 +1,6 @@
 using Moq;
 using ViaEventAssociation.Core.Domain.Contracts;
-using ViaEventsAssociation.Core.Application.CommandDispatching.Commands.Guest;
+using ViaEventsAssociation.Core.Application.CommandHandler.Commands.Guest;
 
 namespace UnitTests.Features.Guest.CreateGuestTests;
 

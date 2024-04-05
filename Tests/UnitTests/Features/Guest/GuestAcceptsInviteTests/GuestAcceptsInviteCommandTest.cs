@@ -1,4 +1,4 @@
-using ViaEventsAssociation.Core.Application.CommandDispatching.Commands.Guest;
+using ViaEventsAssociation.Core.Application.CommandHandler.Commands.Guest;
 using VIAEventsAssociation.Core.Tools.OperationResult.OperationResult;
 
 namespace UnitTests.Features.Guest.GuestAcceptsInviteTests;

@@ -6,9 +6,9 @@ using ViaEventAssociation.Core.Domain.CreatorAgg.InviteEntity;
 using ViaEventAssociation.Core.Domain.EventAgg;
 using ViaEventAssociation.Core.Domain.GuestAgg.Guest;
 using ViaEventAssociation.Core.Domain.GuestAgg.RequestEntity;
-using ViaEventsAssociation.Core.Application.CommandDispatching.Commands.Guest;
-using ViaEventsAssociation.Core.Application.CommandDispatching.Common.Base;
-using ViaEventsAssociation.Core.Application.CommandDispatching.Handlers.Guest;
+using ViaEventsAssociation.Core.Application.CommandHandler.Commands.Guest;
+using ViaEventsAssociation.Core.Application.CommandHandler.Common.Base;
+using ViaEventsAssociation.Core.Application.CommandHandler.Handlers.GuestHandlers;
 using VIAEventsAssociation.Core.Tools.OperationResult.Error;
 using VIAEventsAssociation.Core.Tools.OperationResult.Helpers;
 using VIAEventsAssociation.Core.Tools.OperationResult.OperationResult;
@@ -61,12 +61,12 @@ public class GuestIsInvitedToEventHandlerTest
         var error = ErrorHelper.CreateVeaError("Not found.", ErrorType.ResourceNotFound);
         errorResult.CollectError(error);
         repoMock.Setup(r => r.Find(It.IsAny<CreatorId>())).Returns(errorResult);
-        _handler = new GuestIsInvitedToEventHandler(new FakeGuestRepository(), repoMock.Object, new FakeEventRepository(), new FakeInviteRepository(),new FakeUow());
+        _handler = new GuestIsInvitedToEventHandler(new FakeGuestRepository(), repoMock.Object, new FakeEventRepository(), new FakeInviteRepository());
         return error;
     }
 
     private void SetupSuccess()
     {
-        _handler = new GuestIsInvitedToEventHandler(new FakeGuestRepository(), new FakeCreatorRepository(), new FakeEventRepository(), new FakeInviteRepository(),new FakeUow());
+        _handler = new GuestIsInvitedToEventHandler(new FakeGuestRepository(), new FakeCreatorRepository(), new FakeEventRepository(), new FakeInviteRepository());
     }
 }

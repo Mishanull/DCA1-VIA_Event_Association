@@ -6,6 +6,7 @@ using ViaEventAssociation.Core.Domain.GuestAgg.Guest;
 using ViaEventAssociation.Core.Domain.GuestAgg.Request;
 using ViaEventAssociation.Core.Domain.GuestAgg.RequestEntity;
 using ViaEventAssociation.Core.Domain.Services;
+using ViaEventAssociation.Core.Domain.Services.Guest;
 using VIAEventsAssociation.Core.Tools.OperationResult.Error;
 using VIAEventsAssociation.Core.Tools.OperationResult.OperationResult;
 

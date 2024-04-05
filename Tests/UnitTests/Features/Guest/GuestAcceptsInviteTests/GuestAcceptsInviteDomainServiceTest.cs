@@ -6,6 +6,7 @@ using ViaEventAssociation.Core.Domain.CreatorAgg;
 using ViaEventAssociation.Core.Domain.CreatorAgg.InviteEntity;
 using ViaEventAssociation.Core.Domain.EventAgg;
 using ViaEventAssociation.Core.Domain.GuestAgg.Guest;
+using ViaEventAssociation.Core.Domain.Services.Guest;
 using VIAEventsAssociation.Core.Tools.Enumeration;
 using VIAEventsAssociation.Core.Tools.OperationResult.Error;
 using VIAEventsAssociation.Core.Tools.OperationResult.Helpers;
@@ -21,7 +22,7 @@ public class GuestAcceptsInviteDomainServiceTest
     private readonly Mock<IInviteRepository> _inviteRepoMock;
     private readonly Mock<IEmailCheck> _mockEmailCheck;
     private readonly Email _defaultEmail;
-    private readonly ViaEventAssociation.Core.Domain.Services.GuestAcceptsInvite uut;
+    private readonly GuestAcceptsInvite uut;
     public GuestAcceptsInviteDomainServiceTest()
     {
         _guestRepoMock = new Mock<IGuestRepository>();
@@ -30,7 +31,7 @@ public class GuestAcceptsInviteDomainServiceTest
         _creatorRepoMock = new Mock<ICreatorRepository>();
         _mockEmailCheck = new Mock<IEmailCheck>();
         _defaultEmail = Email.Create("creator@example.com", _mockEmailCheck.Object).Value!;
-        uut = new ViaEventAssociation.Core.Domain.Services.GuestAcceptsInvite(
+        uut = new GuestAcceptsInvite(
             _guestRepoMock.Object,
             _creatorRepoMock.Object,
             _eventRepoMock.Object,

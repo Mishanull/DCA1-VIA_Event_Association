@@ -1,18 +1,16 @@
+using Moq;
 using ViaEventAssociation.Core.Domain.Common.ValueObjects;
 using ViaEventAssociation.Core.Domain.Contracts.Repositories;
-using ViaEventAssociation.Core.Domain.GuestAgg.RequestEntity;
-using VIAEventsAssociation.Core.Tools.Enumeration;
-using VIAEventsAssociation.Core.Tools.OperationResult.Error;
-
-namespace UnitTests.Features.Guest;
-
-using Moq;
-using Xunit;
 using ViaEventAssociation.Core.Domain.EventAgg;
 using ViaEventAssociation.Core.Domain.GuestAgg.Guest;
 using ViaEventAssociation.Core.Domain.GuestAgg.Request;
-using ViaEventAssociation.Core.Domain.Services;
+using ViaEventAssociation.Core.Domain.GuestAgg.RequestEntity;
+using ViaEventAssociation.Core.Domain.Services.Guest;
+using VIAEventsAssociation.Core.Tools.Enumeration;
+using VIAEventsAssociation.Core.Tools.OperationResult.Error;
 using VIAEventsAssociation.Core.Tools.OperationResult.OperationResult;
+
+namespace UnitTests.Features.Guest.GuestParticipatesInEventTests;
 
 public class GuestRequestsParticipationInPublicEventDomainServiceTest
 {
