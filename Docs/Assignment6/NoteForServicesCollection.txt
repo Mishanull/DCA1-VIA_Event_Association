@@ -1,0 +1,8 @@
+public void ConfigureServices(IServiceCollection services)
+{
+    // Other service configurations...
+
+    services.AddCommandHandlers(Assembly.GetAssembly(typeof(MyCommandHandler)));
+}
+
+we'll have to use this in startup.cs when we get to the Web API
