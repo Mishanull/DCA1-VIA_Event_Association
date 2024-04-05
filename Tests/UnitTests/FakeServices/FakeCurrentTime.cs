@@ -2,9 +2,14 @@
 
 namespace UnitTests.FakeServices;
 
-public class FakeCurrentTime : ICurrentTime
+public class FakeCurrentTime(DateTime fakeTime) : ICurrentTime
 {
-    public DateTime FakeTime { get; set; }
+    public DateTime FakeTime { get; set; } = fakeTime;
+
+    public FakeCurrentTime() : this(DateTime.Now)
+    {
+    }
+
     public DateTime GetCurrentTime()
     {
         return FakeTime;

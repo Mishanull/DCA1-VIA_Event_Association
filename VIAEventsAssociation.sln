@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "Tests\UnitTest
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViaEventAssociation.Core.Domain", "src\Core\ViaEventAssociation.Core.Domain\ViaEventAssociation.Core.Domain.csproj", "{A8507607-C908-4C57-90AE-A2B8AF2FF56F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViaEventsAssociation.Core.Application", "src\Core\ViaEventsAssociation.Core.Application\ViaEventsAssociation.Core.Application.csproj", "{16EC6F05-D66C-4150-B4A5-50EB26765B66}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,7 @@ Global
 		{958D5FC2-417F-46C0-A05A-B0E762849C02} = {1EFA51CE-89D4-447A-92CF-7C7E3DC9D8A0}
 		{5F0B6340-A480-47FC-BC68-8C7B524EB120} = {FB111EB4-E680-4C20-8EFB-80BEFADDED76}
 		{A8507607-C908-4C57-90AE-A2B8AF2FF56F} = {958D5FC2-417F-46C0-A05A-B0E762849C02}
+		{16EC6F05-D66C-4150-B4A5-50EB26765B66} = {958D5FC2-417F-46C0-A05A-B0E762849C02}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{5AE3F2FF-C84C-4BEF-97DB-B6BAEE5A4FE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -55,5 +58,9 @@ Global
 		{A8507607-C908-4C57-90AE-A2B8AF2FF56F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A8507607-C908-4C57-90AE-A2B8AF2FF56F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A8507607-C908-4C57-90AE-A2B8AF2FF56F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16EC6F05-D66C-4150-B4A5-50EB26765B66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16EC6F05-D66C-4150-B4A5-50EB26765B66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16EC6F05-D66C-4150-B4A5-50EB26765B66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16EC6F05-D66C-4150-B4A5-50EB26765B66}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
