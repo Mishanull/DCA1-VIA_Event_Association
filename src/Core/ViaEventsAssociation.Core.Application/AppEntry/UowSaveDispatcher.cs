@@ -13,6 +13,7 @@ internal class UowSaveDispatcher(ICommandDispatcher next, IUnitOfWork unitOfWork
         {
             return dispatchResult;
         }
+        
         await unitOfWork.SaveChangesAsync();
         return new Result();
     }

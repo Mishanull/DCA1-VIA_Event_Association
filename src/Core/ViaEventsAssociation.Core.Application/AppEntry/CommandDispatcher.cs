@@ -8,14 +8,19 @@ internal class CommandDispatcher(IServiceProvider serviceProvider) : ICommandDis
 {
     public Task<Result> Dispatch(Command command)
     {
-        Type handlerType = typeof(ICommandHandler<Command>);
+        var handlerType = typeof(ICommandHandler<>).MakeGenericType(command.GetType());
         var service = serviceProvider.GetService(handlerType);
         if (service == null)
         {
             throw new ServiceNotFoundException("Service is not registered with the service provider");
         }
-
-        ICommandHandler<Command> handler = (ICommandHandler<Command>)service;
-        return handler.HandleAsync(command);
+        
+        var handleAsyncMethod = service.GetType().GetMethod("HandleAsync");
+        if (handleAsyncMethod == null)
+        {
+            throw new InvalidOperationException("The handler does not implement HandleAsync method.");
+        }
+        
+        return (Task<Result>)handleAsyncMethod.Invoke(service, [command])!;
     }
 }
