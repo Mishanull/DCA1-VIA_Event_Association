@@ -17,7 +17,7 @@ public class GuestDeclinesInviteCommandTest
         Assert.False(result.IsErrorResult());
         Assert.NotNull(result.Value);
         Assert.IsType<GuestDeclinesInviteCommand>(result.Value);
-        Assert.Equal(validInviteId, result.Value!.InviteId.Id.ToString(), ignoreCase: true);
+        Assert.Equal(validInviteId, result.Value!.InviteId.Value.ToString(), ignoreCase: true);
     }
 
     [Fact]

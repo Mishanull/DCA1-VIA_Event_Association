@@ -7,11 +7,16 @@ namespace ViaEventAssociation.Core.Domain.Common.Base;
 
 public class TId 
 {
-    internal Guid Id { get; private set; }
+    public Guid Value { get; private init; }
 
     protected TId()
     {
-        Id = Guid.NewGuid();
+        Value = Guid.NewGuid();
+    }
+    
+    public static T Create<T>() where T: TId, new()
+    {
+        return new T();
     }
 
     public static Result<T> FromString<T>(string id) where T: TId, new()
@@ -20,7 +25,7 @@ public class TId
         {
             T instance = new ()
             {
-                Id = Guid.Parse(id)
+                Value = Guid.Parse(id)
             };
             
             return new Result<T>(instance);
@@ -33,8 +38,18 @@ public class TId
         }
     }
     
+    public static Result<T> FromGuid<T>(Guid id) where T: TId, new()
+    {
+        T instance = new ()
+        {
+            Value = id
+        };
+        
+        return new Result<T>(instance);
+    }
+    
     public override string ToString()
     {
-        return Id.ToString();
+        return Value.ToString();
     }
 }

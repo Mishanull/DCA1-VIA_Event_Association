@@ -24,7 +24,7 @@ public class GuestIsInvitedToEventHandlerTest
     public GuestIsInvitedToEventHandlerTest()
     {
         _invite = Invite.Create(new GuestId(), new CreatorId(), new VeaEventId()).Value!; 
-        _validCommand = GuestIsInvitedToEventCommand.Create(_invite.CreatorId.Id.ToString()!, _invite.GuestId.Id.ToString()!, _invite.EventId.Id.ToString()).Value!;
+        _validCommand = GuestIsInvitedToEventCommand.Create(_invite.CreatorId.Value.ToString()!, _invite.GuestId.Value.ToString()!, _invite.EventId.Value.ToString()).Value!;
     }
 
     [Fact]

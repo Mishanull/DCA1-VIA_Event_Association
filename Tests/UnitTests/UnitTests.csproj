@@ -27,6 +27,7 @@
       <ProjectReference Include="..\..\src\Core\ViaEventAssociation.Core.Domain\ViaEventAssociation.Core.Domain.csproj" />
       <ProjectReference Include="..\..\src\Core\ViaEventAssociation.Core.Domain\ViaEventAssociation.Core.Domain.csproj" />
       <ProjectReference Include="..\..\src\Core\ViaEventsAssociation.Core.Application\ViaEventsAssociation.Core.Application.csproj" />
+      <ProjectReference Include="..\..\src\ViaEventAssociation.Infrastructure.DomainModelPersistence\ViaEventAssociation.Infrastructure.DomainModelPersistence.csproj" />
     </ItemGroup>
 
 </Project>

@@ -17,7 +17,7 @@ public class GuestCancelsParticipationHandlerTest
 {
     private ICommandHandler<GuestCancelsEventParticipationCommand> _handler;
     private static readonly RequestId _inviteId = new RequestId();
-    private GuestCancelsEventParticipationCommand _validCommand = GuestCancelsEventParticipationCommand.Create(_inviteId.Id.ToString()).Value!;
+    private GuestCancelsEventParticipationCommand _validCommand = GuestCancelsEventParticipationCommand.Create(_inviteId.Value.ToString()).Value!;
 
     [Fact]
     public async Task GuestAcceptsInvite_Successful()
