@@ -23,7 +23,7 @@ public class GuestParticipatesInEventHandlerTest
     public GuestParticipatesInEventHandlerTest()
     {
         _request = Request.Create("Interested.", new VeaEventId(), new GuestId()).Value!;
-        _validCommand = GuestParticipatesInPublicEventCommand.Create(_request.EventId.Id.ToString()!, _request.GuestId.Id.ToString()!, _request.Reason).Value!;
+        _validCommand = GuestParticipatesInPublicEventCommand.Create(_request.EventId.Value.ToString()!, _request.GuestId.Value.ToString()!, _request.Reason).Value!;
     }
 
     [Fact]

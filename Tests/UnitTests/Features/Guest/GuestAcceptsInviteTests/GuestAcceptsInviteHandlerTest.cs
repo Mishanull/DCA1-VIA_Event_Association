@@ -15,7 +15,7 @@ public class GuestAcceptsInviteHandlerTest
 {
     private  ICommandHandler<GuestAcceptsInviteCommand> _handler;
     private static readonly InviteId _inviteId = new InviteId();
-    private GuestAcceptsInviteCommand _validCommand = GuestAcceptsInviteCommand.Create(_inviteId.Id.ToString()).Value!;
+    private GuestAcceptsInviteCommand _validCommand = GuestAcceptsInviteCommand.Create(_inviteId.Value.ToString()).Value!;
 
     [Fact]
     public async Task GuestAcceptsInvite_Successful()

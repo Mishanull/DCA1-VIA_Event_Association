@@ -18,8 +18,8 @@ public class GuestParticipatesInEventCommandTest
         // Assert
         Assert.False(result.IsErrorResult());
         Assert.NotNull(result.Value);
-        Assert.Equal(validEventId, result.Value!.EventId.Id.ToString(), ignoreCase: true);
-        Assert.Equal(validGuestId, result.Value!.VeaGuestId.Id.ToString(), ignoreCase: true);
+        Assert.Equal(validEventId, result.Value!.EventId.Value.ToString(), ignoreCase: true);
+        Assert.Equal(validGuestId, result.Value!.VeaGuestId.Value.ToString(), ignoreCase: true);
         Assert.Equal(reason, result.Value!.Reason);
     }
 

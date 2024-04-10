@@ -22,7 +22,7 @@ public class CreateLocationCommandTest
         Assert.False(result.IsErrorResult());
         Assert.NotNull(result.Value);
         Assert.Equal(validName, result.Value.LocationName.Value);
-        Assert.Equal(validCreatorIdString, result.Value.CreatorId.Id.ToString());
+        Assert.Equal(validCreatorIdString, result.Value.CreatorId.Value.ToString());
     }
 
     [Fact]

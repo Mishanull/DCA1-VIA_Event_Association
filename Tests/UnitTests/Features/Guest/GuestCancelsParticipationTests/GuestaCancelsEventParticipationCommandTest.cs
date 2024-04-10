@@ -17,7 +17,7 @@ public class GuestCancelsEventParticipationCommandTest
         Assert.False(result.IsErrorResult());
         Assert.NotNull(result.Value);
         Assert.IsType<GuestCancelsEventParticipationCommand>(result.Value);
-        Assert.Equal(validRequestId, result.Value!.RequestId.Id.ToString(), ignoreCase: true);
+        Assert.Equal(validRequestId, result.Value!.RequestId.Value.ToString(), ignoreCase: true);
     }
 
     [Fact]

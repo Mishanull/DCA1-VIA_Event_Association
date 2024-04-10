@@ -23,7 +23,7 @@ public class FakeVeaEventRepositoryImpl : IVeaEventRepository
 
     public async Task<Result<VeaEvent>> FindAsync(VeaEventId veaEventId)
     {
-        var veaEvent = VeaEvents.FirstOrDefault(ve => ve.Id.Id == veaEventId.Id); //FirstOrDefault returns null if not found
+        var veaEvent = VeaEvents.FirstOrDefault(ve => ve.Id.Value == veaEventId.Value); //FirstOrDefault returns null if not found
         var result = new Result<VeaEvent>(veaEvent);
         if (veaEvent == null)
         {
