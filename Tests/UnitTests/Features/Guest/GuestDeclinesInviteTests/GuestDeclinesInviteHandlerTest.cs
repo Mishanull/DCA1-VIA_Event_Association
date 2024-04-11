@@ -48,17 +48,17 @@ public class GuestDeclinesInviteHandlerTest
     private VeaError SetupFailure()
     {
 
-        var repoMock = new Mock<IInviteRepository>();
         var errorResult = new Result<Invite>(null);
         var error = ErrorHelper.CreateVeaError("Not found.", ErrorType.ResourceNotFound);
         errorResult.CollectError(error);
-        repoMock.Setup(r => r.Find(It.IsAny<InviteId>())).Returns(errorResult);
-        _handler = new GuestDeclinesInviteHandler(new FakeGuestRepository(), new FakeEventRepository(), repoMock.Object, new FakeCreatorRepository());
+        var creatorRepoFailMock = new Mock<ICreatorRepository>();
+        creatorRepoFailMock.Setup(r => r.FindInviteAsync(It.IsAny<InviteId>())).ReturnsAsync(errorResult);
+        _handler = new GuestDeclinesInviteHandler(new FakeGuestRepository(), new FakeEventRepository(),  creatorRepoFailMock.Object);
         return error;
     }
 
     private void SetupSuccess()
     {
-        _handler = new GuestDeclinesInviteHandler(new FakeGuestRepository(), new FakeEventRepository(), new FakeInviteRepository(), new FakeCreatorRepository());
+        _handler = new GuestDeclinesInviteHandler(new FakeGuestRepository(), new FakeEventRepository(),  new FakeCreatorRepository());
     }
 }

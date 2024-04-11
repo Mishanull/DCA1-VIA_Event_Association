@@ -28,7 +28,6 @@ public class SetEventLocationDomainServiceTest
     {
         _locationRepoMock.Setup(repo => repo.FindAsync(It.IsAny<LocationId>())).ReturnsAsync(new Result<Location>(ValidLocation));
         _eventRepoMock.Setup(repo => repo.FindAsync(It.IsAny<VeaEventId>())).ReturnsAsync(new Result<VeaEvent>(ValidEvent));
-        _eventRepoMock.Setup(repo => repo.UpdateAsync(It.IsAny<VeaEvent>())).ReturnsAsync(new Result<VeaEvent>(ValidEvent));
     }
 
     [Fact]

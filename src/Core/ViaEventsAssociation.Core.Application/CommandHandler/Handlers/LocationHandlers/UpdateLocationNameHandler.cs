@@ -23,6 +23,6 @@ public class UpdateLocationNameHandler: ICommandHandler<UpdateLocationNameComman
 
         var location = repositoryResult.Value!;
         location.UpdateName(command.LocationName);
-        return await _locationRepository.UpdateAsync(location);
+        return new Result();
     }
 }

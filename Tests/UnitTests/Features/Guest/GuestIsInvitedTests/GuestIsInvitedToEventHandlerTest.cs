@@ -60,13 +60,13 @@ public class GuestIsInvitedToEventHandlerTest
         var errorResult = new Result<Creator>(null);
         var error = ErrorHelper.CreateVeaError("Not found.", ErrorType.ResourceNotFound);
         errorResult.CollectError(error);
-        repoMock.Setup(r => r.Find(It.IsAny<CreatorId>())).Returns(errorResult);
-        _handler = new GuestIsInvitedToEventHandler(new FakeGuestRepository(), repoMock.Object, new FakeEventRepository(), new FakeInviteRepository());
+        repoMock.Setup(r => r.FindAsync(It.IsAny<CreatorId>())).ReturnsAsync(errorResult);
+        _handler = new GuestIsInvitedToEventHandler(new FakeGuestRepository(), repoMock.Object, new FakeEventRepository());
         return error;
     }
 
     private void SetupSuccess()
     {
-        _handler = new GuestIsInvitedToEventHandler(new FakeGuestRepository(), new FakeCreatorRepository(), new FakeEventRepository(), new FakeInviteRepository());
+        _handler = new GuestIsInvitedToEventHandler(new FakeGuestRepository(), new FakeCreatorRepository(), new FakeEventRepository());
     }
 }

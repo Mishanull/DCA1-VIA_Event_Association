@@ -7,7 +7,7 @@ namespace UnitTests.Features.Event.UpdateFromToTests;
 
 public class UpdateFromToTest
 {
-    private static readonly DateTime FakeDateTime = new (2023, 08, 24, 12, 00, 00);
+    private static readonly DateTime FakeDateTime = new(2023, 08, 24, 12, 00, 00);
 
     [Theory]
     [InlineData("2023-08-25T19:00:00", "2023-08-25T23:59:00")]
@@ -23,14 +23,14 @@ public class UpdateFromToTest
             .WithStatus(VeaEventStatus.Draft)
             .Build();
         var newFromTo = FromTo.Create(from, to).Value;
-        
+
         // Act
         veaEvent.UpdateFromTo(newFromTo);
-        
+
         // Assert
         Assert.Equal(veaEvent.FromTo, newFromTo);
     }
-    
+
     [Theory]
     [InlineData("2023-08-25T19:00:00", "2023-08-26T01:00:00")] //end time edge case
     [InlineData("2023-08-25T08:00:00", "2023-08-25T16:30:00")] //start time edge case
@@ -43,10 +43,10 @@ public class UpdateFromToTest
             .WithStatus(VeaEventStatus.Draft)
             .Build();
         var newFromTo = FromTo.Create(from, to).Value;
-        
+
         // Act
         veaEvent.UpdateFromTo(newFromTo);
-        
+
         // Assert
         Assert.Equal(veaEvent.FromTo, newFromTo);
     }
@@ -61,10 +61,10 @@ public class UpdateFromToTest
             .WithStatus(VeaEventStatus.Ready)
             .Build();
         var newFromTo = FromTo.Create(FakeDateTime.AddDays(2), FakeDateTime.AddDays(2).AddHours(4)); //one day later than planned
-        
+
         // Act
         veaEvent.UpdateFromTo(newFromTo.Value);
-        
+
         // Assert
         Assert.Equal(veaEvent.FromTo, newFromTo.Value);
         Assert.Equal(veaEvent.VeaEventStatus, VeaEventStatus.Draft);
@@ -77,15 +77,15 @@ public class UpdateFromToTest
         var veaEvent = new VeaEventBuilder().Init()
             .WithTime(FakeDateTime)
             .Build();
-        var newFromTo = FromTo.Create(DateTime.Now, DateTime.Now.AddHours(2)).Value; //start time is in the future
-        
+        var newFromTo = FromTo.Create(DateTime.Now, DateTime.Now.AddHours(2)).Value!; //start time is in the future
+
         // Act
-        veaEvent.UpdateFromTo(newFromTo);
-        
+        var result = veaEvent.UpdateFromTo(newFromTo);
+
         // Assert
-        Assert.Equal(veaEvent.FromTo, newFromTo);
+        Assert.True(result.IsErrorResult());
     }
-    
+
     [Fact]
     public void S5_UpdateFromTo_WithValidFromToOf10HoursDurationOrLess_ShouldUpdateFromTo()
     {
@@ -94,14 +94,14 @@ public class UpdateFromToTest
             .WithTime(FakeDateTime)
             .Build();
         var newFromTo = FromTo.Create(FakeDateTime.AddDays(1), FakeDateTime.AddDays(1).AddHours(10)); //more than 10 hours fails
-        
+
         // Act
         veaEvent.UpdateFromTo(newFromTo.Value);
-        
+
         // Assert
         Assert.Equal(veaEvent.FromTo, newFromTo.Value);
     }
-    
+
     [Theory]
     [InlineData("2023-08-26T19:00:00", "2023-08-25T01:00:00")]
     [InlineData("2023-08-26T19:00:00", "2023-08-25T23:59:00")]
@@ -114,15 +114,15 @@ public class UpdateFromToTest
             .WithTime(FakeDateTime)
             .Build();
         var newFromTo = FromTo.Create(from, to);
-        
+
         // Act
         var result = veaEvent.UpdateFromTo(newFromTo.Value);
-        
+
         // Assert
         Assert.True(result.IsErrorResult());
         Assert.Equal(result.Errors.First().Type, ErrorType.InvalidFromTo);
     }
-    
+
     [Theory]
     [InlineData("2023-08-26T19:00:00", "2023-08-26T14:00:00")]
     [InlineData("2023-08-26T16:00:00", "2023-08-26T00:00:00")]
@@ -136,15 +136,15 @@ public class UpdateFromToTest
             .WithTime(FakeDateTime)
             .Build();
         var newFromTo = FromTo.Create(from, to);
-        
+
         // Act
         var result = veaEvent.UpdateFromTo(newFromTo.Value);
-        
+
         // Assert
         Assert.True(result.IsErrorResult());
         Assert.Equal(result.Errors.First().Type, ErrorType.InvalidFromTo);
     }
-    
+
     [Theory]
     [InlineData("2023-08-26T14:00:00", "2023-08-26T14:50:00")]
     [InlineData("2023-08-26T18:00:00", "2023-08-26T18:59:00")]
@@ -157,15 +157,15 @@ public class UpdateFromToTest
             .WithTime(FakeDateTime)
             .Build();
         var newFromTo = FromTo.Create(from, to);
-        
+
         // Act
         var result = veaEvent.UpdateFromTo(newFromTo.Value);
-        
+
         // Assert
         Assert.True(result.IsErrorResult());
         Assert.Equal(result.Errors.First().Type, ErrorType.InvalidFromTo);
     }
-    
+
     [Theory]
     [InlineData("2023-08-25T23:30:00", "2023-08-26T00:15:00")]
     [InlineData("2023-08-30T23:01:00", "2023-08-31T00:00:00")]
@@ -177,15 +177,15 @@ public class UpdateFromToTest
             .WithTime(FakeDateTime)
             .Build();
         var newFromTo = FromTo.Create(from, to);
-        
+
         // Act
         var result = veaEvent.UpdateFromTo(newFromTo.Value);
-        
+
         // Assert
         Assert.True(result.IsErrorResult());
         Assert.Equal(result.Errors.First().Type, ErrorType.InvalidFromTo);
     }
-    
+
     [Theory]
     [InlineData("2023-08-25T07:59:00", "2023-08-25T14:50:00")]
     [InlineData("2023-08-25T07:59:00", "2023-08-25T15:00:00")]
@@ -199,15 +199,15 @@ public class UpdateFromToTest
             .WithTime(FakeDateTime)
             .Build();
         var newFromTo = FromTo.Create(from, to);
-        
+
         // Act
         var result = veaEvent.UpdateFromTo(newFromTo.Value);
-        
+
         // Assert
         Assert.True(result.IsErrorResult());
         Assert.Equal(result.Errors.First().Type, ErrorType.InvalidFromTo);
     }
-    
+
     [Theory]
     [InlineData("2023-08-24T23:50:00", "2023-08-25T01:01:00")]
     [InlineData("2023-08-24T22:00:00", "2023-08-25T07:59:00")]
@@ -219,15 +219,15 @@ public class UpdateFromToTest
             .WithTime(FakeDateTime)
             .Build();
         var newFromTo = FromTo.Create(from, to);
-        
+
         // Act
         var result = veaEvent.UpdateFromTo(newFromTo.Value);
-        
+
         // Assert
         Assert.True(result.IsErrorResult());
         Assert.Equal(result.Errors.First().Type, ErrorType.InvalidFromTo);
     }
-    
+
     [Fact]
     public void F7_UpdateFromToOfActiveEvent_WithValidFromTo_ShouldThrowActionNotAllowedError()
     {
@@ -236,15 +236,15 @@ public class UpdateFromToTest
             .WithStatus(VeaEventStatus.Active)
             .Build();
         var newFromTo = FromTo.Create(FakeDateTime.AddDays(1), FakeDateTime.AddDays(1).AddHours(4));
-        
+
         // Act
         var result = veaEvent.UpdateFromTo(newFromTo.Value);
-        
+
         // Assert
         Assert.True(result.IsErrorResult());
         Assert.Equal(result.Errors.First().Type, ErrorType.ActionNotAllowed);
     }
-    
+
     [Fact]
     public void F8_UpdateFromToOfCancelledEvent_WithValidFromTo_ShouldThrowActionNotAllowedError()
     {
@@ -253,15 +253,15 @@ public class UpdateFromToTest
             .WithStatus(VeaEventStatus.Cancelled)
             .Build();
         var newFromTo = FromTo.Create(FakeDateTime.AddDays(1), FakeDateTime.AddDays(1).AddHours(4));
-        
+
         // Act
         var result = veaEvent.UpdateFromTo(newFromTo.Value);
-        
+
         // Assert
         Assert.True(result.IsErrorResult());
         Assert.Equal(result.Errors.First().Type, ErrorType.ActionNotAllowed);
     }
-    
+
     [Theory]
     [InlineData("2023-08-30T08:00:00", "2023-08-30T18:01:00")]
     [InlineData("2023-08-30T14:59:00", "2023-08-31T01:00:00")]
@@ -274,15 +274,15 @@ public class UpdateFromToTest
             .WithTime(FakeDateTime)
             .Build();
         var newFromTo = FromTo.Create(from, to);
-        
+
         // Act
         var result = veaEvent.UpdateFromTo(newFromTo.Value);
-        
+
         // Assert
         Assert.True(result.IsErrorResult());
         Assert.Equal(result.Errors.First().Type, ErrorType.InvalidFromTo);
     }
-    
+
     [Fact]
     public void F10_UpdateFromTo_WithStartTimeInThePast_ShouldThrowInvalidFromToError()
     {
@@ -291,15 +291,15 @@ public class UpdateFromToTest
             .WithTime(FakeDateTime)
             .Build();
         var newFromTo = FromTo.Create(FakeDateTime.AddDays(-1), FakeDateTime.AddDays(-1).AddHours(4));
-        
+
         // Act
         var result = veaEvent.UpdateFromTo(newFromTo.Value);
-        
+
         // Assert
         Assert.True(result.IsErrorResult());
         Assert.Equal(result.Errors.First().Type, ErrorType.InvalidFromTo);
     }
-    
+
     [Theory]
     [InlineData("2023-08-31T00:30:00", "2023-08-31T08:30:00")]
     [InlineData("2023-08-30T23:59:00", "2023-08-31T08:01:00")]
@@ -311,10 +311,10 @@ public class UpdateFromToTest
             .WithTime(FakeDateTime)
             .Build();
         var newFromTo = FromTo.Create(from, to);
-        
+
         // Act
         var result = veaEvent.UpdateFromTo(newFromTo.Value);
-        
+
         // Assert
         Assert.True(result.IsErrorResult());
         Assert.Equal(result.Errors.First().Type, ErrorType.InvalidFromTo);

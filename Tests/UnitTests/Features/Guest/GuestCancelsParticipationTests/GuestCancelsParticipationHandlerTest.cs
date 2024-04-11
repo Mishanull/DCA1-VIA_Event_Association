@@ -48,17 +48,17 @@ public class GuestCancelsParticipationHandlerTest
 
     private VeaError SetupFailure()
     {
-        var repoMock = new Mock<IRequestRepository>();
         var errorResult = new Result<Request>(null);
         var error = ErrorHelper.CreateVeaError("Not found.", ErrorType.ResourceNotFound);
         errorResult.CollectError(error);
-        repoMock.Setup(r => r.Find(It.IsAny<RequestId>())).Returns(errorResult);
-        _handler = new GuestCancelsEventParticipationHandler(new FakeGuestRepository(), new FakeEventRepository(), repoMock.Object);
+        var repoMock = new Mock<IGuestRepository>();
+        repoMock.Setup(r => r.FindRequestAsync(It.IsAny<RequestId>())).ReturnsAsync(errorResult);
+        _handler = new GuestCancelsEventParticipationHandler(repoMock.Object, new FakeEventRepository());
         return error;
     }
 
     private void SetupSuccess()
     {
-        _handler = new GuestCancelsEventParticipationHandler(new FakeGuestRepository(), new FakeEventRepository(), new FakeRequestRepository());
+        _handler = new GuestCancelsEventParticipationHandler(new FakeGuestRepository(), new FakeEventRepository());
     }
 }

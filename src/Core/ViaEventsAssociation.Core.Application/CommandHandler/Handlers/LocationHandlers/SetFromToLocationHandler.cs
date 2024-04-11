@@ -23,6 +23,6 @@ public class SetFromToLocationHandler : ICommandHandler<SetFromToLocationCommand
 
         var location = repositoryResult.Value!;
         location.SetFromTo(command.FromTo);
-        return await _locationRepository.UpdateAsync(location);
+        return new Result();
     }
 }

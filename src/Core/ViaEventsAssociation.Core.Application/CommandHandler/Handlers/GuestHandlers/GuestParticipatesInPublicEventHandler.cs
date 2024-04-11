@@ -10,12 +10,10 @@ namespace ViaEventsAssociation.Core.Application.CommandHandler.Handlers.GuestHan
 internal class GuestParticipatesInPublicEventHandler : ICommandHandler<GuestParticipatesInPublicEventCommand>
 {
     private readonly GuestRequestParticipationPublicEvent _guestRequestParticipation;
-    private readonly IRequestRepository _requestRepository;
 
-    internal GuestParticipatesInPublicEventHandler(IGuestRepository guestRepository, IVeaEventRepository eventRepository, IRequestRepository requestRepository)
+    internal GuestParticipatesInPublicEventHandler(IGuestRepository guestRepository, IVeaEventRepository eventRepository)
     {
-        _requestRepository = requestRepository;
-        _guestRequestParticipation = new GuestRequestParticipationPublicEvent(guestRepository, eventRepository, requestRepository);
+        _guestRequestParticipation = new GuestRequestParticipationPublicEvent(guestRepository, eventRepository);
     }
 
     public async Task<Result> HandleAsync(GuestParticipatesInPublicEventCommand command)
@@ -24,12 +22,6 @@ internal class GuestParticipatesInPublicEventHandler : ICommandHandler<GuestPart
         if (createRequestResult.IsErrorResult())
         {
             return createRequestResult;
-        }
-
-        var repoAddResult = await _requestRepository.AddAsync(createRequestResult.Value!);
-        if (repoAddResult.IsErrorResult())
-        {
-            return repoAddResult;
         }
 
         var handleResult = await _guestRequestParticipation.Handle(createRequestResult.Value!);

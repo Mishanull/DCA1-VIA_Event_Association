@@ -33,16 +33,11 @@ public class SetLocationMaxGuestsHandlerTest
             .Setup(repo => repo.FindAsync(It.IsAny<LocationId>()))
             .ReturnsAsync(new Result<Location>(TestLocation));
 
-        _locationRepositoryMock
-            .Setup(repo => repo.UpdateAsync(It.IsAny<Location>()))
-            .ReturnsAsync(new Result<Location>(null));
-
         // Act
         var result = await _handler.HandleAsync(_validCommand);
 
         // Assert
         Assert.False(result.IsErrorResult());
-        _locationRepositoryMock.Verify(repo => repo.UpdateAsync(It.IsAny<Location>()), Times.Once);
     }
 
     [Fact]

@@ -11,9 +11,9 @@ internal class GuestIsInvitedToEventHandler : ICommandHandler<GuestIsInvitedToEv
 {
     private readonly GuestIsInvitedToEvent _guestIsInvitedToEvent;
 
-    internal GuestIsInvitedToEventHandler(IGuestRepository guestRepo, ICreatorRepository creatorRepo, IVeaEventRepository eventRepo, IInviteRepository inviteRepo)
+    internal GuestIsInvitedToEventHandler(IGuestRepository guestRepo, ICreatorRepository creatorRepo, IVeaEventRepository eventRepo)
     {
-        _guestIsInvitedToEvent = new GuestIsInvitedToEvent(guestRepo, creatorRepo, eventRepo, inviteRepo);
+        _guestIsInvitedToEvent = new GuestIsInvitedToEvent(guestRepo, creatorRepo, eventRepo);
     }
 
     public async Task<Result> HandleAsync(GuestIsInvitedToEventCommand command)

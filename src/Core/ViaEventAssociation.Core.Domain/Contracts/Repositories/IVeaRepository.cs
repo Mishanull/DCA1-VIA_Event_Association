@@ -7,9 +7,7 @@ public interface IVeaRepository<Tagg, TypeId>
     where Tagg : AggregateRoot
     where TypeId : TId
 {
-    public Result<Tagg> Find(TypeId id);
     public Task<Result<Tagg>> FindAsync(TypeId id);
     public Task<Result> AddAsync(Tagg entity); 
     public Task<Result> RemoveAsync(TypeId id);
-    public Task<Result<Tagg>> UpdateAsync(Tagg entity);
 }

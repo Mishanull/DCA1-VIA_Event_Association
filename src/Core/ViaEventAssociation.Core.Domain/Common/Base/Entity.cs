@@ -8,4 +8,9 @@ public class Entity<TId>
     {
         Id = id;
     }
+
+    public Entity()
+    {
+        
+    }
 }

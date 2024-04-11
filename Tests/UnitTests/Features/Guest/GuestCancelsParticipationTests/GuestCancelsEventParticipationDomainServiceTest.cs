@@ -15,24 +15,21 @@ namespace UnitTests.Features.Guest.GuestCancelsParticipationTests;
 public class GuestCancelsEventParticipationDomainServiceTest
 {
     private readonly Mock<IGuestRepository> _guestRepoMock;
-    private readonly Mock<IRequestRepository> _requestRepoMock;
     private readonly Mock<IVeaEventRepository> _eventRepoMock;
     private static readonly FromTo ValidFromTo = FromTo.Create(DateTime.Now.AddDays(6), DateTime.Now.AddDays(8)).Value!;
     private readonly GuestCancelsEventParticipation service;
     public GuestCancelsEventParticipationDomainServiceTest()
     {
         _guestRepoMock = new Mock<IGuestRepository>();
-        _requestRepoMock = new Mock<IRequestRepository>();
         _eventRepoMock = new Mock<IVeaEventRepository>();
         service = new GuestCancelsEventParticipation(
-            _guestRepoMock.Object,
-            _eventRepoMock.Object,
-            _requestRepoMock.Object);
+                _guestRepoMock.Object,
+                _eventRepoMock.Object
+            );
     }
 
     [Fact]
     public async Task S1_GuestCancelParticipation_SuccessfulCancellation_ShouldRemoveParticipation()
-
     {
         //Arrange
         var guestId = new GuestId();
@@ -46,7 +43,6 @@ public class GuestCancelsEventParticipationDomainServiceTest
         var request = Request.Create("I am interested in this.", eventId, guestId).Value;
         veaEvent.AddParticipant(guestId);
         RepoMockSetup(guestId, guest, eventId, veaEvent, request);
-        _requestRepoMock.Setup(repo => repo.Find(request.Id)).Returns(new Result<Request>(request));
 
         // Act
         var result = await service.Handle(request.Id);
@@ -94,7 +90,7 @@ public class GuestCancelsEventParticipationDomainServiceTest
         };
         veaEvent.AddParticipant(guestId);
 
-        var request = Request.Create("I am interested in this.", eventId, guestId).Value;
+        var request = Request.Create("I am interested in this.", eventId, guestId).Value!;
         RepoMockSetup(guestId, guest, eventId, veaEvent, request);
 
         // Act
@@ -107,8 +103,8 @@ public class GuestCancelsEventParticipationDomainServiceTest
 
     private void RepoMockSetup(GuestId guestId, VeaGuest guest, VeaEventId eventId, VeaEvent veaEvent, Request request)
     {
-        _guestRepoMock.Setup(repo => repo.Find(guestId)).Returns(new Result<VeaGuest>(guest));
-        _eventRepoMock.Setup(repo => repo.Find(eventId)).Returns(new Result<VeaEvent>(veaEvent));
-        _requestRepoMock.Setup(repo => repo.Find(request.Id)).Returns(new Result<Request>(request));
+        _guestRepoMock.Setup(repo => repo.FindAsync(guestId)).ReturnsAsync(new Result<VeaGuest>(guest));
+        _guestRepoMock.Setup(repo => repo.FindRequestAsync(request.Id)).ReturnsAsync(new Result<Request>(request));
+        _eventRepoMock.Setup(repo => repo.FindAsync(eventId)).ReturnsAsync(new Result<VeaEvent>(veaEvent));
     }
 }

@@ -21,9 +21,9 @@ public class VeaGuest : AggregateRoot
     internal FirstName? FirstName{ get; private init; } 
     internal LastName? LastName { get; private init; }
     internal PictureUrl? PictureUrl { get; private init; } = new ();
-    private ICollection<RequestEntity.Request> JoinRequests { get; init; } = [];
+    private HashSet<RequestEntity.Request> JoinRequests { get; init; } = [];
 
-    internal VeaGuest(GuestId id) : base(id)
+    internal VeaGuest(GuestId id) 
     {
         Id = id;
     }

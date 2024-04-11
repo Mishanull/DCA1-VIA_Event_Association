@@ -15,7 +15,6 @@ namespace UnitTests.Features.Guest.GuestParticipatesInEventTests;
 public class GuestRequestsParticipationInPublicEventDomainServiceTest
 {
     private readonly Mock<IGuestRepository> _guestRepoMock;
-    private readonly Mock<IRequestRepository> _requestRepoMock;
     private readonly Mock<IVeaEventRepository> _eventRepoMock;
     private static readonly string Reason = "I am interested in this.";
     private static readonly FromTo ValidFromTo = FromTo.Create(DateTime.Now.AddDays(6), DateTime.Now.AddDays(8)).Value!;
@@ -25,12 +24,10 @@ public class GuestRequestsParticipationInPublicEventDomainServiceTest
     public GuestRequestsParticipationInPublicEventDomainServiceTest()
     {
         _guestRepoMock = new Mock<IGuestRepository>();
-        _requestRepoMock = new Mock<IRequestRepository>();
         _eventRepoMock = new Mock<IVeaEventRepository>();
         _service = new GuestRequestParticipationPublicEvent(
             _guestRepoMock.Object,
-            _eventRepoMock.Object,
-            _requestRepoMock.Object);
+            _eventRepoMock.Object);
     }
     
     [Fact]
@@ -88,8 +85,8 @@ public class GuestRequestsParticipationInPublicEventDomainServiceTest
 
     private void RepoMockSetup(GuestId guestId, VeaGuest guest, VeaEventId eventId, VeaEvent veaEvent, Request request)
     {
-        _guestRepoMock.Setup(repo => repo.Find(guestId)).Returns(new Result<VeaGuest>(guest));
-        _eventRepoMock.Setup(repo => repo.Find(eventId)).Returns(new Result<VeaEvent>(veaEvent));
+        _guestRepoMock.Setup(repo => repo.FindAsync(guestId)).ReturnsAsync(new Result<VeaGuest>(guest));
+        _eventRepoMock.Setup(repo => repo.FindAsync(eventId)).ReturnsAsync(new Result<VeaEvent>(veaEvent));
     }
 
 

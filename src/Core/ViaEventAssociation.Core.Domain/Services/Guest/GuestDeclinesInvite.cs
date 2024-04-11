@@ -1,4 +1,5 @@
 using ViaEventAssociation.Core.Domain.Contracts.Repositories;
+using ViaEventAssociation.Core.Domain.CreatorAgg;
 using ViaEventAssociation.Core.Domain.CreatorAgg.InviteEntity;
 using ViaEventAssociation.Core.Domain.EventAgg;
 using ViaEventAssociation.Core.Domain.GuestAgg.Guest;
@@ -11,29 +12,39 @@ namespace ViaEventAssociation.Core.Domain.Services.Guest;
 public class GuestDeclinesInvite(
     IGuestRepository guestRepo,
     ICreatorRepository creatorRepo,
-    IVeaEventRepository eventRepo,
-    IInviteRepository inviteRepo)
+    IVeaEventRepository eventRepo)
 {
     public async Task<Result> Handle(InviteId inviteId)
     {
-        if (ValidateInviteId(inviteId, out var findInviteResult)) return findInviteResult;
+        var findInviteResult = await creatorRepo.FindInviteAsync(inviteId); 
+        if (findInviteResult.IsErrorResult())
+        {
+            return findInviteResult;
+        }
+        var invite = findInviteResult.Value!;
+        
+        var findCreatorResult = await creatorRepo.FindAsync(invite.CreatorId);
+        var findGuestResult = await guestRepo.FindAsync(invite.GuestId);
+        var findEventResult = await eventRepo.FindAsync(invite.EventId);
+        var result = new Result();
+        result.CollectFromMultiple(findGuestResult, findCreatorResult, findEventResult);
+        if (result.IsErrorResult())
+        {
+            return result;
+        }
 
-        if (ValidateCreatorGuestAndEventExistence(findInviteResult, out var result, out var invite,
-                out var findGuestResult, out var findEventResult)) return result;
-
+        var creator = findCreatorResult.Value!;
         if (ValidateVeaEvent(findEventResult, result, out var veaEvent, out var result1)) return result1;
 
-        await DeclineInviteAndUpdateAggregates(invite, veaEvent, findGuestResult, result);
+        DeclineInviteAndUpdateAggregates(invite, creator, veaEvent, findGuestResult);
         return result;
     }
 
-    private async Task DeclineInviteAndUpdateAggregates(Invite invite, VeaEvent veaEvent, Result<VeaGuest> findGuestResult,
-        Result result)
+    private void DeclineInviteAndUpdateAggregates(Invite invite, Creator creator, VeaEvent veaEvent, Result<VeaGuest> findGuestResult)
     {
         invite.Decline();
         veaEvent.RemoveParticipant(findGuestResult.Value!.Id);
-        await inviteRepo.UpdateAsync(invite);
-        await eventRepo.UpdateAsync(veaEvent);
+        creator.AddInvite(invite);
     }
 
     private static bool ValidateVeaEvent(Result<VeaEvent> findEventResult, Result result, out VeaEvent veaEvent,
@@ -71,39 +82,6 @@ public class GuestDeclinesInvite(
                 result1 = result;
                 return true;
             }
-        }
-
-        return false;
-    }
-
-    private bool ValidateCreatorGuestAndEventExistence(Result<Invite> findInviteResult, out Result result,
-        out Invite invite,
-        out Result<VeaGuest> findGuestResult, out Result<VeaEvent> findEventResult)
-    {
-        result = new Result();
-        invite = findInviteResult.Value!;
-        findGuestResult = guestRepo.Find(invite.GuestId);
-        var findCreatorResult = creatorRepo.Find(invite.CreatorId);
-        findEventResult = eventRepo.Find(invite.EventId);
-        result.CollectErrors(findGuestResult.Errors);
-        result.CollectErrors(findCreatorResult.Errors);
-        result.CollectErrors(findEventResult.Errors);
-        result.CollectErrors(findInviteResult.Errors);
-
-        if (result.IsErrorResult())
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    private bool ValidateInviteId(InviteId inviteId, out Result<Invite> findInviteResult)
-    {
-        findInviteResult = inviteRepo.Find(inviteId);
-        if (findInviteResult.IsErrorResult())
-        {
-            return true;
         }
 
         return false;

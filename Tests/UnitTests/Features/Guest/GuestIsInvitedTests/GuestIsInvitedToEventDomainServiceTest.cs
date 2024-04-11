@@ -19,7 +19,6 @@ public class GuestIsInvitedToEventDomainServiceTest
     private readonly Mock<IGuestRepository> _guestRepoMock;
     private readonly Mock<IVeaEventRepository> _eventRepoMock;
     private readonly Mock<ICreatorRepository> _creatorRepoMock;
-    private readonly Mock<IInviteRepository> _inviteRepoMock;
     private readonly Mock<IEmailCheck> _mockEmailCheck;
     private readonly Email _defaultEmail;
     private readonly GuestIsInvitedToEvent _service;
@@ -28,23 +27,21 @@ public class GuestIsInvitedToEventDomainServiceTest
     {
         _guestRepoMock = new Mock<IGuestRepository>();
         _eventRepoMock = new Mock<IVeaEventRepository>();
-        _inviteRepoMock = new Mock<IInviteRepository>();
         _creatorRepoMock = new Mock<ICreatorRepository>();
         _mockEmailCheck = new Mock<IEmailCheck>();
         _defaultEmail = Email.Create("creator@example.com", _mockEmailCheck.Object).Value!;
         _service = new GuestIsInvitedToEvent(
-            _guestRepoMock.Object,
-            _creatorRepoMock.Object,
-            _eventRepoMock.Object,
-            _inviteRepoMock.Object);
+                _guestRepoMock.Object,
+                _creatorRepoMock.Object,
+                _eventRepoMock.Object
+            );
     }
 
     private void RepoMockSetup(VeaGuest guest, VeaEvent veaEvent, Invite invite, Creator creator)
     {
-        _guestRepoMock.Setup(repo => repo.Find(guest.Id)).Returns(new Result<VeaGuest>(guest));
-        _eventRepoMock.Setup(repo => repo.Find(veaEvent.Id)).Returns(new Result<VeaEvent>(veaEvent));
-        _inviteRepoMock.Setup(repo => repo.Find(invite.Id)).Returns(new Result<Invite>(invite));
-        _creatorRepoMock.Setup(repo => repo.Find(creator.Id)).Returns(new Result<Creator>(creator));
+        _guestRepoMock.Setup(repo => repo.FindAsync(guest.Id)).ReturnsAsync(new Result<VeaGuest>(guest));
+        _eventRepoMock.Setup(repo => repo.FindAsync(veaEvent.Id)).ReturnsAsync(new Result<VeaEvent>(veaEvent));
+        _creatorRepoMock.Setup(repo => repo.FindAsync(creator.Id)).ReturnsAsync(new Result<Creator>(creator));
         _mockEmailCheck.Setup(emailService => emailService.DoesEmailExist(_defaultEmail.Value)).Returns(true);
     }
 
@@ -78,7 +75,7 @@ public class GuestIsInvitedToEventDomainServiceTest
         var guest = new VeaGuest(new GuestId());
         var veaEvent = new VeaEvent(new VeaEventId())
         {
-            VeaEventStatus = Enumeration.FromValue<VeaEventStatus>(status)
+            VeaEventStatus = Enumeration.FromValue<VeaEventStatus>(status)!
         };
         var creator = Creator.Create(_defaultEmail).Value;
         var invite = Invite.Create(guest.Id, creator.Id, veaEvent.Id).Value;
@@ -104,7 +101,7 @@ public class GuestIsInvitedToEventDomainServiceTest
         var creator = Creator.Create(_defaultEmail).Value;
         var invite = Invite.Create(guest.Id, creator.Id, veaEvent.Id).Value;
 
-        veaEvent.MaxGuests = MaxGuests.Create(0).Value;
+        veaEvent.MaxGuests = MaxGuests.Create(0).Value!;
         RepoMockSetup(guest, veaEvent, invite, creator);
 
         // Act
