@@ -10,9 +10,9 @@ public class Creator : AggregateRoot
     internal CreatorId Id { get; }
     internal Email Email { get; private init; }
 
-    internal ICollection<Invite> CreatedInvites { get; private init; } = [];
+    internal HashSet<Invite> CreatedInvites { get; private init; } = [];
 
-    private Creator(CreatorId id) : base(id)
+    private Creator(CreatorId id)
     {
         Id = id;
     }

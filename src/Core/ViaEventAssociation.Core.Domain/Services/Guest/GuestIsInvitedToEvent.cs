@@ -2,6 +2,7 @@ using ViaEventAssociation.Core.Domain.Contracts.Repositories;
 using ViaEventAssociation.Core.Domain.CreatorAgg;
 using ViaEventAssociation.Core.Domain.CreatorAgg.InviteEntity;
 using ViaEventAssociation.Core.Domain.EventAgg;
+using ViaEventAssociation.Core.Domain.GuestAgg.Guest;
 using VIAEventsAssociation.Core.Tools.OperationResult.Error;
 using VIAEventsAssociation.Core.Tools.OperationResult.Helpers;
 using VIAEventsAssociation.Core.Tools.OperationResult.OperationResult;
@@ -11,24 +12,29 @@ namespace ViaEventAssociation.Core.Domain.Services.Guest;
 public class GuestIsInvitedToEvent(
     IGuestRepository guestRepo,
     ICreatorRepository creatorRepo,
-    IVeaEventRepository eventRepo,
-    IInviteRepository inviteRepo)
+    IVeaEventRepository eventRepo)
 {
-    public async Task<Result> Handle(Invite invite) 
+    public async Task<Result> Handle(Invite invite)
     {
+        var findGuestResult = await guestRepo.FindAsync(invite.GuestId);
+        var findCreatorResult = await creatorRepo.FindAsync(invite.CreatorId);
+        var findEventResult = await eventRepo.FindAsync(invite.EventId);
         var result = new Result();
-        if (ValidateGuestCreatorAndEventExistence(invite, result, out var findCreatorResult, out var findEventResult, out var immediateResult)) return immediateResult;
+        result.CollectFromMultiple(findEventResult, findGuestResult, findCreatorResult);
+        if (result.IsErrorResult())
+        {
+            return result;
+        }
+        
         if (ValidateEvent(findEventResult, result)) return result;
-        await UpdateAggregates(invite, findCreatorResult, result);
+        UpdateAggregates(invite, findCreatorResult, result);
         return result;
     }
 
-    private async Task UpdateAggregates(Invite invite, Result<Creator> findCreatorResult, Result result)
+    private void UpdateAggregates(Invite invite, Result<Creator> findCreatorResult, Result result)
     {
         var creator = findCreatorResult.Value!;
         creator.AddInvite(invite);
-        await inviteRepo.AddAsync(invite); 
-        await creatorRepo.UpdateAsync(creator);
     }
 
     private static bool ValidateEvent(Result<VeaEvent> findEventResult, Result result)
@@ -53,28 +59,6 @@ public class GuestIsInvitedToEvent(
             }
         }
 
-        return false;
-    }
-
-    private bool ValidateGuestCreatorAndEventExistence(Invite invite, Result result,
-        out Result<Creator> findCreatorResult,
-        out Result<VeaEvent> findEventResult, out Result result1)
-    {
-        var findGuestResult = guestRepo.Find(invite.GuestId);
-        findCreatorResult = creatorRepo.Find(invite.CreatorId);
-        findEventResult = eventRepo.Find(invite.EventId);
-        result.CollectErrors(findGuestResult.Errors);
-        result.CollectErrors(findCreatorResult.Errors);
-        result.CollectErrors(findEventResult.Errors);
-        if (result.IsErrorResult())
-        {
-            {
-                result1 = result;
-                return true;
-            }
-        }
-
-        result1 = result;
         return false;
     }
 }

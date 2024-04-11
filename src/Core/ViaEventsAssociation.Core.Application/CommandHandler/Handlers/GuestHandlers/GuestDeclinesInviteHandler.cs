@@ -10,9 +10,9 @@ internal class GuestDeclinesInviteHandler : ICommandHandler<GuestDeclinesInviteC
 {
     private readonly GuestDeclinesInvite _guestDeclinesInvite;
 
-    internal GuestDeclinesInviteHandler(IGuestRepository guestRepository, IVeaEventRepository eventRepository, IInviteRepository inviteRepository, ICreatorRepository creatorRepository)
+    internal GuestDeclinesInviteHandler(IGuestRepository guestRepository, IVeaEventRepository eventRepository, ICreatorRepository creatorRepository)
     {
-        _guestDeclinesInvite = new GuestDeclinesInvite(guestRepository, creatorRepository, eventRepository, inviteRepository);
+        _guestDeclinesInvite = new GuestDeclinesInvite(guestRepository, creatorRepository, eventRepository);
     }
 
     public async Task<Result> HandleAsync(GuestDeclinesInviteCommand command)

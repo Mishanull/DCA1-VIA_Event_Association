@@ -13,7 +13,7 @@ namespace UnitTests.Features.Guest.GuestAcceptsInviteTests;
 
 public class GuestAcceptsInviteHandlerTest
 {
-    private  ICommandHandler<GuestAcceptsInviteCommand> _handler;
+    private ICommandHandler<GuestAcceptsInviteCommand> _handler;
     private static readonly InviteId _inviteId = new InviteId();
     private GuestAcceptsInviteCommand _validCommand = GuestAcceptsInviteCommand.Create(_inviteId.Value.ToString()).Value!;
 
@@ -22,10 +22,10 @@ public class GuestAcceptsInviteHandlerTest
     {
         //Arrange
         SetupSuccess();
-        
+
         //Act
         var result = await _handler.HandleAsync(_validCommand);
-        
+
         //Assert
         Assert.False(result.IsErrorResult());
     }
@@ -38,25 +38,25 @@ public class GuestAcceptsInviteHandlerTest
 
         //Act
         var result = await _handler.HandleAsync(_validCommand);
-        
+
         //Assert
         Assert.True(result.IsErrorResult());
         Assert.Equal(result.Errors.First(), error);
     }
-    
+
     private VeaError SetupFailure()
     {
-        var repoMock = new Mock<IInviteRepository>();
         var errorResult = new Result<Invite>(null);
         var error = ErrorHelper.CreateVeaError("Not found.", ErrorType.ResourceNotFound);
         errorResult.CollectError(error);
-        repoMock.Setup(r => r.Find(It.IsAny<InviteId>())).Returns(errorResult);
-        _handler = new GuestAcceptsInviteHandler(new FakeGuestRepository(), new FakeEventRepository(), repoMock.Object, new FakeCreatorRepository());
+        var creatorRepoFailMock = new Mock<ICreatorRepository>();
+        creatorRepoFailMock.Setup(r => r.FindInviteAsync(It.IsAny<InviteId>())).ReturnsAsync(errorResult);
+        _handler = new GuestAcceptsInviteHandler(new FakeGuestRepository(), new FakeEventRepository(), creatorRepoFailMock.Object);
         return error;
     }
-    
+
     private void SetupSuccess()
     {
-        _handler = new GuestAcceptsInviteHandler(new FakeGuestRepository(), new FakeEventRepository(), new FakeInviteRepository(), new FakeCreatorRepository());
+        _handler = new GuestAcceptsInviteHandler(new FakeGuestRepository(), new FakeEventRepository(), new FakeCreatorRepository());
     }
 }

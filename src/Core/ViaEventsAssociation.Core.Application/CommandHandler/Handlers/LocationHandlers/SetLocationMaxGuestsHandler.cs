@@ -24,6 +24,6 @@ public class SetLocationMaxGuestsHandler : ICommandHandler<SetLocationMaxGuestsC
 
         var location = repositoryResult.Value!;
         location.SetMaxGuests(command.MaxGuests);
-        return  await _locationRepository.UpdateAsync(location);;
+        return new Result();
     }
 }

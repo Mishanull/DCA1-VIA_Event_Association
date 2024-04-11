@@ -10,7 +10,7 @@ using VIAEventsAssociation.Core.Tools.OperationResult.OperationResult;
 
 namespace ViaEventAssociation.Core.Domain.EventAgg;
 
-public class VeaEvent(TId id) : AggregateRoot(id)
+public class VeaEvent : AggregateRoot
 {
     // Default values
     private const string DefaultTitle = "Working Title";
@@ -18,12 +18,12 @@ public class VeaEvent(TId id) : AggregateRoot(id)
     private static readonly VeaEventStatus DefaultEventStatus = VeaEventStatus.Draft;
     private const int DefaultMaxGuests = 5;
     private static readonly VeaEventType DefaultEventType = VeaEventType.Private;
-    
+
     // Services
     internal readonly ICurrentTime CurrentTimeProvider;
 
     // Properties
-    internal VeaEventId Id => (VeaEventId)base.Id;
+    internal VeaEventId Id { get; private init; }
     internal Title Title { get; set; } = ((Result<Title>)Title.Create(DefaultTitle)).Value!;
     internal Description Description { get; set; } = Description.Create(DefaultDescription).Value!;
     internal VeaEventType VeaEventType { get; set; } = DefaultEventType;
@@ -31,19 +31,25 @@ public class VeaEvent(TId id) : AggregateRoot(id)
     internal VeaEventStatus VeaEventStatus { get; set; } = DefaultEventStatus;
     internal FromTo? FromTo { get; set; }
     internal CreatorId CreatorId { get; }
-    
+
     internal List<GuestId> Participants { get; } = [];
-    
+
     internal LocationId? LocationId { get; private set; }
 
     // Constructors
-    private VeaEvent(VeaEventId id ,CreatorId creatorId, ICurrentTime currentTimeProvider) : this(id)
+    internal VeaEvent(VeaEventId id, CreatorId creatorId, ICurrentTime currentTimeProvider)
     {
+        Id = id;
         CreatorId = creatorId;
         CurrentTimeProvider = currentTimeProvider;
     }
 
-    public static Result<VeaEvent> Create(CreatorId creatorId ,ICurrentTime currentTime)
+    internal VeaEvent(VeaEventId id)
+    {
+        Id = id;
+    }
+
+    public static Result<VeaEvent> Create(CreatorId creatorId, ICurrentTime currentTime)
     {
         var veaEvent = new VeaEvent(new VeaEventId(), creatorId, currentTime);
         return new Result<VeaEvent>(veaEvent);
@@ -127,12 +133,12 @@ public class VeaEvent(TId id) : AggregateRoot(id)
         {
             errorResult.CollectError(ErrorHelper.CreateVeaError("Cancelled event cannot be modified.", ErrorType.ActionNotAllowed));
         }
-        
+
         if (Equals(VeaEventStatus, VeaEventStatus.Active))
         {
             errorResult.CollectError(ErrorHelper.CreateVeaError("Active event cannot be modified.", ErrorType.ActionNotAllowed));
         }
-        
+
         // event cannot be shorter than 1 hour and longer than 10 hours
         if (fromTo.End - fromTo.Start < TimeSpan.FromHours(1) || fromTo.End - fromTo.Start > TimeSpan.FromHours(10))
         {

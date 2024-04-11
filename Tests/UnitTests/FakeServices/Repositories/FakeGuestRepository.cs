@@ -1,27 +1,21 @@
 using ViaEventAssociation.Core.Domain.Common.ValueObjects;
 using ViaEventAssociation.Core.Domain.Contracts.Repositories;
+using ViaEventAssociation.Core.Domain.EventAgg;
 using ViaEventAssociation.Core.Domain.GuestAgg.Guest;
+using ViaEventAssociation.Core.Domain.GuestAgg.Request;
+using ViaEventAssociation.Core.Domain.GuestAgg.RequestEntity;
 using VIAEventsAssociation.Core.Tools.OperationResult.OperationResult;
 
 namespace UnitTests.FakeServices.Repositories;
 
 public class FakeGuestRepository : IGuestRepository
 {
-
-    public Result<VeaGuest> Find(GuestId id)
-    {
-         return new Result<VeaGuest>(VeaGuest.Create(
-            Email.Create("example@via.dk", new FakeEmailCheck()).Value!, 
-            FirstName.Create("marius").Value!, 
-            LastName.Create("posda").Value!, 
-            PictureUrl.Create("https://example.com/yes.png").Value!).Value);
-    }
     public async Task<Result<VeaGuest>> FindAsync(GuestId id)
     {
         return new Result<VeaGuest>(VeaGuest.Create(
-            Email.Create("example@via.dk", new FakeEmailCheck()).Value!, 
-            FirstName.Create("marius").Value!, 
-            LastName.Create("posda").Value!, 
+            Email.Create("example@via.dk", new FakeEmailCheck()).Value!,
+            FirstName.Create("marius").Value!,
+            LastName.Create("posda").Value!,
             PictureUrl.Create("https://example.com/yes.png").Value!).Value);
     }
 
@@ -30,21 +24,13 @@ public class FakeGuestRepository : IGuestRepository
         return new Result();
     }
 
-    public Result Remove(GuestId id)
-    {
-        throw new NotImplementedException();
-    }
-
     public Task<Result> RemoveAsync(GuestId id)
     {
         throw new NotImplementedException();
     }
-    public Result<VeaGuest> Update(VeaGuest entity)
+
+    public async Task<Result<Request>> FindRequestAsync(RequestId id)
     {
-        throw new NotImplementedException();
-    }
-    public async Task<Result<VeaGuest>> UpdateAsync(VeaGuest entity)
-    {
-        return new Result<VeaGuest>(entity);
+        return new Result<Request>(Request.Create("I am interested in this.", new VeaEventId(), new GuestId()).Value!);
     }
 }

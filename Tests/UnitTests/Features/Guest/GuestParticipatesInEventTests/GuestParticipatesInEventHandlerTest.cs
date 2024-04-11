@@ -19,7 +19,7 @@ public class GuestParticipatesInEventHandlerTest
     private ICommandHandler<GuestParticipatesInPublicEventCommand> _handler;
     private static Request _request;
     private GuestParticipatesInPublicEventCommand _validCommand;
-    
+
     public GuestParticipatesInEventHandlerTest()
     {
         _request = Request.Create("Interested.", new VeaEventId(), new GuestId()).Value!;
@@ -59,13 +59,13 @@ public class GuestParticipatesInEventHandlerTest
         var errorResult = new Result<VeaGuest>(null);
         var error = ErrorHelper.CreateVeaError("Not found.", ErrorType.ResourceNotFound);
         errorResult.CollectError(error);
-        repoMock.Setup(r => r.Find(It.IsAny<GuestId>())).Returns(errorResult);
-        _handler = new GuestParticipatesInPublicEventHandler(repoMock.Object, new FakeEventRepository(),new FakeRequestRepository() );
+        repoMock.Setup(r => r.FindAsync(It.IsAny<GuestId>())).ReturnsAsync(errorResult);
+        _handler = new GuestParticipatesInPublicEventHandler(repoMock.Object, new FakeEventRepository());
         return error;
     }
 
     private void SetupSuccess()
     {
-        _handler = new GuestParticipatesInPublicEventHandler(new FakeGuestRepository(), new FakeEventRepository(), new FakeRequestRepository());
+        _handler = new GuestParticipatesInPublicEventHandler(new FakeGuestRepository(), new FakeEventRepository());
     }
 }

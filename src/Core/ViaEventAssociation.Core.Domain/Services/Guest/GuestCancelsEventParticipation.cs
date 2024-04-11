@@ -11,26 +11,37 @@ namespace ViaEventAssociation.Core.Domain.Services.Guest;
 
 public class GuestCancelsEventParticipation(
     IGuestRepository guestRepo,
-    IVeaEventRepository eventRepo,
-    IRequestRepository requestRepo)
+    IVeaEventRepository eventRepo
+  )
 {
     public async Task<Result> Handle(RequestId requestId)
     {
-        if (ValidateRequestId(requestId, out var findRequestResult)) return findRequestResult;
-
-        if (ValidateGuestAndResultExist(findRequestResult, out var result, out var request, out var findGuestResult, out var findEventResult)) return result;
+        var result = new Result();
+        var findRequestResult = await guestRepo.FindRequestAsync(requestId);
+        if (findRequestResult.IsErrorResult())
+        {
+            return findRequestResult;
+        }
+        var request = findRequestResult.Value!;
+        var findGuestResult = await guestRepo.FindAsync(request.GuestId);
+        var findEventResult = await eventRepo.FindAsync(request.EventId);
+        result.CollectFromMultiple(findGuestResult, findEventResult);
+        if (result.IsErrorResult())
+        {
+            return result;
+        }
 
         VeaGuest guest = findGuestResult.Value!;
         VeaEvent veaEvent = findEventResult.Value!;
 
         if (ValidateEventHasNotEnded(veaEvent, result, out var result1)) return result1;
 
-        await CancelRequestAndUpdateAggregates(veaEvent, guest, request);
+        CancelRequestAndUpdateAggregates(veaEvent, guest, request);
 
         return result;
     }
 
-    private async Task CancelRequestAndUpdateAggregates(VeaEvent veaEvent, VeaGuest guest, Request request)
+    private void CancelRequestAndUpdateAggregates(VeaEvent veaEvent, VeaGuest guest, Request request)
     {
         if (veaEvent.IsParticipant(guest.Id))
         {
@@ -38,13 +49,12 @@ public class GuestCancelsEventParticipation(
         }
 
         request.CancelRequest();
-        await eventRepo.UpdateAsync(veaEvent);
-        await requestRepo.UpdateAsync(request);
+        guest.AddRequest(request);
     }
 
     private static bool ValidateEventHasNotEnded(VeaEvent veaEvent, Result result, out Result result1)
     {
-        if (veaEvent.FromTo.End.Date < DateTime.Now)
+        if (veaEvent.FromTo!.End.Date < DateTime.Now)
         {
             result.CollectError(ErrorHelper.CreateVeaError(
                 "Event has already ended.", ErrorType.EventHasEnded));
@@ -55,34 +65,6 @@ public class GuestCancelsEventParticipation(
         }
 
         result1 = result;
-        return false;
-    }
-
-    private bool ValidateGuestAndResultExist(Result<Request> findRequestResult, out Result result, out Request request,
-        out Result<VeaGuest> findGuestResult, out Result<VeaEvent> findEventResult)
-    {
-        result = new Result();
-        request = findRequestResult.Value!;
-        findGuestResult = guestRepo.Find(request.GuestId);
-        findEventResult = eventRepo.Find(request.EventId);
-        result.CollectErrors(findGuestResult.Errors);
-        result.CollectErrors(findEventResult.Errors);
-        if (result.IsErrorResult())
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    private bool ValidateRequestId(RequestId requestId, out Result<Request> findRequestResult)
-    {
-        findRequestResult = requestRepo.Find(requestId);
-        if (findRequestResult.IsErrorResult())
-        {
-            return true;
-        }
-
         return false;
     }
 }

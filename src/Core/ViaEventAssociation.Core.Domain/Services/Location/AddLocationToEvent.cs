@@ -20,7 +20,6 @@ public class AddLocationToEvent(ILocationRepository locationRepository, IVeaEven
 
         var veaEvent = veaEventResult.Value!;
         veaEvent.SetLocationId(locationId);
-        var updateResult = await veaEventRepository.UpdateAsync(veaEvent);
-        return updateResult;
+        return new Result();
     }
 }

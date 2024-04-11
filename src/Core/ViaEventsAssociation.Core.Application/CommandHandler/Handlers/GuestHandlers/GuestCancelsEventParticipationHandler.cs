@@ -10,9 +10,9 @@ public class GuestCancelsEventParticipationHandler : ICommandHandler<GuestCancel
 {
     private readonly GuestCancelsEventParticipation _guestCancelsEventParticipation;
 
-    internal GuestCancelsEventParticipationHandler(IGuestRepository guestRepository, IVeaEventRepository eventRepository, IRequestRepository requestRepository)
+    internal GuestCancelsEventParticipationHandler(IGuestRepository guestRepository, IVeaEventRepository eventRepository)
     {
-        _guestCancelsEventParticipation = new GuestCancelsEventParticipation(guestRepository, eventRepository, requestRepository);
+        _guestCancelsEventParticipation = new GuestCancelsEventParticipation(guestRepository, eventRepository);
     }
     
     public async Task<Result> HandleAsync(GuestCancelsEventParticipationCommand command)

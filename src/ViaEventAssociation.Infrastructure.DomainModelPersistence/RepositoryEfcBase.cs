@@ -10,11 +10,6 @@ public class RepositoryEfcBase<TAgg, TYpeId>(DbContext context) : IVeaRepository
     where TAgg : AggregateRoot
     where TYpeId : TId
 {
-    public virtual Result<TAgg> Find(TYpeId id)
-    {
-        throw new NotImplementedException();
-    }
-
     public virtual async Task<Result<TAgg>> FindAsync(TYpeId id)
     {
         TAgg? root = await context.Set<TAgg>().FindAsync(id);

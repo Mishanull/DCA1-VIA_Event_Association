@@ -3,4 +3,4 @@ using ViaEventAssociation.Core.Domain.LocationAgg;
 
 namespace ViaEventAssociation.Infrastructure.SqliteDmPersistence.LocationPersistence;
 
-public class LocationSqliteRepositoryEfc(WriteDbContext context) : RepositoryEfcBase<Location, LocationId>, ILocationRepository;
+public class LocationSqliteRepositoryEfc(WriteDbContext context) : RepositoryEfcBase<Location, LocationId>(context), ILocationRepository;

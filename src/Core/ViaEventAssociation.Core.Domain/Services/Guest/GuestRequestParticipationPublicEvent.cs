@@ -10,27 +10,31 @@ namespace ViaEventAssociation.Core.Domain.Services.Guest;
 
 public class GuestRequestParticipationPublicEvent(
     IGuestRepository guestRepo,
-    IVeaEventRepository eventRepo,
-    IRequestRepository requestRepo)
+    IVeaEventRepository eventRepo)
 {
     public async Task<Result> Handle(Request request)
     {
-        if (Result(request, out var result, out var findGuestResult, out var findEventResult)) return result;
+        var result = new Result();
+        var findGuestResult = await guestRepo.FindAsync(request.GuestId);
+        var findEventResult = await eventRepo.FindAsync(request.EventId);
+        result.CollectFromMultiple(findGuestResult, findEventResult);
+        if (result.IsErrorResult())
+        {
+            return result;
+        }
+
         var veaEvent = ValidateEvent(findEventResult, result);
         var guest = ValidateGuestParticipation(findGuestResult, veaEvent, result);
         if (HandleErrorResult(request, result, out var result1)) return result1;
-        await UpdateAggregates(request, veaEvent, guest, result);
+        UpdateAggregates(request, veaEvent, guest, result);
         return result;
     }
 
-    private async Task UpdateAggregates(Request request, VeaEvent veaEvent, VeaGuest guest, Result result)
+    private void UpdateAggregates(Request request, VeaEvent veaEvent, VeaGuest guest, Result result)
     {
         veaEvent.AddParticipant(guest.Id);
         request.ApproveRequest();
         guest.AddRequest(request);
-        await eventRepo.UpdateAsync(veaEvent);
-        await requestRepo.UpdateAsync(request);
-        await guestRepo.UpdateAsync(guest);
     }
 
     private static bool HandleErrorResult(Request request, Result result, out Result result1)
@@ -69,7 +73,7 @@ public class GuestRequestParticipationPublicEvent(
             result.CollectError(ErrorHelper.CreateVeaError("Event is full.", ErrorType.EventIsFull));
         }
 
-        if (veaEvent.FromTo.End.Date < DateTime.Now)
+        if (veaEvent.FromTo!.End.Date < DateTime.Now)
         {
             result.CollectError(ErrorHelper.CreateVeaError(
                 "Event has already ended.", ErrorType.EventHasEnded));
@@ -91,21 +95,5 @@ public class GuestRequestParticipationPublicEvent(
         }
 
         return veaEvent;
-    }
-
-    private bool Result(Request request, out Result result, out Result<VeaGuest> findGuestResult,
-        out Result<VeaEvent> findEventResult)
-    {
-        result = new Result();
-        findGuestResult = guestRepo.Find(request.GuestId);
-        findEventResult = eventRepo.Find(request.EventId);
-        result.CollectErrors(findGuestResult.Errors);
-        result.CollectErrors(findEventResult.Errors);
-        if (result.IsErrorResult())
-        {
-            return true;
-        }
-
-        return false;
     }
 }
