@@ -9,13 +9,14 @@ public class Creator : AggregateRoot
 {
     internal CreatorId Id { get; }
     internal Email Email { get; private init; }
-
     internal HashSet<Invite> CreatedInvites { get; private init; } = [];
 
     private Creator(CreatorId id)
     {
         Id = id;
     }
+    private Creator() { } // EF Core
+    
     public static Result<Creator> Create(Email email)
     {
         email.Value = email.Value.ToLower();
@@ -23,7 +24,6 @@ public class Creator : AggregateRoot
         {
             Email = email,
         };
-
         return new Result<Creator>(creator);
     }
 

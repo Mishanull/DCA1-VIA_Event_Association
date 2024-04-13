@@ -1,4 +1,5 @@
 ﻿using UnitTests.Utils;
+using ViaEventAssociation.Core.Domain.Common.ValueObjects;
 using ViaEventAssociation.Core.Domain.EventAgg;
 using VIAEventsAssociation.Core.Tools.OperationResult.Error;
 using VIAEventsAssociation.Core.Tools.OperationResult.OperationResult;

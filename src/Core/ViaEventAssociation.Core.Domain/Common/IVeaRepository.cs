@@ -1,7 +1,7 @@
 using ViaEventAssociation.Core.Domain.Common.Base;
 using VIAEventsAssociation.Core.Tools.OperationResult.OperationResult;
 
-namespace ViaEventAssociation.Core.Domain.Contracts.Repositories;
+namespace ViaEventAssociation.Core.Domain.Common;
 
 public interface IVeaRepository<Tagg, TypeId>
     where Tagg : AggregateRoot

@@ -6,8 +6,8 @@ namespace ViaEventAssociation.Core.Domain.Common.ValueObjects;
 
 public class FromTo : ValueObject
 {
-    internal DateTime Start { get; init; }
-    internal DateTime End { get; init; }
+    public DateTime Start { get; init; }
+    public DateTime End { get; init; }
     
     private FromTo(DateTime start, DateTime end)
     {

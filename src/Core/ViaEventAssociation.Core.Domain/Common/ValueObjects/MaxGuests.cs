@@ -2,11 +2,11 @@
 using VIAEventsAssociation.Core.Tools.OperationResult.Error;
 using VIAEventsAssociation.Core.Tools.OperationResult.OperationResult;
 
-namespace ViaEventAssociation.Core.Domain.EventAgg;
+namespace ViaEventAssociation.Core.Domain.Common.ValueObjects;
 
 public class MaxGuests : ValueObject
 {
-    internal int Value { get; init; }
+    public int Value { get; init; }
     //private constructor
     private MaxGuests(int value)
     {

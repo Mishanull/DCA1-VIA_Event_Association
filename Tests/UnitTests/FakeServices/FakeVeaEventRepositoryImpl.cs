@@ -1,5 +1,4 @@
-﻿using ViaEventAssociation.Core.Domain.Contracts.Repositories;
-using ViaEventAssociation.Core.Domain.EventAgg;
+﻿using ViaEventAssociation.Core.Domain.EventAgg;
 using VIAEventsAssociation.Core.Tools.OperationResult.Error;
 using VIAEventsAssociation.Core.Tools.OperationResult.Helpers;
 using VIAEventsAssociation.Core.Tools.OperationResult.OperationResult;

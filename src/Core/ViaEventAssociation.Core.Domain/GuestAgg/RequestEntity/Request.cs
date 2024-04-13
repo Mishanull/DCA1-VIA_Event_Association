@@ -13,7 +13,6 @@ public class Request : Entity<RequestId>
     internal string Reason { get; private init; } = "";
     internal VeaEventId EventId { get; private init; }
     internal GuestId GuestId { get; private init; }
-
     internal RequestStatus RequestStatus { get; private set; } = RequestStatus.Pending;
 
     private Request(RequestId id, VeaEventId eventId, GuestId guestId) : base(id)
@@ -22,7 +21,6 @@ public class Request : Entity<RequestId>
         GuestId = guestId;
         Id = id;
     }
-
     private Request(RequestId id, VeaEventId eventId, GuestId guestId, string reason) : base(id)
     {
         EventId = eventId;
@@ -30,6 +28,7 @@ public class Request : Entity<RequestId>
         Id = id;
         Reason = reason;
     }
+    private Request() { } //EF Core
 
     public static Result<Request> Create(string reason, VeaEventId eventId, GuestId guestId)
     {

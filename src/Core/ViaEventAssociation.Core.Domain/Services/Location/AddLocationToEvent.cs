@@ -1,4 +1,3 @@
-using ViaEventAssociation.Core.Domain.Contracts.Repositories;
 using ViaEventAssociation.Core.Domain.EventAgg;
 using ViaEventAssociation.Core.Domain.LocationAgg;
 using VIAEventsAssociation.Core.Tools.OperationResult.OperationResult;
