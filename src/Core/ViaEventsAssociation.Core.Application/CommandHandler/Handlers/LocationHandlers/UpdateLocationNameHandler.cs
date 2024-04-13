@@ -1,4 +1,4 @@
-using ViaEventAssociation.Core.Domain.Contracts.Repositories;
+using ViaEventAssociation.Core.Domain.LocationAgg;
 using ViaEventsAssociation.Core.Application.CommandHandler.Commands.Location;
 using ViaEventsAssociation.Core.Application.CommandHandler.Common.Base;
 using VIAEventsAssociation.Core.Tools.OperationResult.OperationResult;

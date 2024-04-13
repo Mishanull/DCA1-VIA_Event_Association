@@ -24,7 +24,7 @@ public class VeaEvent : AggregateRoot
 
     // Properties
     internal VeaEventId Id { get; private init; }
-    internal Title Title { get; set; } = ((Result<Title>)Title.Create(DefaultTitle)).Value!;
+    internal Title Title { get; set; } = Title.Create(DefaultTitle).Value!;
     internal Description Description { get; set; } = Description.Create(DefaultDescription).Value!;
     internal VeaEventType VeaEventType { get; set; } = DefaultEventType;
     internal MaxGuests MaxGuests { get; set; } = MaxGuests.Create(DefaultMaxGuests).Value!;

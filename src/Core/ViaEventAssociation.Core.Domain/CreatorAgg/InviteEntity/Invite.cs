@@ -23,6 +23,7 @@ public class Invite : Entity<InviteId>
         EventId = veaEventId;
         Id = id;
     }
+    private Invite(){} //EF Core
 
     public static Result<Invite> Create(GuestId guestId, CreatorId creatorId, VeaEventId veaEventId)
     {

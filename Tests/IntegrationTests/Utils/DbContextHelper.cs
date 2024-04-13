@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ViaEventAssociation.Infrastructure.SqliteDmPersistence;
 
-namespace UnitTests.Utils;
+namespace IntegrationTests.Utils;
 
 public static class DbContextHelper
 {

@@ -1,17 +1,12 @@
 using ViaEventAssociation.Core.Domain.Common.Base;
 using ViaEventAssociation.Core.Domain.Common.ValueObjects;
-using ViaEventAssociation.Core.Domain.Contracts;
-using VIAEventsAssociation.Core.Tools.OperationResult.Helpers;
 using VIAEventsAssociation.Core.Tools.OperationResult.OperationResult;
 
 namespace ViaEventAssociation.Core.Domain.GuestAgg.Guest;
 
 public  class GuestId : TId
 {
-    public GuestId()
-    {
-        
-    }
+    public GuestId() { }
 }
 
 public class VeaGuest : AggregateRoot
@@ -21,12 +16,13 @@ public class VeaGuest : AggregateRoot
     internal FirstName? FirstName{ get; private init; } 
     internal LastName? LastName { get; private init; }
     internal PictureUrl? PictureUrl { get; private init; } = new ();
-    private HashSet<RequestEntity.Request> JoinRequests { get; init; } = [];
+    internal HashSet<RequestEntity.Request> JoinRequests { get; init; } = [];
 
     internal VeaGuest(GuestId id) 
     {
         Id = id;
     }
+    private VeaGuest(){} //EF Core
     
     public static Result<VeaGuest> Create(Email email, FirstName firstName, LastName lastName, PictureUrl pictureUrl)
     {

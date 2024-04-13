@@ -1,5 +1,4 @@
 using ViaEventAssociation.Core.Domain.Common.ValueObjects;
-using ViaEventAssociation.Core.Domain.Contracts.Repositories;
 using ViaEventAssociation.Core.Domain.CreatorAgg;
 using ViaEventAssociation.Core.Domain.CreatorAgg.InviteEntity;
 using ViaEventAssociation.Core.Domain.EventAgg;

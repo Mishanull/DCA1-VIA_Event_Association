@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ViaEventAssociation.Core.Domain.Common;
 using ViaEventAssociation.Core.Domain.Common.Base;
-using ViaEventAssociation.Core.Domain.Contracts.Repositories;
 using VIAEventsAssociation.Core.Tools.OperationResult.Helpers;
 using VIAEventsAssociation.Core.Tools.OperationResult.OperationResult;
 
@@ -19,7 +19,15 @@ public class RepositoryEfcBase<TAgg, TYpeId>(DbContext context) : IVeaRepository
 
     public virtual async Task<Result> AddAsync(TAgg entity)
     {
-        await context.Set<TAgg>().AddAsync(entity);
+        try
+        {
+            await context.Set<TAgg>().AddAsync(entity);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
         return ResultHelper.CreateSuccess();
     }
 

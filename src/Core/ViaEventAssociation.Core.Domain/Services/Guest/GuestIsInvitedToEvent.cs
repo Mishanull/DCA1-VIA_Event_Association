@@ -1,7 +1,7 @@
-using ViaEventAssociation.Core.Domain.Contracts.Repositories;
 using ViaEventAssociation.Core.Domain.CreatorAgg;
 using ViaEventAssociation.Core.Domain.CreatorAgg.InviteEntity;
 using ViaEventAssociation.Core.Domain.EventAgg;
+using ViaEventAssociation.Core.Domain.GuestAgg;
 using ViaEventAssociation.Core.Domain.GuestAgg.Guest;
 using VIAEventsAssociation.Core.Tools.OperationResult.Error;
 using VIAEventsAssociation.Core.Tools.OperationResult.Helpers;

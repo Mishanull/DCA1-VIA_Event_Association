@@ -1,9 +1,8 @@
-using ViaEventAssociation.Core.Domain.CreatorAgg;
+using ViaEventAssociation.Core.Domain.Common;
 using ViaEventAssociation.Core.Domain.CreatorAgg.InviteEntity;
-using ViaEventAssociation.Core.Domain.GuestAgg.RequestEntity;
 using VIAEventsAssociation.Core.Tools.OperationResult.OperationResult;
 
-namespace ViaEventAssociation.Core.Domain.Contracts.Repositories;
+namespace ViaEventAssociation.Core.Domain.CreatorAgg;
 
 public interface ICreatorRepository : IVeaRepository<Creator, CreatorId>
 {

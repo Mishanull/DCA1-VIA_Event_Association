@@ -1,5 +1,4 @@
-﻿using ViaEventAssociation.Core.Domain.Contracts.Repositories;
-using ViaEventAssociation.Core.Domain.Contracts.UnitOfWork;
+﻿using ViaEventAssociation.Core.Domain.Contracts.UnitOfWork;
 using ViaEventAssociation.Core.Domain.EventAgg;
 using ViaEventsAssociation.Core.Application.CommandHandler.Commands.Event;
 using ViaEventsAssociation.Core.Application.CommandHandler.Common.Base;

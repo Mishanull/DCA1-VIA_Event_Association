@@ -1,8 +1,8 @@
 using Moq;
 using UnitTests.FakeServices.Repositories;
 using ViaEventAssociation.Core.Domain.Contracts;
-using ViaEventAssociation.Core.Domain.Contracts.Repositories;
 using ViaEventAssociation.Core.Domain.Contracts.UnitOfWork;
+using ViaEventAssociation.Core.Domain.GuestAgg;
 using ViaEventAssociation.Core.Domain.GuestAgg.Guest;
 using ViaEventsAssociation.Core.Application.CommandHandler.Commands.Guest;
 using ViaEventsAssociation.Core.Application.CommandHandler.Common.Base;

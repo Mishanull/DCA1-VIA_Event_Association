@@ -1,6 +1,6 @@
 using Moq;
 using UnitTests.FakeServices.Repositories;
-using ViaEventAssociation.Core.Domain.Contracts.Repositories;
+using ViaEventAssociation.Core.Domain.CreatorAgg;
 using ViaEventAssociation.Core.Domain.CreatorAgg.InviteEntity;
 using ViaEventsAssociation.Core.Application.CommandHandler.Commands.Guest;
 using ViaEventsAssociation.Core.Application.CommandHandler.Common.Base;

@@ -19,5 +19,15 @@
             <_Parameter1>UnitTests</_Parameter1>
         </AssemblyAttribute>
     </ItemGroup>
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+            <_Parameter1>IntegrationTests</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+            <_Parameter1>ViaEventAssociation.Infrastructure.DomainModelPersistence</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
 
 </Project>

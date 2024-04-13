@@ -1,4 +1,5 @@
 using ViaEventAssociation.Core.Domain.Common.Base;
+using ViaEventAssociation.Core.Domain.Common.ValueObjects;
 using ViaEventAssociation.Core.Domain.EventAgg;
 using ViaEventAssociation.Core.Domain.LocationAgg;
 using ViaEventsAssociation.Core.Application.CommandHandler.Common.Base;

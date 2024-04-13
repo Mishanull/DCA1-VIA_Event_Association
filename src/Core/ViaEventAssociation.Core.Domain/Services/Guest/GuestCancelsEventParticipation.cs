@@ -1,5 +1,5 @@
-using ViaEventAssociation.Core.Domain.Contracts.Repositories;
 using ViaEventAssociation.Core.Domain.EventAgg;
+using ViaEventAssociation.Core.Domain.GuestAgg;
 using ViaEventAssociation.Core.Domain.GuestAgg.Guest;
 using ViaEventAssociation.Core.Domain.GuestAgg.Request;
 using ViaEventAssociation.Core.Domain.GuestAgg.RequestEntity;

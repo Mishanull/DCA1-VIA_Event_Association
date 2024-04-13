@@ -11,7 +11,8 @@ public class LocationName : ValueObject
     {
         Value = value;
     }
-    internal string Value { get; }
+    private LocationName(){} // For EF Core
+    public string Value { get; }
 
     public static Result<LocationName> Create(string value)
     {

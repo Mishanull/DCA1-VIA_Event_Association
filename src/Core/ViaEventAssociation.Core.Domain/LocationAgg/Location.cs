@@ -1,7 +1,6 @@
 using ViaEventAssociation.Core.Domain.Common.Base;
 using ViaEventAssociation.Core.Domain.Common.ValueObjects;
 using ViaEventAssociation.Core.Domain.CreatorAgg;
-using ViaEventAssociation.Core.Domain.EventAgg;
 using VIAEventsAssociation.Core.Tools.OperationResult.OperationResult;
 
 namespace ViaEventAssociation.Core.Domain.LocationAgg;

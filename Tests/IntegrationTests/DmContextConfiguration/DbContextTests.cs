@@ -1,8 +1,8 @@
-﻿using UnitTests.Utils;
+﻿using IntegrationTests.Utils;
 using ViaEventAssociation.Core.Domain.Common.Base;
 using ViaEventAssociation.Infrastructure.SqliteDmPersistence.EntityM_Trial;
 
-namespace UnitTests.Infrastructure;
+namespace IntegrationTests.DmContextConfiguration;
 
 public class DbContextTests
 {
