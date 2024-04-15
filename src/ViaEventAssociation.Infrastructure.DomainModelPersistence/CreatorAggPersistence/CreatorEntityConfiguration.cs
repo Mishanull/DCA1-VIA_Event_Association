@@ -3,6 +3,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ViaEventAssociation.Core.Domain.Common.Base;
 using ViaEventAssociation.Core.Domain.Common.ValueObjects;
 using ViaEventAssociation.Core.Domain.CreatorAgg;
+using ViaEventAssociation.Core.Domain.CreatorAgg.InviteEntity;
+using ViaEventAssociation.Core.Domain.EventAgg;
+using ViaEventAssociation.Core.Domain.GuestAgg.Guest;
 
 namespace ViaEventAssociation.Infrastructure.SqliteDmPersistence.CreatorAggPersistence;
 
@@ -29,39 +32,5 @@ public class CreatorEntityConfiguration : IEntityTypeConfiguration<Creator>
                     .IsRequired();
             }
         );
-        
-        // *Done directly in the WriteDbContext class
-        // //CreatedInvites : list of entities
-        // entityTypeBuilder.OwnsMany<Invite>(c => c.CreatedInvites, valueBuilder =>
-        //     {
-        //         valueBuilder.HasKey(i=>i.Id);
-        //         valueBuilder.Property(i => i.Id)
-        //             .HasConversion(
-        //                 iId => iId.Value,
-        //                 dbValue => TId.FromGuid<InviteId>(dbValue).Value!
-        //             );
-        //         valueBuilder.Property(i => i.InviteStatus)
-        //             .HasConversion(
-        //                 inviteStatus=>inviteStatus.ToString(),
-        //                 dbValue => (InviteStatus)Enum.Parse(typeof(InviteStatus), dbValue)
-        //             );
-        //         valueBuilder.Property(i => i.Timestamp);
-        //         valueBuilder.Property(i => i.CreatorId)
-        //             .HasConversion(
-        //                 cId => cId.Value,
-        //                 dbValue => TId.FromGuid<CreatorId>(dbValue).Value!
-        //             );
-        //         valueBuilder.Property(i=>i.GuestId)
-        //             .HasConversion(
-        //                 gId => gId.Value,
-        //                 dbValue => TId.FromGuid<GuestId>(dbValue).Value!
-        //             );
-        //         valueBuilder.Property(i=>i.EventId)
-        //             .HasConversion(
-        //                 eId => eId.Value,
-        //                 dbValue => TId.FromGuid<VeaEventId>(dbValue).Value!
-        //             );
-        //     }
-        // );
     }
 }

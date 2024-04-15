@@ -2,7 +2,10 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ViaEventAssociation.Core.Domain.Common.Base;
 using ViaEventAssociation.Core.Domain.Common.ValueObjects;
+using ViaEventAssociation.Core.Domain.EventAgg;
 using ViaEventAssociation.Core.Domain.GuestAgg.Guest;
+using ViaEventAssociation.Core.Domain.GuestAgg.Request;
+using ViaEventAssociation.Core.Domain.GuestAgg.RequestEntity;
 
 namespace ViaEventAssociation.Infrastructure.SqliteDmPersistence.GuestAggPersistence;
 
@@ -38,29 +41,5 @@ public class GuestEntityConfiguration : IEntityTypeConfiguration<VeaGuest>
         propertyTypeBuilder.OwnsOne<PictureUrl>(g => g.PictureUrl)
             .Property(p => p.Value)
             .HasColumnName("PictureUrl");
-        
-        // *Done directly in the WriteDbContext class
-        // //JoinRequests : list of entities
-        // propertyTypeBuilder.OwnsMany<Request>(g=>g.JoinRequests, valueBuilder =>
-        //     {
-        //         valueBuilder.HasKey(r=>r.Id);
-        //         valueBuilder.Property(r => r.Id)
-        //             .HasConversion(
-        //                 rId => rId.Value,
-        //                 dbValue => TId.FromGuid<RequestId>(dbValue).Value!
-        //             );
-        //         valueBuilder.Property(r => r.Reason);
-        //         valueBuilder.Property(r => r.EventId)
-        //             .HasConversion(
-        //                 eId => eId.Value,
-        //                 dbValue => TId.FromGuid<VeaEventId>(dbValue).Value!
-        //             );
-        //         valueBuilder.Property<RequestStatus>(r => r.RequestStatus)
-        //             .HasConversion(
-        //                 requestStatus => requestStatus.ToString(),
-        //                 dbValue => (RequestStatus)Enum.Parse(typeof(RequestStatus), dbValue)
-        //             );
-        //     }
-        // );
     }
 }
