@@ -17,7 +17,7 @@ public class LocationConfigTests
         //Arrange
         var ctx = DbContextHelper.SetupContext();
         var name = LocationName.Create("LocationName").Value;
-        var creator = Creator.Create(Email.Create("benjamin.bartosik@gmail.com", new FakeEmailCheck()).Value).Value;
+        var creator = Creator.Create(Email.Create("benjamin.bartosik@gmail.com", new FakeEmailCheck()).Value!).Value;
         var location = Location.Create(name!, creator!.Id).Value;
 
         //Act
@@ -36,7 +36,7 @@ public class LocationConfigTests
     {
         //Arrange
         await using WriteDbContext ctx = DbContextHelper.SetupContext();
-        var creator = Creator.Create(Email.Create("benjamin.bartosik@gmail.com", new FakeEmailCheck()).Value).Value;
+        var creator = Creator.Create(Email.Create("benjamin.bartosik@gmail.com", new FakeEmailCheck()).Value!).Value;
         var location = Location.Create(null, creator!.Id).Value;
     
         //Act
@@ -54,7 +54,7 @@ public class LocationConfigTests
         //Arrange
         await using WriteDbContext ctx = DbContextHelper.SetupContext();
         var name = LocationName.Create("LocationName").Value;
-        var creator = Creator.Create(Email.Create("benjamin.bartosik@gmail.com", new FakeEmailCheck()).Value).Value;
+        var creator = Creator.Create(Email.Create("benjamin.bartosik@gmail.com", new FakeEmailCheck()).Value!).Value;
         await DbContextHelper.SaveAndClearAsync(creator!, ctx);
         
         var location = Location.Create(name!, creator!.Id).Value;
