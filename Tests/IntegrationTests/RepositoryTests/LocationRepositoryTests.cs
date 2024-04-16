@@ -1,5 +1,4 @@
 ﻿using IntegrationTests.Utils;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using UnitTests.FakeServices;
 using ViaEventAssociation.Core.Domain.Common.Base;
@@ -10,7 +9,7 @@ using ViaEventAssociation.Infrastructure.SqliteDmPersistence.CreatorAggPersisten
 using ViaEventAssociation.Infrastructure.SqliteDmPersistence.LocationAggPersistence;
 using ViaEventAssociation.Infrastructure.SqliteDmPersistence.UnitOfWork;
 
-namespace IntegrationTests.Repositories;
+namespace IntegrationTests.RepositoryTests;
 
 public class LocationRepositoryTests
 {

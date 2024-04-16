@@ -6,7 +6,7 @@ using ViaEventAssociation.Core.Domain.CreatorAgg;
 using ViaEventAssociation.Core.Domain.LocationAgg;
 using ViaEventAssociation.Infrastructure.SqliteDmPersistence;
 
-namespace IntegrationTests.DmContextConfiguration;
+namespace IntegrationTests.DmContextConfigurationTests;
 
 public class LocationConfigTests
 {
