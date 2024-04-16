@@ -3,7 +3,6 @@ using ViaEventsAssociation.Core.Application.CommandHandler.Common.Base;
 namespace ViaEventsAssociation.Core.Application.AppEntry.ServiceRegistration;
 
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Linq;
 using System.Reflection;
 

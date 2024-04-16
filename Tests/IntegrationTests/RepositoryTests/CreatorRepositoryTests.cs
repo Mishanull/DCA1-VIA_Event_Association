@@ -1,17 +1,15 @@
 ﻿using IntegrationTests.Utils;
 using UnitTests.FakeServices;
-using UnitTests.Utils;
 using ViaEventAssociation.Core.Domain.Common.ValueObjects;
 using ViaEventAssociation.Core.Domain.CreatorAgg;
 using ViaEventAssociation.Core.Domain.CreatorAgg.InviteEntity;
 using ViaEventAssociation.Core.Domain.EventAgg;
 using ViaEventAssociation.Core.Domain.GuestAgg.Guest;
-using ViaEventAssociation.Core.Domain.GuestAgg.RequestEntity;
 using ViaEventAssociation.Infrastructure.SqliteDmPersistence.CreatorAggPersistence;
 using ViaEventAssociation.Infrastructure.SqliteDmPersistence.EventAggPersistence;
 using ViaEventAssociation.Infrastructure.SqliteDmPersistence.GuestAggPersistence;
 
-namespace IntegrationTests.Repositories;
+namespace IntegrationTests.RepositoryTests;
 
 public class CreatorRepositoryTests
 {

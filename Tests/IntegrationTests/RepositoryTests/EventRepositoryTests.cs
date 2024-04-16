@@ -11,7 +11,7 @@ using ViaEventAssociation.Infrastructure.SqliteDmPersistence.EventAggPersistence
 using ViaEventAssociation.Infrastructure.SqliteDmPersistence.LocationAggPersistence;
 using ViaEventAssociation.Infrastructure.SqliteDmPersistence.UnitOfWork;
 
-namespace IntegrationTests.Repositories;
+namespace IntegrationTests.RepositoryTests;
 
 public class EventRepositoryTests
 {

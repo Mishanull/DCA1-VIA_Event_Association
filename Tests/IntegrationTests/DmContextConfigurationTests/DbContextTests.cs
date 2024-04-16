@@ -2,7 +2,7 @@
 using ViaEventAssociation.Core.Domain.Common.Base;
 using ViaEventAssociation.Infrastructure.SqliteDmPersistence.EntityM_Trial;
 
-namespace IntegrationTests.DmContextConfiguration;
+namespace IntegrationTests.DmContextConfigurationTests;
 
 public class DbContextTests
 {

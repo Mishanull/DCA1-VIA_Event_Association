@@ -21,6 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\src\ViaEventAssociation.Infrastructure.EfcQueries\ViaEventAssociation.Infrastructure.EfcQueries.csproj" />
       <ProjectReference Include="..\UnitTests\UnitTests.csproj" />
     </ItemGroup>
 

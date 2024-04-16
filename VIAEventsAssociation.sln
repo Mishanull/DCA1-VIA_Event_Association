@@ -28,6 +28,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViaEventAssociation.Infrast
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTests", "Tests\IntegrationTests\IntegrationTests.csproj", "{FCC98EDD-B50B-4022-9DF2-9A726428A142}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViaEventAssociation.Core.QueryContracts", "src\Core\ViaEventAssociation.Core.QueryContracts\ViaEventAssociation.Core.QueryContracts.csproj", "{185BF95F-C397-4C80-8CA8-8C942D64DC62}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViaEventAssociation.Infrastructure.EfcQueries", "src\ViaEventAssociation.Infrastructure.EfcQueries\ViaEventAssociation.Infrastructure.EfcQueries.csproj", "{64B69047-3E7C-4B1F-859B-9ABB1BE2BA98}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +49,8 @@ Global
 		{8155B488-CE6E-4FA4-BC70-926F4863B06F} = {1EFA51CE-89D4-447A-92CF-7C7E3DC9D8A0}
 		{C65F4D1A-0AC5-470B-8F02-F103999F524D} = {8155B488-CE6E-4FA4-BC70-926F4863B06F}
 		{FCC98EDD-B50B-4022-9DF2-9A726428A142} = {FB111EB4-E680-4C20-8EFB-80BEFADDED76}
+		{185BF95F-C397-4C80-8CA8-8C942D64DC62} = {958D5FC2-417F-46C0-A05A-B0E762849C02}
+		{64B69047-3E7C-4B1F-859B-9ABB1BE2BA98} = {8155B488-CE6E-4FA4-BC70-926F4863B06F}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{5AE3F2FF-C84C-4BEF-97DB-B6BAEE5A4FE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -79,5 +85,13 @@ Global
 		{FCC98EDD-B50B-4022-9DF2-9A726428A142}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FCC98EDD-B50B-4022-9DF2-9A726428A142}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FCC98EDD-B50B-4022-9DF2-9A726428A142}.Release|Any CPU.Build.0 = Release|Any CPU
+		{185BF95F-C397-4C80-8CA8-8C942D64DC62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{185BF95F-C397-4C80-8CA8-8C942D64DC62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{185BF95F-C397-4C80-8CA8-8C942D64DC62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{185BF95F-C397-4C80-8CA8-8C942D64DC62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64B69047-3E7C-4B1F-859B-9ABB1BE2BA98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64B69047-3E7C-4B1F-859B-9ABB1BE2BA98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64B69047-3E7C-4B1F-859B-9ABB1BE2BA98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64B69047-3E7C-4B1F-859B-9ABB1BE2BA98}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
