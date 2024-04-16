@@ -10,9 +10,11 @@ namespace ViaEventAssociation.Infrastructure.SqliteDmPersistence.CreatorAggPersi
 public class CreatorSqliteRepositoryEfc(DbContext context)
     : RepositoryEfcBase<Creator, CreatorId>(context), ICreatorRepository
 {
+    private readonly DbContext _context = context;
+
     public async Task<Result<Invite>> FindInviteAsync(InviteId id)
     {
-        var invite = await context.Set<Invite>().FindAsync(id);
+        var invite = await _context.Set<Invite>().FindAsync(id);
         if (invite == null)
         {
             var errorResult = new Result<Invite>(null);

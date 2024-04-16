@@ -42,35 +42,35 @@ public class GuestRepositoryTests
     
     // This bloody thing should be working in the exact same manner as the invite yet it doesn't
     // Fuck me
-    // [Fact]
-    // public async Task SaveAndRetrieveRequest()
-    // {
-    //     //Arrange
-    //     var ctx = DbContextHelper.SetupContext();
-    //     var creatorRepository = new CreatorSqliteRepositoryEfc(ctx);
-    //     var veaEventRepository = new EventSqliteRepositoryEfc(ctx);
-    //     var guestRepository = new GuestSqliteRepositoryEfc(ctx);
-    //     var email = Email.Create("bbb@gmail.com", new FakeEmailCheck()).Value;
-    //     var firstName = FirstName.Create("Benjamin").Value;
-    //     var lastName = LastName.Create("Bartosik").Value;
-    //     var pictureUrl = PictureUrl.Create("url").Value;
-    //     var guest = VeaGuest.Create(email!, firstName!, lastName!, pictureUrl!).Value!;
-    //     var creator = Creator.Create(email!).Value!;
-    //     var veaEvent = VeaEvent.Create(creator.Id, new FakeCurrentTime()).Value!;
-    //     await guestRepository.AddAsync(guest);
-    //     await creatorRepository.AddAsync(creator);
-    //     await veaEventRepository.AddAsync(veaEvent);
-    //     var request = Request.Create("reasonsdsdsd", veaEvent.Id, guest.Id).Value!;
-    //     guest.AddRequest(request);
-    //     await ctx.SaveChangesAsync();
-    //
-    //     //Act
-    //     var retrievedResult = await guestRepository.FindRequestAsync(request.Id);
-    //     var retrievedRequest = retrievedResult.Value;
-    //
-    //     //Assert
-    //     Assert.NotNull(retrievedRequest);
-    //     Assert.Equal(request, retrievedRequest);
-    //     ctx.ChangeTracker.Clear();
-    // }
+    [Fact]
+    public async Task SaveAndRetrieveRequest()
+    {
+        //Arrange
+        var ctx = DbContextHelper.SetupContext();
+        var creatorRepository = new CreatorSqliteRepositoryEfc(ctx);
+        var veaEventRepository = new EventSqliteRepositoryEfc(ctx);
+        var guestRepository = new GuestSqliteRepositoryEfc(ctx);
+        var email = Email.Create("bbb@gmail.com", new FakeEmailCheck()).Value;
+        var firstName = FirstName.Create("Benjamin").Value;
+        var lastName = LastName.Create("Bartosik").Value;
+        var pictureUrl = PictureUrl.Create("url").Value;
+        var guest = VeaGuest.Create(email!, firstName!, lastName!, pictureUrl!).Value!;
+        var creator = Creator.Create(email!).Value!;
+        var veaEvent = VeaEvent.Create(creator.Id, new FakeCurrentTime()).Value!;
+        await guestRepository.AddAsync(guest);
+        await creatorRepository.AddAsync(creator);
+        await veaEventRepository.AddAsync(veaEvent);
+        var request = Request.Create("reasonsdsdsd", veaEvent.Id, guest.Id).Value!;
+        guest.AddRequest(request);
+        await ctx.SaveChangesAsync();
+    
+        //Act
+        var retrievedResult = await guestRepository.FindRequestAsync(request.Id);
+        var retrievedRequest = retrievedResult.Value;
+    
+        //Assert
+        Assert.NotNull(retrievedRequest);
+        Assert.Equal(request, retrievedRequest);
+        ctx.ChangeTracker.Clear();
+    }
 }

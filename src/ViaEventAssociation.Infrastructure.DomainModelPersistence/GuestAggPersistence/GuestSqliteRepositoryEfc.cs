@@ -12,9 +12,11 @@ namespace ViaEventAssociation.Infrastructure.SqliteDmPersistence.GuestAggPersist
 public class GuestSqliteRepositoryEfc(DbContext context)
     : RepositoryEfcBase<VeaGuest, GuestId>(context), IGuestRepository
 {
+    private readonly DbContext _context = context;
+
     public async Task<Result<Request>> FindRequestAsync(RequestId id)
     {
-        var request = await context.Set<Request>().FindAsync(id);
+        var request = await _context.Set<Request>().FindAsync(id);
         if (request == null)
         {
             var errorResult = new Result<Request>(null);

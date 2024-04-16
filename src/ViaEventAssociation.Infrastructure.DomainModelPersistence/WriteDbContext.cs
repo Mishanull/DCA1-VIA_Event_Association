@@ -81,7 +81,7 @@ public class WriteDbContext(DbContextOptions options):DbContext(options)
             .HasForeignKey(r => r.EventId);
         propertyTypeBuilder
             .HasOne<VeaGuest>()
-            .WithMany()
+            .WithMany(g => g.JoinRequests)
             .HasForeignKey(r => r.GuestId);
     }
     
