@@ -78,9 +78,6 @@ public class EventEntityConfiguration : IEntityTypeConfiguration<VeaEvent>
             .WithMany()
             .HasForeignKey(e=>e.CreatorId);
         
-        // //Participants : list of strongly-typed foreign keys
-        // propertyTypeBuilder.HasMany<VeaGuest>()
-        //     .WithMany();
         
         //LocationId : strongly-typed foreign key
         propertyTypeBuilder.HasOne<Location>()

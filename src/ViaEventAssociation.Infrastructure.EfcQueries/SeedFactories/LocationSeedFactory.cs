@@ -31,15 +31,15 @@ public class LocationSeedFactory
                                             "Id": "e0b61b58-0af5-4d64-b801-27153bdf1c01",
                                             "Name": "Atriet",
                                             "MaxCapacity": 50,
-                                            "AvailabilityStart": "20-02-2024",
-                                            "AvailabilityEnd": "20-05-2024"
+                                            "AvailabilityStart": "11-04-2024",
+                                            "AvailabilityEnd": "14-04-2024"
                                           },
                                           {
                                             "Id": "efd18631-e050-4bd0-a15a-6d5a17cca490",
                                             "Name": "C05.19",
                                             "MaxCapacity": 40,
-                                            "AvailabilityStart": "01-03-2024",
-                                            "AvailabilityEnd": "30-04-2024"
+                                            "AvailabilityStart": "11-04-2024",
+                                            "AvailabilityEnd": "14-04-2024"
                                           },
                                           {
                                             "Id": "6a739f77-5a4d-4e03-9631-9fdfd1403975",
@@ -53,7 +53,7 @@ public class LocationSeedFactory
                                             "Name": "Aud A1",
                                             "MaxCapacity": 50,
                                             "AvailabilityStart": "01-03-2024",
-                                            "AvailabilityEnd": "31-06-2024"
+                                            "AvailabilityEnd": "30-06-2024"
                                           },
                                           {
                                             "Id": "731cea3a-4e31-4af5-b537-7b35c3dbe73c",
