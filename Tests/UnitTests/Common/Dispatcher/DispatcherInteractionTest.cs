@@ -57,6 +57,7 @@ public class DispatcherInteractionTest
     {
         // Arrange
         IServiceCollection serviceCollection = new ServiceCollection();
+        
         // ICommandHandler used here, no handlers needed
         serviceCollection.AddCommandHandlers(Assembly.GetAssembly(typeof(ICommandHandler<>))!);
         IServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
