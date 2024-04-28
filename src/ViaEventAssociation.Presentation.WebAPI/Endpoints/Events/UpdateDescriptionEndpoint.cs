@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using ViaEventAssociation.Core.Domain.Contracts.UnitOfWork;
 using ViaEventAssociation.Presentation.WebAPI.Endpoints.Common;
 using ViaEventsAssociation.Core.Application.AppEntry;
@@ -6,21 +6,24 @@ using ViaEventsAssociation.Core.Application.CommandHandler.Commands.Event;
 
 namespace ViaEventAssociation.Presentation.WebAPI.Endpoints.Events;
 
-public class ActivateEventEndpoint(ICommandDispatcher dispatcher, IUnitOfWork unitOfWork) : ApiEndpoint.WithRequest<ActivateEventRequest>.WithoutResponse
+public class UpdateDescriptionEndpoint(ICommandDispatcher dispatcher, IUnitOfWork unitOfWork) : ApiEndpoint.WithRequest<UpdateDescriptionRequest>.WithoutResponse
 {
-    [HttpPost("events/{EventId}/activate")]
-    public override async Task<ActionResult> HandleAsync([FromRoute]ActivateEventRequest activateEventRequest)
+    [HttpPost("events/updateDescription")]
+    public override async Task<ActionResult> HandleAsync([FromBody] UpdateDescriptionRequest updateDescriptionRequest)
     {
-        var commandResult = ActivateEventCommand.Create(activateEventRequest.EventId);
+        var commandResult = UpdateDescriptionCommand.Create(updateDescriptionRequest.EventId, updateDescriptionRequest.Description);
         if (commandResult.IsErrorResult())
         {
             return BadRequest(commandResult.Errors);
         }
-
         var saveDispatcher = new UowSaveDispatcher(dispatcher, unitOfWork);
         var dispatchResult = await saveDispatcher.Dispatch(commandResult.Value!);
         return !dispatchResult.IsErrorResult() ? Ok() : BadRequest(dispatchResult.Errors);
     }
 }
 
-public record ActivateEventRequest([FromRoute] string EventId);
+public class UpdateDescriptionRequest
+{
+    public string EventId { get; set; }  
+    public string Description { get; set; }   
+}

@@ -31,7 +31,7 @@ public class CreateEventHandler: ICommandHandler<CreateEventCommand>
             return result;
         }
         
-        await _unitOfWork.SaveChangesAsync();
+        // await _unitOfWork.SaveChangesAsync();
         return result;
     }
 }

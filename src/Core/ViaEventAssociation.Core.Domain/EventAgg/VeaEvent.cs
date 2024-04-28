@@ -1,4 +1,5 @@
-﻿using ViaEventAssociation.Core.Domain.Common.Base;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using ViaEventAssociation.Core.Domain.Common.Base;
 using ViaEventAssociation.Core.Domain.Common.ValueObjects;
 using ViaEventAssociation.Core.Domain.Contracts;
 using ViaEventAssociation.Core.Domain.CreatorAgg;
@@ -20,7 +21,8 @@ public class VeaEvent : AggregateRoot
     private static readonly VeaEventType DefaultEventType = VeaEventType.Private;
 
     // Services
-    internal readonly ICurrentTime CurrentTimeProvider;
+    [NotMapped]
+    public ICurrentTime CurrentTimeProvider { get; set; }
 
     // Properties
     internal VeaEventId Id { get; private init; }
@@ -30,7 +32,7 @@ public class VeaEvent : AggregateRoot
     internal MaxGuests MaxGuests { get; set; } = MaxGuests.Create(DefaultMaxGuests).Value!;
     internal VeaEventStatus VeaEventStatus { get; set; } = DefaultEventStatus;
     internal FromTo? FromTo { get; set; }
-    internal CreatorId CreatorId { get; }
+    internal CreatorId CreatorId { get; set; }
 
     internal List<GuestId> Participants { get; } = [];
 

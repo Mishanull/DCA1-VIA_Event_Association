@@ -1,6 +1,6 @@
-using ObjectMapper;
 using ViaEventAssociation.Core.QueryContracts.Queries;
 using ViaEventAssociation.Presentation.WebAPI.Endpoints.Queries;
+using ViaEventsAssociation.Core.Tools.ObjectMapper;
 
 namespace ViaEventAssociation.Presentation.WebAPI.MappingConfigs;
 

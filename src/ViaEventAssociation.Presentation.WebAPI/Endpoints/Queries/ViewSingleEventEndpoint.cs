@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using ObjectMapper;
 using ViaEventAssociation.Core.QueryContracts.Queries;
 using ViaEventAssociation.Core.QueryContracts.QueryDispatching;
 using ViaEventAssociation.Presentation.WebAPI.Endpoints.Common;
+using ViaEventsAssociation.Core.Tools.ObjectMapper;
 
 namespace ViaEventAssociation.Presentation.WebAPI.Endpoints.Queries;
 

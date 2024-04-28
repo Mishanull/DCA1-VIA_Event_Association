@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using ViaEventAssociation.Core.Domain.Contracts.UnitOfWork;
 using ViaEventAssociation.Core.Domain.Services;
 using ViaEventAssociation.Presentation.WebAPI.Endpoints.Common;
 using ViaEventsAssociation.Core.Application.AppEntry;
@@ -6,11 +7,11 @@ using ViaEventsAssociation.Core.Application.CommandHandler.Commands.Event;
 
 namespace ViaEventAssociation.Presentation.WebAPI.Endpoints.Events;
 
-public class CreateEventEndpoint(ICommandDispatcher commandDispatcher)
+public class CreateEventEndpoint(ICommandDispatcher commandDispatcher, IUnitOfWork unitOfWork)
     : ApiEndpoint.WithRequest<CreateEventRequest>.WithoutResponse
 {
-    [HttpPost("events/{Id}/create")]
-    public override async Task<ActionResult> HandleAsync(CreateEventRequest request)
+    [HttpPost("events/create")]
+    public override async Task<ActionResult> HandleAsync([FromBody]CreateEventRequest request)
     {
         var commandResult = CreateEventCommand.Create(request.CreatorId, new CurrentTime());
         if (commandResult.IsErrorResult())
@@ -18,9 +19,10 @@ public class CreateEventEndpoint(ICommandDispatcher commandDispatcher)
             return BadRequest(commandResult.Errors);
         }
 
-        var dispatchResult = await commandDispatcher.Dispatch(commandResult.Value!);
-        return dispatchResult.IsErrorResult() ? Ok() : BadRequest(dispatchResult.Errors);
+        var saveDispatcher = new UowSaveDispatcher(commandDispatcher, unitOfWork);
+        var dispatchResult = await saveDispatcher.Dispatch(commandResult.Value!);
+        return !dispatchResult.IsErrorResult() ? Ok() : BadRequest(dispatchResult.Errors);
     }
 }
 
-public record CreateEventRequest([FromRoute]string CreatorId);
+public record CreateEventRequest([FromBody]string CreatorId);

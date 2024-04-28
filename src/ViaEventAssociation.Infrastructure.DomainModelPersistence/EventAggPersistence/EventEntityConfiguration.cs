@@ -41,11 +41,9 @@ public class EventEntityConfiguration : IEntityTypeConfiguration<VeaEvent>
             }
         );
         
-        //VeaEventType : enum
-        propertyTypeBuilder.Property<VeaEventType>(e => e.VeaEventType)
-            .HasConversion(status => status.DisplayName,
-                value => (VeaEventType)Enum.Parse(typeof(VeaEventType), value)
-            );
+        propertyTypeBuilder.ComplexProperty<VeaEventType>(
+            c => c.VeaEventType,
+            propertyBuilder => propertyBuilder.Property(l => l.DisplayName).HasColumnName("VeaEventType"));
         
         //MaxGuests : non-nullable single-valued ValueObject
         propertyTypeBuilder.ComplexProperty<MaxGuests>(
@@ -57,11 +55,9 @@ public class EventEntityConfiguration : IEntityTypeConfiguration<VeaEvent>
             }
         );
         
-        //VeaEventStatus : enum
-        propertyTypeBuilder.Property<VeaEventStatus>(e => e.VeaEventStatus)
-            .HasConversion(status => status.DisplayName,
-                value => (VeaEventStatus)Enum.Parse(typeof(VeaEventStatus), value)
-            );
+        propertyTypeBuilder.ComplexProperty<VeaEventStatus>(
+            c => c.VeaEventStatus,
+            propertyBuilder => propertyBuilder.Property(l => l.DisplayName).HasColumnName("VeaEventStatus"));
         
         //FromTo : nullable multi-valued ValueObject
         propertyTypeBuilder.OwnsOne<FromTo>(e => e.FromTo, valueBuilder =>

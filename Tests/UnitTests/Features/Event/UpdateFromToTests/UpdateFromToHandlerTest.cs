@@ -2,6 +2,7 @@
 using UnitTests.FakeServices.Repositories;
 using UnitTests.Utils;
 using ViaEventAssociation.Core.Domain.EventAgg;
+using ViaEventAssociation.Core.Domain.Services;
 using ViaEventsAssociation.Core.Application.CommandHandler.Commands.Event;
 using ViaEventsAssociation.Core.Application.CommandHandler.Common.Base;
 using ViaEventsAssociation.Core.Application.CommandHandler.Handlers.Event;
@@ -14,6 +15,7 @@ public class UpdateFromToHandlerTest
     private VeaEventBuilder _veaEventBuilder;
     private IVeaEventRepository _veaEventRepository;
     private ICommandHandler<UpdateFromToCommand> _handler;
+    private FakeCurrentTime _currentTime;
     
     private DateTime originalFrom = DateTime.Today.AddDays(1).AddHours(10);
     private DateTime originalTo = DateTime.Today.AddDays(1).AddHours(11);
@@ -97,7 +99,8 @@ public class UpdateFromToHandlerTest
     {
         _veaEventBuilder = new VeaEventBuilder();
         _veaEventRepository = new FakeVeaEventRepositoryImpl();
-        _handler = new UpdateFromToHandler(_veaEventRepository, new FakeUow());
+        _currentTime = new FakeCurrentTime();
+        _handler = new UpdateFromToHandler(_veaEventRepository, new FakeUow(), _currentTime);
     }
     
 }

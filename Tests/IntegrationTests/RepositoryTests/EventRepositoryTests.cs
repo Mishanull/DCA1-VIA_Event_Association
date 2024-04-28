@@ -27,6 +27,8 @@ public class EventRepositoryTests
         var veaEvent = VeaEvent.Create(creator!.Id, new FakeCurrentTime()).Value;
         var title = Title.Create("Test title").Value!;
         veaEvent!.UpdateTitle(title);
+        var fromToResult = FromTo.Create(DateTime.Today.AddDays(1).AddHours(10), DateTime.Today.AddDays(1).AddHours(11));
+        veaEvent.UpdateFromTo(fromToResult.Value!);
         
         await creatorRepository.AddAsync(creator);
         await veaEventRepository.AddAsync(veaEvent);
@@ -39,6 +41,8 @@ public class EventRepositoryTests
         //Assert
         Assert.NotNull(retrievedVeaEvent);
         Assert.Equal(title.Value, retrievedVeaEvent.Title.Value);
+        Assert.Equal(veaEvent.FromTo.Start, retrievedVeaEvent.FromTo.Start);
+        Assert.Equal(veaEvent.FromTo.End, retrievedVeaEvent.FromTo.End);
         
         ctx.ChangeTracker.Clear();
     }
