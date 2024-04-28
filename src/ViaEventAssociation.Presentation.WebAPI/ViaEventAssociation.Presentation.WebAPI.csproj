@@ -12,6 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\Tests\UnitTests\UnitTests.csproj" />
       <ProjectReference Include="..\Core\ViaEventsAssociation.Core.Tools.ObjectMapper\ViaEventsAssociation.Core.Tools.ObjectMapper.csproj" />
       <ProjectReference Include="..\Core\ViaEventAssociation.Core.QueryContracts\ViaEventAssociation.Core.QueryContracts.csproj" />
       <ProjectReference Include="..\Core\ViaEventsAssociation.Core.Application\ViaEventsAssociation.Core.Application.csproj" />

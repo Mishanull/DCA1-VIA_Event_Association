@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
@@ -27,6 +27,7 @@
     <ItemGroup>
         <ProjectReference Include="..\..\src\ViaEventAssociation.Infrastructure.EfcQueries\ViaEventAssociation.Infrastructure.EfcQueries.csproj"/>
         <ProjectReference Include="..\UnitTests\UnitTests.csproj"/>
+        <ProjectReference Include="..\..\src\ViaEventAssociation.Presentation.WebAPI\ViaEventAssociation.Presentation.WebAPI.csproj"/>
     </ItemGroup>
     <ItemGroup>
       <Folder Include="WebAPI\Queries\" />

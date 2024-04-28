@@ -1,4 +1,5 @@
-﻿using ViaEventAssociation.Core.Domain.Contracts.UnitOfWork;
+﻿using ViaEventAssociation.Core.Domain.Contracts;
+using ViaEventAssociation.Core.Domain.Contracts.UnitOfWork;
 using ViaEventAssociation.Core.Domain.EventAgg;
 using ViaEventsAssociation.Core.Application.CommandHandler.Commands.Event;
 using ViaEventsAssociation.Core.Application.CommandHandler.Common.Base;
@@ -10,11 +11,13 @@ public class UpdateFromToHandler : ICommandHandler<UpdateFromToCommand>
 {
     private readonly IVeaEventRepository _veaEventRepository;
     private readonly IUnitOfWork _unitOfWork;
-    
-    public UpdateFromToHandler(IVeaEventRepository veaEventRepository, IUnitOfWork unitOfWork)
+    private readonly ICurrentTime _currentTime; 
+
+    public UpdateFromToHandler(IVeaEventRepository veaEventRepository, IUnitOfWork unitOfWork, ICurrentTime currentTime)
     {
         _veaEventRepository = veaEventRepository;
         _unitOfWork = unitOfWork;
+        _currentTime = currentTime;
     }
         
     public async Task<Result> HandleAsync(UpdateFromToCommand command)
@@ -24,7 +27,8 @@ public class UpdateFromToHandler : ICommandHandler<UpdateFromToCommand>
         {
             return veaEventResult;
         }
-        
+
+        veaEventResult.Value!.CurrentTimeProvider = _currentTime;
         var result = veaEventResult.Value!.UpdateFromTo(command.FromTo);
         if (result.IsErrorResult())
         {

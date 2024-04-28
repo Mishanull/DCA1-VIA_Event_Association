@@ -4,16 +4,16 @@ using VIAEventsAssociation.Core.Tools.OperationResult.OperationResult;
 
 namespace ViaEventsAssociation.Core.Application.AppEntry;
 
-internal class UowSaveDispatcher(ICommandDispatcher next, IUnitOfWork unitOfWork) : ICommandDispatcher
+public class UowSaveDispatcher(ICommandDispatcher next, IUnitOfWork unitOfWork) : ICommandDispatcher
 {
     public async Task<Result> Dispatch(Command command)
     {
-        var dispatchResult=await next.Dispatch(command);
+        var dispatchResult = await next.Dispatch(command);
         if (dispatchResult.IsErrorResult())
         {
             return dispatchResult;
         }
-        
+
         await unitOfWork.SaveChangesAsync();
         return new Result();
     }

@@ -1,10 +1,13 @@
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
+using ViaEventAssociation.Core.Domain.Contracts;
+using ViaEventAssociation.Core.Domain.Services;
 using ViaEventAssociation.Core.QueryContracts.Contract;
 using ViaEventAssociation.Core.QueryContracts.ServiceRegistration;
 using ViaEventAssociation.Infrastructure.EfcQueries.DTOs;
 using ViaEventAssociation.Infrastructure.SqliteDmPersistence;
 using ViaEventAssociation.Infrastructure.SqliteDmPersistence.ServiceRegistration;
+using ViaEventAssociation.Presentation.WebAPI.ServiceRegistration;
 using ViaEventsAssociation.Core.Application.AppEntry.ServiceRegistration;
 using ViaEventsAssociation.Core.Application.CommandHandler.Common.Base;
 
@@ -19,14 +22,7 @@ builder.Services.AddSwaggerGen(c=>{
 builder.Services.AddControllers();
 
 // database contexts registration
-var baseDir = AppDomain.CurrentDomain.BaseDirectory;
-
-var relativePath = Path.Combine(baseDir, "../../DbFile/VeaDb.db");
-
-var absolutePath = Path.GetFullPath(relativePath);
-
-var connectionString = $"Data Source={absolutePath};";
-
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<WriteDbContext>(options =>
     options.UseSqlite(connectionString));
 builder.Services.AddDbContext<VeaDbContext>(options => options.UseSqlite(connectionString));
@@ -36,6 +32,8 @@ builder.Services.AddCommandHandlers(Assembly.GetAssembly(typeof(ICommandHandler<
 builder.Services.AddQueryHandlers(Assembly.GetAssembly(typeof(IQueryHandler<,>))!);
 builder.Services.RegisterCommandDispatcher();
 builder.Services.RegisterQueryDispatcher();
+builder.Services.RegisterMappingConfigs();
+builder.Services.AddSingleton<ICurrentTime, CurrentTime>();
 
 var app = builder.Build();
 app.MapControllers();
@@ -51,3 +49,5 @@ app.UseHttpsRedirection();
 
 
 app.Run();
+
+public partial class Program{ }

@@ -1,4 +1,5 @@
 ﻿using UnitTests.FakeServices;
+using ViaEventAssociation.Core.Domain.Common.Base;
 using ViaEventAssociation.Core.Domain.Common.ValueObjects;
 using ViaEventAssociation.Core.Domain.CreatorAgg;
 using ViaEventAssociation.Core.Domain.EventAgg;
@@ -54,6 +55,13 @@ public class VeaEventBuilder
     public VeaEventBuilder WithFromTo(DateTime from, DateTime to)
     {
         _veaEvent.FromTo = FromTo.Create(from, to).Value;
+        return this;
+    }
+
+    public VeaEventBuilder WithCreatorId(string creatorId)
+    {
+        var creatorIdResult = TId.FromString<CreatorId>(creatorId);
+        _veaEvent.CreatorId = creatorIdResult.Value!;
         return this;
     }
     

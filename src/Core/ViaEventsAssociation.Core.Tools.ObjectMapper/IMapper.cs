@@ -1,4 +1,4 @@
-namespace ObjectMapper;
+namespace ViaEventsAssociation.Core.Tools.ObjectMapper;
 
 public interface IMapper
 {

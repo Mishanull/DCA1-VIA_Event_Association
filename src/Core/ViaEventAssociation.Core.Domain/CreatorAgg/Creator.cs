@@ -7,7 +7,7 @@ namespace ViaEventAssociation.Core.Domain.CreatorAgg;
 
 public class Creator : AggregateRoot
 {
-    internal CreatorId Id { get; }
+    public CreatorId Id { get; }
     internal Email Email { get; private init; }
     internal HashSet<Invite> CreatedInvites { get; private init; } = [];
 

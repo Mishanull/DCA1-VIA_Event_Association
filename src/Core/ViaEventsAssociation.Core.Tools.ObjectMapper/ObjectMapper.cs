@@ -1,6 +1,6 @@
 using System.Text.Json;
 
-namespace ObjectMapper;
+namespace ViaEventsAssociation.Core.Tools.ObjectMapper;
 
 public abstract class ObjectMapper (IServiceProvider serviceProvider) : IMapper
 {
