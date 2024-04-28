@@ -3,4 +3,4 @@ using ViaEventAssociation.Core.Domain.EventAgg;
 
 namespace ViaEventAssociation.Infrastructure.SqliteDmPersistence.EventAggPersistence;
 
-public class EventSqliteRepositoryEfc(DbContext context) : RepositoryEfcBase<VeaEvent, VeaEventId>(context), IVeaEventRepository;
+public class EventSqliteRepositoryEfc(WriteDbContext context) : RepositoryEfcBase<VeaEvent, VeaEventId>(context), IVeaEventRepository;

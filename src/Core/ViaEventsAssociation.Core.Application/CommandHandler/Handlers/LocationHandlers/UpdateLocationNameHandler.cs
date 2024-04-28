@@ -8,7 +8,7 @@ namespace ViaEventsAssociation.Core.Application.CommandHandler.Handlers.Location
 public class UpdateLocationNameHandler: ICommandHandler<UpdateLocationNameCommand>
 {
     private readonly ILocationRepository _locationRepository;
-    internal UpdateLocationNameHandler(ILocationRepository locationRepository)
+    public UpdateLocationNameHandler(ILocationRepository locationRepository)
     {
         _locationRepository = locationRepository;
     }

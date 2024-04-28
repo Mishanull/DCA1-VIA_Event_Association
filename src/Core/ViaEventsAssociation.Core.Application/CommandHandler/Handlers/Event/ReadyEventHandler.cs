@@ -11,7 +11,7 @@ public class ReadyEventHandler : ICommandHandler<ReadyEventCommand>
     private readonly IVeaEventRepository _veaEventRepository;
     private readonly IUnitOfWork _unitOfWork;
     
-    internal ReadyEventHandler(IVeaEventRepository veaEventRepository, IUnitOfWork unitOfWork)
+    public ReadyEventHandler(IVeaEventRepository veaEventRepository, IUnitOfWork unitOfWork)
     {
         _veaEventRepository = veaEventRepository;
         _unitOfWork = unitOfWork;

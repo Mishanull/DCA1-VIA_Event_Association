@@ -11,7 +11,7 @@ public class UpdateMaxGuestsHandler : ICommandHandler<UpdateMaxGuestsCommand>
     private readonly IVeaEventRepository _veaEventRepository;
     private readonly IUnitOfWork _unitOfWork;
     
-    internal UpdateMaxGuestsHandler(IVeaEventRepository veaEventRepository, IUnitOfWork unitOfWork)
+    public UpdateMaxGuestsHandler(IVeaEventRepository veaEventRepository, IUnitOfWork unitOfWork)
     {
         _veaEventRepository = veaEventRepository;
         _unitOfWork = unitOfWork;

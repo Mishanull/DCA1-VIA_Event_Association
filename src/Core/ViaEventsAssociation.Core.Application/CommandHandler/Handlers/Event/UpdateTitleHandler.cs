@@ -11,7 +11,7 @@ public class UpdateTitleHandler : ICommandHandler<UpdateTitleCommand>
     private readonly IVeaEventRepository _veaEventRepository;
     private readonly IUnitOfWork _unitOfWork;
     
-    internal UpdateTitleHandler(IVeaEventRepository veaEventRepository, IUnitOfWork unitOfWork)
+    public UpdateTitleHandler(IVeaEventRepository veaEventRepository, IUnitOfWork unitOfWork)
     {
         _veaEventRepository = veaEventRepository;
         _unitOfWork = unitOfWork;

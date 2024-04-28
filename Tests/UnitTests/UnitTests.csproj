@@ -30,4 +30,8 @@
       <ProjectReference Include="..\..\src\ViaEventAssociation.Infrastructure.DomainModelPersistence\ViaEventAssociation.Infrastructure.DomainModelPersistence.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Common\ObjectMapper\" />
+    </ItemGroup>
+
 </Project>

@@ -7,7 +7,7 @@ using VIAEventsAssociation.Core.Tools.OperationResult.OperationResult;
 
 namespace ViaEventAssociation.Infrastructure.SqliteDmPersistence.CreatorAggPersistence;
 
-public class CreatorSqliteRepositoryEfc(DbContext context)
+public class CreatorSqliteRepositoryEfc(WriteDbContext context)
     : RepositoryEfcBase<Creator, CreatorId>(context), ICreatorRepository
 {
     private readonly DbContext _context = context;

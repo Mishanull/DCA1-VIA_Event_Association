@@ -12,7 +12,7 @@ internal class GuestAcceptsInviteHandler : ICommandHandler<GuestAcceptsInviteCom
 {
     private readonly GuestAcceptsInvite _guestAcceptsInvite;
 
-    internal GuestAcceptsInviteHandler(IGuestRepository guestRepository, IVeaEventRepository eventRepository, ICreatorRepository creatorRepository)
+    public GuestAcceptsInviteHandler(IGuestRepository guestRepository, IVeaEventRepository eventRepository, ICreatorRepository creatorRepository)
     {
         _guestAcceptsInvite = new GuestAcceptsInvite(guestRepository, creatorRepository, eventRepository);
     }

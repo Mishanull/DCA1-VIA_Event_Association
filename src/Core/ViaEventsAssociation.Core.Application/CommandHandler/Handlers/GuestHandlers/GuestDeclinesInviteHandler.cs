@@ -12,7 +12,7 @@ internal class GuestDeclinesInviteHandler : ICommandHandler<GuestDeclinesInviteC
 {
     private readonly GuestDeclinesInvite _guestDeclinesInvite;
 
-    internal GuestDeclinesInviteHandler(IGuestRepository guestRepository, IVeaEventRepository eventRepository, ICreatorRepository creatorRepository)
+    public GuestDeclinesInviteHandler(IGuestRepository guestRepository, IVeaEventRepository eventRepository, ICreatorRepository creatorRepository)
     {
         _guestDeclinesInvite = new GuestDeclinesInvite(guestRepository, creatorRepository, eventRepository);
     }

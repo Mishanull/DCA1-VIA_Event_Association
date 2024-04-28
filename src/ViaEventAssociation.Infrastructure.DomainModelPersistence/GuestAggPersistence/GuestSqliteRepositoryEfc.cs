@@ -9,7 +9,7 @@ using VIAEventsAssociation.Core.Tools.OperationResult.OperationResult;
 
 namespace ViaEventAssociation.Infrastructure.SqliteDmPersistence.GuestAggPersistence;
 
-public class GuestSqliteRepositoryEfc(DbContext context)
+public class GuestSqliteRepositoryEfc(WriteDbContext context)
     : RepositoryEfcBase<VeaGuest, GuestId>(context), IGuestRepository
 {
     private readonly DbContext _context = context;

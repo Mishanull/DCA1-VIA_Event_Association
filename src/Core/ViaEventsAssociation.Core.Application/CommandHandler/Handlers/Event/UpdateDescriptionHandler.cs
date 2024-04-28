@@ -11,7 +11,7 @@ public class UpdateDescriptionHandler : ICommandHandler<UpdateDescriptionCommand
     private readonly IVeaEventRepository _veaEventRepository;
     private readonly IUnitOfWork _unitOfWork;
     
-    internal UpdateDescriptionHandler(IVeaEventRepository veaEventRepository, IUnitOfWork unitOfWork)
+    public UpdateDescriptionHandler(IVeaEventRepository veaEventRepository, IUnitOfWork unitOfWork)
     {
         _veaEventRepository = veaEventRepository;
         _unitOfWork = unitOfWork;

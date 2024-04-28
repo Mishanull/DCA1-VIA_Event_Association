@@ -11,7 +11,7 @@ public class GuestCancelsEventParticipationHandler : ICommandHandler<GuestCancel
 {
     private readonly GuestCancelsEventParticipation _guestCancelsEventParticipation;
 
-    internal GuestCancelsEventParticipationHandler(IGuestRepository guestRepository, IVeaEventRepository eventRepository)
+    public GuestCancelsEventParticipationHandler(IGuestRepository guestRepository, IVeaEventRepository eventRepository)
     {
         _guestCancelsEventParticipation = new GuestCancelsEventParticipation(guestRepository, eventRepository);
     }
