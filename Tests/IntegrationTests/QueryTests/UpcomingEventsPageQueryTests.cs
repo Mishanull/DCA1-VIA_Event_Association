@@ -2,6 +2,7 @@
 using UnitTests.FakeServices;
 using ViaEventAssociation.Core.QueryContracts.Queries;
 using ViaEventAssociation.Infrastructure.EfcQueries.QueryHandlers;
+using FakeCurrentTime = IntegrationTests.Utils.FakeCurrentTime;
 
 namespace IntegrationTests.QueryTests;
 

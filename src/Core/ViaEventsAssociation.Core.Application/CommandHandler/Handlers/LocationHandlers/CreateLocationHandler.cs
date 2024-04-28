@@ -8,7 +8,7 @@ namespace ViaEventsAssociation.Core.Application.CommandHandler.Handlers.Location
 internal class CreateLocationHandler  : ICommandHandler<CreateLocationCommand>
 {
     private readonly ILocationRepository _locationRepository;
-    internal CreateLocationHandler(ILocationRepository locationRepository)
+    public CreateLocationHandler(ILocationRepository locationRepository)
     {
         _locationRepository = locationRepository;
     }

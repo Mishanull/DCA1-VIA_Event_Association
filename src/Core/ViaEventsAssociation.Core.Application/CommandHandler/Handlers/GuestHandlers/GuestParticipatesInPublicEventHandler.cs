@@ -12,7 +12,7 @@ internal class GuestParticipatesInPublicEventHandler : ICommandHandler<GuestPart
 {
     private readonly GuestRequestParticipationPublicEvent _guestRequestParticipation;
 
-    internal GuestParticipatesInPublicEventHandler(IGuestRepository guestRepository, IVeaEventRepository eventRepository)
+    public GuestParticipatesInPublicEventHandler(IGuestRepository guestRepository, IVeaEventRepository eventRepository)
     {
         _guestRequestParticipation = new GuestRequestParticipationPublicEvent(guestRepository, eventRepository);
     }

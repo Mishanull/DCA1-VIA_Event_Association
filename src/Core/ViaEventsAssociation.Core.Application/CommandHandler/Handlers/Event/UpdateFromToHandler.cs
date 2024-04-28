@@ -11,7 +11,7 @@ public class UpdateFromToHandler : ICommandHandler<UpdateFromToCommand>
     private readonly IVeaEventRepository _veaEventRepository;
     private readonly IUnitOfWork _unitOfWork;
     
-    internal UpdateFromToHandler(IVeaEventRepository veaEventRepository, IUnitOfWork unitOfWork)
+    public UpdateFromToHandler(IVeaEventRepository veaEventRepository, IUnitOfWork unitOfWork)
     {
         _veaEventRepository = veaEventRepository;
         _unitOfWork = unitOfWork;

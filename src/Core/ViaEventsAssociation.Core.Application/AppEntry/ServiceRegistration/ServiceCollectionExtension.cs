@@ -8,7 +8,7 @@ using System.Reflection;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddCommandHandlers(this IServiceCollection services, Assembly assembly)
+    public static void AddCommandHandlers(this IServiceCollection services, Assembly assembly)
     {
         var commandHandlers = assembly.GetTypes()
             .Where(t => t.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(ICommandHandler<>)))
@@ -20,7 +20,10 @@ public static class ServiceCollectionExtensions
                 .First(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(ICommandHandler<>));
             services.AddScoped(interfaceType, handlerType);
         }
+    }
 
-        return services;
+    public static void RegisterCommandDispatcher(this IServiceCollection services)
+    {
+        services.AddScoped<ICommandDispatcher, CommandDispatcher>();
     }
 }

@@ -9,7 +9,8 @@ public class SetFromToLocationHandler : ICommandHandler<SetFromToLocationCommand
 {
 
     private readonly ILocationRepository _locationRepository;
-    internal SetFromToLocationHandler(ILocationRepository locationRepository)
+    
+    public SetFromToLocationHandler(ILocationRepository locationRepository)
     {
         _locationRepository = locationRepository;
     }

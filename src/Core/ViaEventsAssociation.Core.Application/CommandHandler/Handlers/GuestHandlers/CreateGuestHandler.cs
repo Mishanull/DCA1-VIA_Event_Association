@@ -9,7 +9,7 @@ namespace ViaEventsAssociation.Core.Application.CommandHandler.Handlers.GuestHan
 internal class CreateGuestHandler : ICommandHandler<CreateGuestCommand>
 {
     private readonly IGuestRepository _repository;
-    internal CreateGuestHandler(IGuestRepository repository)
+    public CreateGuestHandler(IGuestRepository repository)
     {
         _repository = repository;
     }

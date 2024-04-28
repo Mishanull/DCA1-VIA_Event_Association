@@ -13,7 +13,7 @@ internal class GuestIsInvitedToEventHandler : ICommandHandler<GuestIsInvitedToEv
 {
     private readonly GuestIsInvitedToEvent _guestIsInvitedToEvent;
 
-    internal GuestIsInvitedToEventHandler(IGuestRepository guestRepo, ICreatorRepository creatorRepo, IVeaEventRepository eventRepo)
+    public GuestIsInvitedToEventHandler(IGuestRepository guestRepo, ICreatorRepository creatorRepo, IVeaEventRepository eventRepo)
     {
         _guestIsInvitedToEvent = new GuestIsInvitedToEvent(guestRepo, creatorRepo, eventRepo);
     }

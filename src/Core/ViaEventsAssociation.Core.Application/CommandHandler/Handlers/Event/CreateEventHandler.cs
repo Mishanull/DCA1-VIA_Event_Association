@@ -11,7 +11,7 @@ public class CreateEventHandler: ICommandHandler<CreateEventCommand>
     private readonly IVeaEventRepository _veaEventRepository;
     private readonly IUnitOfWork _unitOfWork;
     
-    internal CreateEventHandler(IVeaEventRepository veaEventRepository, IUnitOfWork unitOfWork)
+    public CreateEventHandler(IVeaEventRepository veaEventRepository, IUnitOfWork unitOfWork)
     {
         _veaEventRepository = veaEventRepository;
         _unitOfWork = unitOfWork;

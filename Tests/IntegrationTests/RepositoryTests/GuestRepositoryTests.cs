@@ -8,6 +8,7 @@ using ViaEventAssociation.Core.Domain.GuestAgg.RequestEntity;
 using ViaEventAssociation.Infrastructure.SqliteDmPersistence.CreatorAggPersistence;
 using ViaEventAssociation.Infrastructure.SqliteDmPersistence.EventAggPersistence;
 using ViaEventAssociation.Infrastructure.SqliteDmPersistence.GuestAggPersistence;
+using FakeCurrentTime = IntegrationTests.Utils.FakeCurrentTime;
 
 namespace IntegrationTests.RepositoryTests;
 

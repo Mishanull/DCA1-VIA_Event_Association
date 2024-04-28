@@ -13,7 +13,7 @@ using ViaEventAssociation.Infrastructure.SqliteDmPersistence.EntityM_Trial;
 
 namespace ViaEventAssociation.Infrastructure.SqliteDmPersistence;
 
-public class WriteDbContext(DbContextOptions options):DbContext(options)
+public class WriteDbContext(DbContextOptions<WriteDbContext> options):DbContext(options)
 {
     public DbSet<Creator> Creators => Set<Creator>();
     public DbSet<VeaEvent> Events => Set<VeaEvent>();

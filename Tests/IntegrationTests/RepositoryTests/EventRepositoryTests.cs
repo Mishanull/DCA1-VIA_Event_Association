@@ -10,6 +10,7 @@ using ViaEventAssociation.Infrastructure.SqliteDmPersistence.CreatorAggPersisten
 using ViaEventAssociation.Infrastructure.SqliteDmPersistence.EventAggPersistence;
 using ViaEventAssociation.Infrastructure.SqliteDmPersistence.LocationAggPersistence;
 using ViaEventAssociation.Infrastructure.SqliteDmPersistence.UnitOfWork;
+using FakeCurrentTime = IntegrationTests.Utils.FakeCurrentTime;
 
 namespace IntegrationTests.RepositoryTests;
 

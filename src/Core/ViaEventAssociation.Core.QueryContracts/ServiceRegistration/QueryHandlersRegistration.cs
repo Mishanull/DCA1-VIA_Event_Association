@@ -1,12 +1,13 @@
 ﻿using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using ViaEventAssociation.Core.QueryContracts.Contract;
+using ViaEventAssociation.Core.QueryContracts.QueryDispatching;
 
 namespace ViaEventAssociation.Core.QueryContracts.ServiceRegistration;
 
 public static class QueryHandlersRegistration
 {
-    public static IServiceCollection AddQueryHandlers(this IServiceCollection services, Assembly assembly)
+    public static void AddQueryHandlers(this IServiceCollection services, Assembly assembly)
     {
         var queryHandlers = assembly.GetTypes()
             .Where(t => t.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IQueryHandler<,>)))
@@ -18,7 +19,10 @@ public static class QueryHandlersRegistration
                 .First(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IQueryHandler<,>));
             services.AddScoped(interfaceType, handlerType);
         }
-
-        return services;
+    }
+    
+    public static void RegisterQueryDispatcher(this IServiceCollection services)
+    {
+        services.AddScoped<IQueryDispatcher, QueryDispatcher>();
     }
 }

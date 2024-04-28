@@ -8,7 +8,7 @@ public class DesignTimeContextFactory:IDesignTimeDbContextFactory<WriteDbContext
     public WriteDbContext CreateDbContext(string[] args)
     {
         var optionsBuilder = new DbContextOptionsBuilder<WriteDbContext>();
-        optionsBuilder.UseSqlite("Data Source=VeaDb.db");
+        optionsBuilder.UseSqlite("Data Source=../../DbFile/VeaDb.db");
         return new WriteDbContext(optionsBuilder.Options);
     }
 }

@@ -9,7 +9,7 @@ public class SetLocationMaxGuestsHandler : ICommandHandler<SetLocationMaxGuestsC
 {
     
     private readonly ILocationRepository _locationRepository;
-    internal SetLocationMaxGuestsHandler(ILocationRepository locationRepository)
+    public SetLocationMaxGuestsHandler(ILocationRepository locationRepository)
     {
         _locationRepository = locationRepository;
     }

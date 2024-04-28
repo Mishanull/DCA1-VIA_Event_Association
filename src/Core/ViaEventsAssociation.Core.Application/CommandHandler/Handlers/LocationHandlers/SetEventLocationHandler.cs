@@ -10,7 +10,7 @@ namespace ViaEventsAssociation.Core.Application.CommandHandler.Handlers.Location
 internal class SetEventLocationHandler : ICommandHandler<SetEventLocationCommand>
 {
     private readonly AddLocationToEvent _addLocationToEvent;
-    internal SetEventLocationHandler( IVeaEventRepository eventRepository, ILocationRepository locationRepository)
+    public SetEventLocationHandler( IVeaEventRepository eventRepository, ILocationRepository locationRepository)
     {
         _addLocationToEvent = new AddLocationToEvent(locationRepository, eventRepository);
     }
