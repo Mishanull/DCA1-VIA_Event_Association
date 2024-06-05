@@ -26,12 +26,12 @@ public class GuestIsInvitedToEvent(
             return result;
         }
         
-        if (ValidateEvent(findEventResult, result)) return result;
-        UpdateAggregates(invite, findCreatorResult, result);
+        if (!ValidateEvent(findEventResult, result)) return result;
+        UpdateAggregates(invite, findCreatorResult);
         return result;
     }
 
-    private void UpdateAggregates(Invite invite, Result<Creator> findCreatorResult, Result result)
+    private void UpdateAggregates(Invite invite, Result<Creator> findCreatorResult)
     {
         var creator = findCreatorResult.Value!;
         creator.AddInvite(invite);
@@ -46,7 +46,7 @@ public class GuestIsInvitedToEvent(
             result.CollectError(ErrorHelper.CreateVeaError("An invite can only be sent for an active or ready event.",
                 ErrorType.EventNotActive));
             {
-                return true;
+                return false;
             }
         }
 
@@ -55,10 +55,10 @@ public class GuestIsInvitedToEvent(
             result.CollectError(ErrorHelper.CreateVeaError("Event is full, cannot invite more people.",
                 ErrorType.EventIsFull));
             {
-                return true;
+                return false;
             }
         }
 
-        return false;
+        return true;
     }
 }

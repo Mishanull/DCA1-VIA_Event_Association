@@ -246,7 +246,6 @@ public class VeaEvent : AggregateRoot
         return result;
     }
 
-    // Naming? 
     public Result Ready()
     {
         var result = new Result();
@@ -323,8 +322,6 @@ public class VeaEvent : AggregateRoot
         }
 
         VeaEventStatus = VeaEventStatus.Active;
-        return result;
-
         return result;
     }
 

@@ -8,7 +8,7 @@ namespace ViaEventAssociation.Presentation.WebAPI.Endpoints.Queries;
 
 public class AvailableLocationsEndpoint(IMapper mapper, IQueryDispatcher dispatcher): ApiEndpoint.WithRequest<AvailableLocationsRequest>.WithResponse<AvailableLocationsResponse>
 {
-    [HttpGet("availableLocations/{Id}")]
+    [HttpPost("availableLocations/{Id}")]
     public override async Task<ActionResult<AvailableLocationsResponse>> HandleAsync(AvailableLocationsRequest request)
     {
         AvailableLocationsPage.Query query = mapper.Map<AvailableLocationsPage.Query>(request);

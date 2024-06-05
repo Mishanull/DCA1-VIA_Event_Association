@@ -23,7 +23,7 @@ public class EventRepositoryTests
         var ctx = DbContextHelper.SetupContext();
         var veaEventRepository = new EventSqliteRepositoryEfc(ctx);
         var creatorRepository = new CreatorSqliteRepositoryEfc(ctx);
-        var creator = Creator.Create(Email.Create("benjamin.bartosik@gmail.com", new FakeEmailCheck()).Value).Value;
+        var creator = Creator.Create(Email.Create("benjamin.bartosik@gmail.com", new FakeEmailCheck()).Value!).Value;
         var veaEvent = VeaEvent.Create(creator!.Id, new FakeCurrentTime()).Value;
         var title = Title.Create("Test title").Value!;
         veaEvent!.UpdateTitle(title);
@@ -41,7 +41,7 @@ public class EventRepositoryTests
         //Assert
         Assert.NotNull(retrievedVeaEvent);
         Assert.Equal(title.Value, retrievedVeaEvent.Title.Value);
-        Assert.Equal(veaEvent.FromTo.Start, retrievedVeaEvent.FromTo.Start);
+        Assert.Equal(veaEvent.FromTo!.Start, retrievedVeaEvent.FromTo!.Start);
         Assert.Equal(veaEvent.FromTo.End, retrievedVeaEvent.FromTo.End);
         
         ctx.ChangeTracker.Clear();

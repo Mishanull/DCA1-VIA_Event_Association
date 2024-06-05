@@ -15,7 +15,6 @@ namespace IntegrationTests.WebAPI;
 internal class VeaWebApplicationFactory : WebApplicationFactory<Program>
 {
     private IServiceCollection serviceCollection;
-
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.ConfigureTestServices(services =>

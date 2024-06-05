@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using Microsoft.AspNetCore.Mvc.Testing;
 using UnitTests.FakeServices;
 using ViaEventAssociation.Core.Domain.Common.ValueObjects;
@@ -8,13 +8,14 @@ using ViaEventAssociation.Infrastructure.SqliteDmPersistence;
 using ViaEventAssociation.Infrastructure.SqliteDmPersistence.CreatorAggPersistence;
 using ViaEventAssociation.Infrastructure.SqliteDmPersistence.EventAggPersistence;
 using ViaEventAssociation.Presentation.WebAPI.Endpoints.Events;
+using ViaEventAssociation.Presentation.WebAPI.Endpoints.Queries;
 
-namespace IntegrationTests.WebAPI.Events;
+namespace IntegrationTests.WebAPI.Queries;
 
-public class UpdateDescriptionTest
+public class ViewSingleEventEndpointTest
 {
     [Fact]
-    public async Task UpdateDescription_ShouldReturnOk()
+    public async Task ViewSingleEvent_ValidId_Success()
     {
         // Arrange
         await using WebApplicationFactory<Program> webApplicationFactory = new VeaWebApplicationFactory();
@@ -22,45 +23,35 @@ public class UpdateDescriptionTest
 
         var veaEvent = await SetupEventAsync(webApplicationFactory);
 
-        UpdateDescriptionRequest request = new UpdateDescriptionRequest
-        {
-            EventId = veaEvent.Id.ToString(),
-            Description = veaEvent.Description.ToString()!
-        };
+        ViewSingleEventRequest request = new ViewSingleEventRequest(veaEvent.Id.ToString(), 1, 1, 1);
 
         // Act
         HttpResponseMessage response =
-            await client.PostAsync($"api/events/updateDescription", JsonContent.Create(request));
+            await client.PostAsync($"api/events/{veaEvent.Id}", JsonContent.Create(request));
+        
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.True(response.IsSuccessStatusCode);
     }
-
+    
     [Fact]
-    public async Task UpdateDescription_WithInvalidEventId_ShouldReturnBadRequest()
+    public async Task ViewSingleEvent_InvalidId_Failure()
     {
         // Arrange
         await using WebApplicationFactory<Program> webApplicationFactory = new VeaWebApplicationFactory();
         HttpClient client = webApplicationFactory.CreateClient();
-
-        var veaEvent = await SetupEventAsync(webApplicationFactory);
-
-        UpdateDescriptionRequest request = new UpdateDescriptionRequest
-        {
-            EventId = "bollocks",
-            Description = veaEvent.Description.ToString()!
-        };
+        ViewSingleEventRequest request = new ViewSingleEventRequest("someId", 1, 1, 1);
 
         // Act
         HttpResponseMessage response =
-            await client.PostAsync($"api/events/updateDescription", JsonContent.Create(request));
-
+            await client.PostAsync($"api/events/someId", JsonContent.Create(request));
+        
         // Assert
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        Assert.True(!response.IsSuccessStatusCode);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.True(response.IsSuccessStatusCode);
     }
-
+    
     private static async Task<VeaEvent> SetupEventAsync(WebApplicationFactory<Program> webApplicationFactory)
     {
         using var scope = webApplicationFactory.Services.CreateScope();

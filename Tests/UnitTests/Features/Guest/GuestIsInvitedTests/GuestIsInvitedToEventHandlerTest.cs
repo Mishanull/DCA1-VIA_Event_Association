@@ -4,7 +4,6 @@ using ViaEventAssociation.Core.Domain.CreatorAgg;
 using ViaEventAssociation.Core.Domain.CreatorAgg.InviteEntity;
 using ViaEventAssociation.Core.Domain.EventAgg;
 using ViaEventAssociation.Core.Domain.GuestAgg.Guest;
-using ViaEventAssociation.Core.Domain.GuestAgg.RequestEntity;
 using ViaEventsAssociation.Core.Application.CommandHandler.Commands.Guest;
 using ViaEventsAssociation.Core.Application.CommandHandler.Common.Base;
 using ViaEventsAssociation.Core.Application.CommandHandler.Handlers.GuestHandlers;
@@ -27,7 +26,7 @@ public class GuestIsInvitedToEventHandlerTest
     }
 
     [Fact]
-    public async Task GuestAcceptsInvite_Successful()
+    public async Task GuestIsInvitedToEvent_Successful()
     {
         //Arrange
         SetupSuccess();
@@ -40,7 +39,7 @@ public class GuestIsInvitedToEventHandlerTest
     }
 
     [Fact]
-    public async Task GuestAcceptsInvite_RepoError_Failure()
+    public async Task GuestIsInvitedToEvent_RepoError_Failure()
     {
         //Arrange
         var error = SetupFailure();

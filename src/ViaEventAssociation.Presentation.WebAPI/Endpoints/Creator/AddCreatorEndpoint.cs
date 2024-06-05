@@ -10,9 +10,9 @@ namespace ViaEventAssociation.Presentation.WebAPI.Endpoints.Creator;
 public class AddCreatorEndpoint (ICommandDispatcher dispatcher, IUnitOfWork unitOfWork) : ApiEndpoint.WithRequest<AddCreatorRequest>.WithoutResponse
 {
     [HttpPost("creator/add")]
-    public override async Task<ActionResult> HandleAsync([FromBody]AddCreatorRequest request)
+    public override async Task<ActionResult> HandleAsync(AddCreatorRequest request)
     {
-        var commandResult = AddCreatorCommand.Create(request.Email, new FakeEmailCheck());
+        var commandResult = AddCreatorCommand.Create(request.email, new FakeEmailCheck());
         if (commandResult.IsErrorResult())
         {
             return BadRequest(commandResult.Errors);
@@ -24,4 +24,4 @@ public class AddCreatorEndpoint (ICommandDispatcher dispatcher, IUnitOfWork unit
     }
 }
 
-public record AddCreatorRequest([FromBody]string Email);
+public record AddCreatorRequest(string email);

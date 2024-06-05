@@ -8,7 +8,7 @@ namespace ViaEventAssociation.Presentation.WebAPI.Endpoints.Queries;
 
 public class ViewSingleEventEndpoint (IMapper mapper, IQueryDispatcher dispatcher) : ApiEndpoint.WithRequest<ViewSingleEventRequest>.WithResponse<ViewSingleEventResponse>
 {
-    [HttpGet("events/{Id}")]
+    [HttpPost("events/{Id}")]
     public override async Task<ActionResult<ViewSingleEventResponse>> HandleAsync(ViewSingleEventRequest request)
     {
         SingleEventPage.Query query = mapper.Map<SingleEventPage.Query>(request);
@@ -18,5 +18,5 @@ public class ViewSingleEventEndpoint (IMapper mapper, IQueryDispatcher dispatche
     }
 }
 
-public record ViewSingleEventRequest([FromRoute]string Id, [FromQuery]int PageNumber, [FromQuery]int DisplayedRows, [FromQuery]int RowSize);
+public record ViewSingleEventRequest([FromRoute]string Id, [FromBody]int PageNumber, [FromBody]int DisplayedRows, [FromBody]int RowSize);
 public record ViewSingleEventResponse(SingleEventPage.Event Event, List<SingleEventPage.Guest> Guests, int GuestCount);

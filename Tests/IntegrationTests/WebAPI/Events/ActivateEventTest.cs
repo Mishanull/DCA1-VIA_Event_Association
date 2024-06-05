@@ -46,19 +46,15 @@ public class ActivateEventTest
         var veaEvent = veaEventBuilder.Init()
             .WithTitle("Test Event")
             .WithDescription("Test Description")
-            //from 10:00 tmrw until 11:00 tmrw *Today returns 00:00
             .WithFromTo( DateTime.Today.AddDays(1).AddHours(10), DateTime.Today.AddDays(1).AddHours(11))
             .WithCreatorId(creator.Id.ToString())
             .WithStatus(VeaEventStatus.Ready)
-            .Build(); //event cannot be activated unless these fields are set!
+            .Build(); 
         
         await creatorRepository.AddAsync(creator);
         await locationRepository.AddAsync(location!);
         await eventRepository.AddAsync(veaEvent);
         await writeDbContext.SaveChangesAsync();
-        // debug
-        var testEvent = await eventRepository.FindAsync(veaEvent.Id);
-        
         var request = new ActivateEventRequest(veaEvent.Id.ToString());
         
         // Act
@@ -68,8 +64,6 @@ public class ActivateEventTest
         
         Assert.True(response.IsSuccessStatusCode);
         Assert.True(response.StatusCode == HttpStatusCode.OK);
-        
-        
     }
     
 }

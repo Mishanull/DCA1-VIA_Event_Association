@@ -12,6 +12,7 @@ public class ActivateEventTest(ITestOutputHelper testOutputHelper)
     [Fact]
     public void S1_Activate_WithValidStatusAndEventData_ShouldActivateEvent()
     {
+        //Arrange
         const string validTitle = "A Valid Title";
         const string validDescription = "A Valid Description";
         var validFrom = new DateTime(2024, 3, 15, 12, 30, 0);
@@ -26,9 +27,10 @@ public class ActivateEventTest(ITestOutputHelper testOutputHelper)
             .WithStatus(VeaEventStatus.Draft)
             .WithMaxGuests(25)
             .Build();
-
+        //Act
         var result = veaEvent.Activate();
         
+        //Assert
         Assert.False(result.IsErrorResult());
         Assert.Equal(VeaEventStatus.Active, veaEvent.VeaEventStatus);
     }
@@ -36,13 +38,16 @@ public class ActivateEventTest(ITestOutputHelper testOutputHelper)
     [Fact]
     public void S2_Activate_WithReadyStatus_ShouldActivateEvent()
     {
+        //Arrange
         var veaEvent = new VeaEventBuilder()
             .Init()
             .WithStatus(VeaEventStatus.Ready)
             .Build();
 
+        //Act
         var result = veaEvent.Activate();
         
+        //Assert
         Assert.False(result.IsErrorResult());
         Assert.Equal(VeaEventStatus.Active, veaEvent.VeaEventStatus);
     }
@@ -50,13 +55,16 @@ public class ActivateEventTest(ITestOutputHelper testOutputHelper)
     [Fact]
     public void S3_Activate_WithActiveStatus_ShouldChangeNothing()
     {
+        //Arrange
         var veaEvent = new VeaEventBuilder()
             .Init()
             .WithStatus(VeaEventStatus.Active)
             .Build();
 
+        //Act
         var result = veaEvent.Activate();
         
+        //Assert
         Assert.False(result.IsErrorResult());
         Assert.Equal(VeaEventStatus.Active, veaEvent.VeaEventStatus);
     }
@@ -64,21 +72,20 @@ public class ActivateEventTest(ITestOutputHelper testOutputHelper)
     [Fact]
     public void F1_Activate_WithInvalidEventData_ShouldThrowError()
     {
+        //Arrange
         var veaEvent = new VeaEventBuilder()
             .Init()
             .WithStatus(VeaEventStatus.Draft)
             .Build();
 
+        //Act
         var result = veaEvent.Activate();
         
+        //Assert
         Assert.True(result.IsErrorResult());
         Assert.Contains(result.Errors, e => Equals(e.Type, ErrorType.InvalidTitle));
         Assert.Contains(result.Errors, e => Equals(e.Type, ErrorType.InvalidDescription));
         Assert.Contains(result.Errors, e => Equals(e.Type, ErrorType.InvalidFromTo));
-        foreach (var error in result.Errors)
-        {
-            testOutputHelper.WriteLine($"{error.Type} - {error.Message.Message}");
-        }
     }
     
     [Fact]

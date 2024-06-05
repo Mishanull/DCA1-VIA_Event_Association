@@ -23,7 +23,6 @@
         <PreserveCompilationContext>true</PreserveCompilationContext>
     </PropertyGroup>
     <ItemGroup>
-      <Folder Include="Endpoints\Guests\" />
       <Folder Include="Endpoints\Locations\" />
     </ItemGroup>
     

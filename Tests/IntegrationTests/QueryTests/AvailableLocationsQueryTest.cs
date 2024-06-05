@@ -8,7 +8,7 @@ namespace IntegrationTests.QueryTests;
 public class AvailableLocationsQueryTest
 {
     [Fact]
-    public async Task GuestsWithNoEventsReturnsNoEvents()
+    public async Task AvailableLocationsQuery_LocationsAddedToCup_Success()
     {
         //Arrange
         await using var ctx = DbContextHelper.SetupReadContext().Seed();
